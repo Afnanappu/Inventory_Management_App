@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 
+// ignore: must_be_immutable
 class MyBottomNavigationBar extends StatefulWidget {
   MyBottomNavigationBar(
       {super.key, required this.currentIndex, required this.pageController});
@@ -30,6 +31,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       showSelectedLabels: true,
       showUnselectedLabels: true,
       type: BottomNavigationBarType.shifting,
+      landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
+      enableFeedback: true,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(

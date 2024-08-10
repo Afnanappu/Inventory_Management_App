@@ -8,5 +8,4 @@ class MyColors{
   static const Color darkGrey = Color(0xFF939393);
   static const Color black = Color(0xFF000000);
   static const Color red = Color(0xFF000000);
-
 }

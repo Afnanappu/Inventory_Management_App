@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_management_app/screens/dashboard_screen.dart';
-import 'package:inventory_management_app/screens/home_screen.dart';
+import 'package:inventory_management_app/screens/main_screens/account_screen.dart';
+import 'package:inventory_management_app/screens/main_screens/dashboard_screen.dart';
+import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
+import 'package:inventory_management_app/screens/main_screens/item_screen.dart';
 import 'package:inventory_management_app/widgets/bottom_navigation_bar.dart';
 
 class MainHomeScreen extends StatefulWidget {
@@ -25,14 +27,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             _pageViewController.jumpToPage(currentIndex);
           },
           controller: _pageViewController,
-          children: const[
+          children: const [
             HomeScreen(),
             DashboardScreen(),
+            ItemScreen(),
+            AccountScreen()
           ],
         ),
         bottomNavigationBar: MyBottomNavigationBar(
           currentIndex: currentIndex,
           pageController: _pageViewController,
-        ));
+        ),);
   }
 }

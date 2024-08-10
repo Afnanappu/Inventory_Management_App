@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_management_app/screens/main_home_screen.dart';
-import 'package:inventory_management_app/screens/splash_screen.dart';
+import 'package:inventory_management_app/screens/first_screens/main_home_screen.dart';
+import 'package:inventory_management_app/screens/first_screens/splash_screen.dart';
+import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
 
 void main() {
 
@@ -19,6 +20,7 @@ class InventoryManagementApp extends StatelessWidget {
       home: const SplashScreen(),
       routes: {
         "/MainHomeScreen": (ctx) => const MainHomeScreen(),
+        "/NotificationScreen": (ctx) => const NotificationScreen(),
       },
       // theme: ThemeData(
       //   bottomNavigationBarTheme: BottomNavigationBarThemeData(
