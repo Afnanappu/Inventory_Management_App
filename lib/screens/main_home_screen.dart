@@ -34,6 +34,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             AccountScreen()
           ],
         ),
+        //todo: Change the icon
         bottomNavigationBar: MyBottomNavigationBar(
           currentIndex: currentIndex,
           pageController: _pageViewController,

@@ -13,4 +13,14 @@ class MyFontStyle{
         color: MyColors.darkGrey,
         fontWeight: FontWeight.w500,
       );
+  static const smallLightGreyStyle = TextStyle(
+        fontSize: 15,
+        color: MyColors.darkGrey,
+        fontWeight: FontWeight.w400,
+      );
+  static const mainSubFontStyle = TextStyle(
+        fontSize: 22,
+        color: MyColors.blackShade,
+        fontWeight: FontWeight.w500,
+      );
 }

@@ -10,6 +10,7 @@ class AppBarForMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      // backgroundColor: MyColors.lightGrey,
       title: Text(
         title,
         style: MyFontStyle.mainFontStyle,

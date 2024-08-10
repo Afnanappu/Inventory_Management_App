@@ -34,11 +34,15 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
       enableFeedback: true,
       items: const <BottomNavigationBarItem>[
+        //todo: Change the icon
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        //todo: Change the icon
         BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart), label: "Dashboard"),
+        //todo: Change the icon
         BottomNavigationBarItem(
             icon: Icon(Icons.check_box_outline_blank), label: "Item"),
+        //todo: Change the icon
         BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month), label: "Account")
       ],
