@@ -7,6 +7,7 @@ class MyColors{
   static const Color blackShade = Color(0xFF2A2A2A);
   static const Color darkGrey = Color(0xFF939393);
   static const Color black = Color(0xFF000000);
-  static const Color red = Color(0xFF000000);
+  static const Color red = Color(0xFFFF5252);
+  static const Color transparent = Color(0x00000000);
 
 }

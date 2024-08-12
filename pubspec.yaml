@@ -63,6 +63,11 @@ flutter:
   assets:
     - assets/splash logo black.png
     - assets/lo.png
+    - assets/mobiles/OnePlus Nord 4 5G.png
+    - assets/mobiles/Redmi 13C 5G.png
+    - assets/mobiles/Samsung Galaxy S23 Ultra.png
+    - assets/mobiles/OnePlus 12.png
+    - assets/mobiles/Apple iPhone 14 Plus.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

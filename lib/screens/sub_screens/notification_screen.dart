@@ -11,7 +11,7 @@ class NotificationScreen extends StatelessWidget {
       body: const Center(
         child: Text(
           "No notifications",
-          style: MyFontStyle.lightGreyStyle,
+          style: MyFontStyle.lightGrey,
         ),
       ),
     );

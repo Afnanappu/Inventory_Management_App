@@ -22,7 +22,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         widget.pageController.jumpToPage(widget.currentIndex);
       },
       currentIndex: widget.currentIndex,
-      backgroundColor: MyColors.white,
+
+
       selectedItemColor: MyColors.green,
       selectedIconTheme: const IconThemeData(
         color: MyColors.green,
@@ -35,7 +36,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       enableFeedback: true,
       items: const <BottomNavigationBarItem>[
         //todo: Change the icon
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home",backgroundColor: MyColors.white),
         //todo: Change the icon
         BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart), label: "Dashboard"),

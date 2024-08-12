@@ -3,24 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 
 class MyFontStyle{
-  static const mainFontStyle = TextStyle(
+  static const main = TextStyle(
         fontSize: 25,
         color: MyColors.blackShade,
         fontWeight: FontWeight.w500,
       );
-  static const lightGreyStyle = TextStyle(
+  static const lightGrey = TextStyle(
         fontSize: 20,
         color: MyColors.darkGrey,
         fontWeight: FontWeight.w500,
       );
-  static const smallLightGreyStyle = TextStyle(
+  static const smallLightGrey = TextStyle(
         fontSize: 15,
         color: MyColors.darkGrey,
         fontWeight: FontWeight.w400,
       );
-  static const mainSubFontStyle = TextStyle(
+  static const mainSub = TextStyle(
         fontSize: 22,
         color: MyColors.blackShade,
         fontWeight: FontWeight.w500,
+      );
+  static const itemNameInMain = TextStyle(
+        fontSize: 12,
+        color: MyColors.darkGrey,
+        fontWeight: FontWeight.w500,
+      );
+  static const itemPriceInMain = TextStyle(
+        fontSize: 14,
+        color: MyColors.blackShade,
+        fontWeight: FontWeight.bold,
       );
 }

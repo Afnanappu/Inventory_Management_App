@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
+import 'package:inventory_management_app/constants/screen_size.dart';
 
 class AppBarForMain extends StatelessWidget {
   const AppBarForMain({super.key, required this.title});
@@ -9,11 +10,13 @@ class AppBarForMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return AppBar(
       // backgroundColor: MyColors.lightGrey,
       title: Text(
         title,
-        style: MyFontStyle.mainFontStyle,
+        style: MyFontStyle.main,
       ),
       actions: [
         IconButton(
@@ -26,12 +29,12 @@ class AppBarForMain extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Padding(
-              padding:  EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(5),
               child: Icon(Icons.notifications_none),
             ),
           ),
         ),
-        const SizedBox(width: 10,)
+         SizedBox(width: MyScreenSize.screenWidth*0.03,)
       ],
     );
   }

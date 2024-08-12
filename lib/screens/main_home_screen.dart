@@ -27,6 +27,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             _pageViewController.jumpToPage(currentIndex);
           },
           controller: _pageViewController,
+          physics: const NeverScrollableScrollPhysics(),
           children: const [
             HomeScreen(),
             DashboardScreen(),
