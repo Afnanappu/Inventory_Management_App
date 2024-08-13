@@ -3,12 +3,13 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 
-class AppBarForMain extends StatelessWidget {
-  AppBarForMain(
-      {super.key,
-      required this.title,
-      this.icon = Icons.notifications_none,
-      required this.onPressed});
+class AppBarForSubWithEdit extends StatelessWidget {
+  AppBarForSubWithEdit({
+    super.key,
+    required this.title,
+    this.icon = Icons.edit_outlined,
+    required this.onPressed,
+  });
 
   final String title;
   final IconData icon;
@@ -17,23 +18,21 @@ class AppBarForMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // backgroundColor: MyColors.lightGrey,
+      automaticallyImplyLeading: false,
+      leading: IconButton(onPressed: (){
+        Navigator.of(context).pop();
+      }, icon: Icon(Icons.arrow_back_ios_new_sharp,size: 20,)),
+      centerTitle: true,
       title: Text(
         title,
-        style: MyFontStyle.main,
+        style: MyFontStyle.mainSub,
       ),
       actions: [
         IconButton(
           onPressed: onPressed,
-          icon: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: MyColors.darkGrey),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Icon(icon),
-            ),
+          icon: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Icon(icon,color: MyColors.blackShade,),
           ),
         ),
         SizedBox(

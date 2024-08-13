@@ -33,4 +33,14 @@ class MyFontStyle{
         color: MyColors.blackShade,
         fontWeight: FontWeight.bold,
       );
+  static const listTileFont = TextStyle(
+        fontSize: 18,
+        color: MyColors.blackShade,
+        fontWeight: FontWeight.w500,
+      );
+  // static const sub = TextStyle(
+  //       fontSize: 20,
+  //       color: MyColors.blackShade,
+  //       fontWeight: FontWeight.w500,
+  //     );
 }

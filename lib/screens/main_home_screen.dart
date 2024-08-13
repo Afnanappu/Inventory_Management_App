@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_management_app/screens/main_screens/account_screen.dart';
+import 'package:inventory_management_app/screens/main_screens/account/account_screen.dart';
 import 'package:inventory_management_app/screens/main_screens/dashboard_screen.dart';
 import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
 import 'package:inventory_management_app/screens/main_screens/item_screen.dart';

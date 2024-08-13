@@ -18,9 +18,11 @@ class HomeScreen extends StatelessWidget {
     
     return Scaffold(
       //App bar
-      appBar: const PreferredSize(
+      appBar:  PreferredSize(
         preferredSize: Size(double.maxFinite, 60),
-        child: AppBarForMain(title: 'Shop Name'),
+        child: AppBarForMain(title: 'Shop Name',onPressed: (){
+           Navigator.of(context).pushNamed("/NotificationScreen");
+          }),
       ),
 
       //body

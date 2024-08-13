@@ -32,17 +32,17 @@ class _SearchBarForMainState extends State<SearchBarForMain> {
           });
         }
       },
-    
+
       //When the user tap outside of the text field the focus is removed from the field.
       onTapOutside: (event) async {
         //Giving some delay to make it more realistic.
         await Future.delayed(const Duration(milliseconds: 400));
-    
+
         setState(() {
           isSearchClicked == false;
           print("user taped outside of the text field");
         });
-    
+
         //To remove the focus.
         // ignore: use_build_context_synchronously
         FocusScope.of(context).unfocus();
@@ -61,7 +61,7 @@ class _SearchBarForMainState extends State<SearchBarForMain> {
         //todo: Change the icon
         suffixIcon: Padding(
           padding: const EdgeInsets.only(right: 15),
-    
+
           //Check whether the search bar is focussed or not to change the icon in the suffixIcon.
           child: (isSearchClicked == true)
               ? InkWell(
