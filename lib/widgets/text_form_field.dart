@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 
-Widget customFormField({required BuildContext context, required String text, required TextEditingController controller, String? Function(String?)? validator}) {
+Widget customFormField({required BuildContext context, required String text, required TextEditingController controller, String? Function(String?)? validator, bool? enabled = true}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: TextFormField(
         controller: controller,
         validator: validator,
+        enabled: enabled,
         cursorOpacityAnimates: true,
         cursorColor: MyColors.blackShade,
         enableInteractiveSelection: true,
@@ -25,10 +26,11 @@ Widget customFormField({required BuildContext context, required String text, req
           ),
           fillColor: MyColors.lightGrey,
           filled: true,
-          hintText: text,
+          labelText: text,
+          labelStyle: MyFontStyle.smallLightGrey,
+          floatingLabelStyle: TextStyle(color: MyColors.blackShade,),
           contentPadding: const EdgeInsets.only(left: 20),
           hintFadeDuration: const Duration(milliseconds: 200),
-          hintStyle: MyFontStyle.smallLightGrey,
         ),
       ),
     );

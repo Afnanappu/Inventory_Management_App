@@ -52,6 +52,7 @@ flutter:
   assets:
     - assets/splash logo black.png
     - assets/lo.png
+    - assets/shop logo.jpeg
     - assets/mobiles/OnePlus Nord 4 5G.png
     - assets/mobiles/Redmi 13C 5G.png
     - assets/mobiles/Samsung Galaxy S23 Ultra.png

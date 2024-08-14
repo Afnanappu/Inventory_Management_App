@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
-import 'package:inventory_management_app/widgets/app_bar_for_main.dart';
+import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/brand_items.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/item_details_for_home.dart';

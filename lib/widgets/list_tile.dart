@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 
-Widget myListTile(
-    {required BuildContext context,
-    required String title,
-    required IconData icon,void Function()? onTap}) {
+Widget myListTile({
+  required BuildContext context,
+  required String title,
+  required IconData icon,
+  void Function()? onTap,
+}) {
   return Card(
     elevation: 0.5,
     color: MyColors.lightGrey,

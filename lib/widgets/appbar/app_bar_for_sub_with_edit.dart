@@ -8,36 +8,47 @@ class AppBarForSubWithEdit extends StatelessWidget {
     super.key,
     required this.title,
     this.icon = Icons.edit_outlined,
-    required this.onPressed,
+    this.onPressed,
+    this.isAddIcon = true,
   });
 
   final String title;
   final IconData icon;
   void Function()? onPressed;
+  final bool isAddIcon;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      leading: IconButton(onPressed: (){
-        Navigator.of(context).pop();
-      }, icon: Icon(Icons.arrow_back_ios_new_sharp,size: 20,)),
+      leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new_sharp,
+            size: 20,
+          )),
       centerTitle: true,
       title: Text(
         title,
         style: MyFontStyle.mainSub,
       ),
       actions: [
-        IconButton(
-          onPressed: onPressed,
-          icon: Padding(
-            padding: const EdgeInsets.all(5),
-            child: Icon(icon,color: MyColors.blackShade,),
-          ),
-        ),
-        SizedBox(
-          width: MyScreenSize.screenWidth * 0.03,
-        )
+        (isAddIcon == true)
+            ? IconButton(
+                onPressed: onPressed,
+                icon: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Icon(
+                    icon,
+                    color: MyColors.blackShade,
+                  ),
+                ),
+              )
+            : SizedBox(
+                width: MyScreenSize.screenWidth * 0.03,
+              )
       ],
     );
   }
