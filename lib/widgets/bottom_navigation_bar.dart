@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 
 // ignore: must_be_immutable
@@ -42,10 +43,10 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             icon: Icon(Icons.bar_chart), label: "Dashboard"),
         //todo: Change the icon
         BottomNavigationBarItem(
-            icon: Icon(Icons.check_box_outline_blank), label: "Item"),
+            icon: Icon(Icons.layers), label: "Item"),
         //todo: Change the icon
         BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month), label: "Account")
+            icon: Icon(Icons.business), label: "Account")
       ],
     );
   }

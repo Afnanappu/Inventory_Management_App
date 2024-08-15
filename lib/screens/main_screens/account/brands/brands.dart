@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/screens/main_screens/account/brands/delete_brand.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/edit_brand.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
@@ -30,11 +32,11 @@ class AccountBrands extends StatelessWidget {
               title: 'Add Brand',
               icon: Icons.add,
               onTap: () {
-                AddBrandShowDialog(
+                BrandShowDialog(
                   context: context,
                   title: 'Add new Brand',
                   text: 'Enter brand name',
-                  controller: _addBrandController,
+                  controller: _addBrandController, buttonText: 'Add', buttonColor: MyColors.green,message: 'Brand added successfully'
                 );
               },
             ),
@@ -43,15 +45,19 @@ class AccountBrands extends StatelessWidget {
               title: 'Edit Brand',
               icon: Icons.edit_outlined,
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (ctx) =>const BrandAddNew()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) =>  BrandAddNew()));
               },
             ),
             myListTile(
               context: context,
               title: 'Delete Brand',
               icon: Icons.delete_outline,
-              onTap: () {},
+              onTap: () {
+               
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) => const BrandDelete()));
+              },
             ),
           ],
         ),

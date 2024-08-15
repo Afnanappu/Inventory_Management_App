@@ -5,10 +5,8 @@ import 'package:inventory_management_app/screens/main_screens/account/brands/dia
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/list_tile.dart';
 
-class BrandAddNew extends StatelessWidget {
-  BrandAddNew({super.key});
-
-  final _editBrandController = TextEditingController();
+class BrandDelete extends StatelessWidget {
+  const BrandDelete({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +17,24 @@ class BrandAddNew extends StatelessWidget {
           title: brandItemList[index + 1],
           haveLeading: false,
           haveTrailing: true,
+          trailIcon: Icons.delete_outline,
           onTap: () {
             BrandShowDialog(
-                context: context,
-                title: 'Edit brand',
-                text: 'Brand name',
-                controller: _editBrandController,
-                buttonText: 'Save',
-                buttonColor: MyColors.green,
-                message: 'Brand edited successfully');
+              context: context,
+              title: 'Delete brand',
+              buttonText: 'Delete',
+              buttonColor: MyColors.red,
+              message: 'Brand deleted successfully',
+              haveTextField: false,
+              content: 'Are you sure?',
+            );
           }),
     );
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
         child: AppBarForSubWithEdit(
-          title: "Edit Brand",
+          title: "Delete Brand",
           isAddIcon: false,
         ),
       ),

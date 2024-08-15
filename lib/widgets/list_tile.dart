@@ -5,8 +5,11 @@ import 'package:inventory_management_app/constants/font_styles.dart';
 Widget myListTile({
   required BuildContext context,
   required String title,
-  required IconData icon,
+   IconData icon = Icons.add,
   void Function()? onTap,
+  bool haveTrailing = false,
+  bool haveLeading = true,
+  IconData trailIcon = Icons.edit_outlined,
 }) {
   return Card(
     elevation: 0.5,
@@ -18,11 +21,16 @@ Widget myListTile({
         title,
         style: MyFontStyle.listTileFont,
       ),
-      leading: Icon(
+      leading: (haveLeading == true)?Icon(
         icon,
         size: 30,
         color: MyColors.blackShade,
-      ),
+      ):null,
+      trailing: (haveTrailing == true)?Icon(
+        trailIcon,
+        size: 26,
+        color: MyColors.blackShade,
+      ): null,
     ),
   );
 }

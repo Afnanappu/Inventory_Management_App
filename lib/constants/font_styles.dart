@@ -38,9 +38,14 @@ class MyFontStyle{
         color: MyColors.blackShade,
         fontWeight: FontWeight.w500,
       );
-  // static const sub = TextStyle(
-  //       fontSize: 20,
-  //       color: MyColors.blackShade,
-  //       fontWeight: FontWeight.w500,
-  //     );
+  static const saleTile = TextStyle(
+        fontSize: 17,
+        color: MyColors.blackShade,
+        fontWeight: FontWeight.w600,
+      );
+  static const saleTileInvoice = TextStyle(
+        fontSize: 11,
+        color: MyColors.darkGrey,
+        fontWeight: FontWeight.w600,
+      );
 }

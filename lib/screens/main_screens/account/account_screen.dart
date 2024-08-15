@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/screens/first_screens/login_screen.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/brands.dart';
-import 'package:inventory_management_app/screens/main_screens/account/busines%20profile/business_profile.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
+import 'package:inventory_management_app/widgets/bottom_sheet.dart';
 import 'package:inventory_management_app/widgets/list_tile.dart';
 import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'busines profile/business_profile.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -14,7 +15,7 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size(double.maxFinite, 60),
+          preferredSize: const Size(double.maxFinite, 60),
           child: AppBarForMain(
             title: "Account",
             icon: Icons.logout,
@@ -55,19 +56,37 @@ class AccountScreen extends StatelessWidget {
                           );
                         }),
                     myListTile(
-                        context: context,
-                        title: 'Brands',
-                        icon: Icons.category_outlined,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (ctx) =>  AccountBrands()),
-                          );
-                        },),
+                      context: context,
+                      title: 'Brands',
+                      icon: Icons.category_outlined,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (ctx) => AccountBrands()),
+                        );
+                      },
+                    ),
                     myListTile(
-                        context: context,
-                        title: 'Help & Support',
-                        icon: Icons.support_agent_outlined),
+                      context: context,
+                      title: 'Help & Support',
+                      icon: Icons.support_agent_outlined,
+                      onTap: () async {
+                         print('Generated URI: ');
+
+                         Uri email = Uri(
+                          scheme: 'https',
+                          path: 'https://flutter.dev',
+                        );
+                         print('Generated URI: $email');
+                        if (await canLaunchUrl(email)) {
+                          await launchUrl(
+                            email,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } else {
+                          throw 'Could not make call to $email';
+                        }
+                      },
+                    ),
                     myListTile(
                         context: context,
                         title: 'Rate this app',
@@ -79,7 +98,6 @@ class AccountScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                
                 const Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
