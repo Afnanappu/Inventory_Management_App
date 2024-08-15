@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/delete_brand.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/edit_brand.dart';
-import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/dialog_for_add_brand.dart';
 import 'package:inventory_management_app/widgets/list_tile.dart';
-import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 
 class AccountBrands extends StatelessWidget {
   AccountBrands({super.key});

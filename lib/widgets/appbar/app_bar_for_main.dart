@@ -8,11 +8,13 @@ class AppBarForMain extends StatelessWidget {
       {super.key,
       required this.title,
       this.icon = Icons.notifications_none,
-      required this.onPressed});
+      required this.onPressed,
+      this.haveBorder = true});
 
   final String title;
   final IconData icon;
   void Function()? onPressed;
+  bool haveBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class AppBarForMain extends StatelessWidget {
           onPressed: onPressed,
           icon: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: MyColors.darkGrey),
+              border: (haveBorder == true)?Border.all(color: MyColors.darkGrey):null,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(

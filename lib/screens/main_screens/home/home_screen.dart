@@ -3,9 +3,9 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
-import 'package:inventory_management_app/widgets/brand_items.dart';
+import 'package:inventory_management_app/screens/main_screens/home/brand_items.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
-import 'package:inventory_management_app/widgets/item_details_for_home.dart';
+import 'package:inventory_management_app/screens/main_screens/home/item_details_for_home.dart';
 import 'package:inventory_management_app/widgets/price_filter.dart';
 import 'package:inventory_management_app/widgets/search_bar.dart';
 
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       //App bar
       appBar:  PreferredSize(
-        preferredSize: Size(double.maxFinite, 60),
+        preferredSize:const Size(double.maxFinite, 60),
         child: AppBarForMain(title: 'Shop Name',onPressed: (){
            Navigator.of(context).pushNamed("/NotificationScreen");
           }),

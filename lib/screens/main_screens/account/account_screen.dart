@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/screens/first_screens/login_screen.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/brands.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
-import 'package:inventory_management_app/widgets/bottom_sheet.dart';
 import 'package:inventory_management_app/widgets/list_tile.dart';
 import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 import 'package:url_launcher/url_launcher.dart';

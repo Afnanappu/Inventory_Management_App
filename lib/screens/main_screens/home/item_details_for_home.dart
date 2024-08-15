@@ -40,7 +40,7 @@ class ItemDetailsForHome extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(itemModel.itemName,style: MyFontStyle.itemNameInMain),
+                Expanded(child: Text(itemModel.itemName,style: MyFontStyle.itemNameInMain, overflow: TextOverflow.ellipsis,)),
                 Text(itemModel.itemPrice, style: MyFontStyle.itemPriceInMain,),
               ],
             )),

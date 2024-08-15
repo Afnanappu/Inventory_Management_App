@@ -4,6 +4,8 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
+import 'package:inventory_management_app/widgets/custom_container.dart';
+import 'package:inventory_management_app/widgets/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/sale_list_tile.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -26,8 +28,6 @@ class DashboardScreen extends StatelessWidget {
               Navigator.of(context).pushNamed("/NotificationScreen");
             }),
       ),
-
-
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -50,12 +50,12 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
           const SliverToBoxAdapter(
-            child:  SizedBox(
+            child: SizedBox(
               height: 20,
             ),
           ),
           const SliverToBoxAdapter(
-            child:  Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CustomContainer(
@@ -70,11 +70,11 @@ class DashboardScreen extends StatelessWidget {
               ],
             ),
           ),
-
           const SliverToBoxAdapter(
-            child:SizedBox(height: 20,),
+            child: SizedBox(
+              height: 20,
+            ),
           ),
-
           SliverToBoxAdapter(
             child: SizedBox(
               height: 200,
@@ -125,7 +125,7 @@ class DashboardScreen extends StatelessWidget {
                     'Resent',
                     style: MyFontStyle.listTileFont,
                   ),
-            
+
                   //See all
                   //todo: Add the see all button functions
                   TextButton(
@@ -145,60 +145,21 @@ class DashboardScreen extends StatelessWidget {
               return SaleListTile(
                 image: itemModelList.value[index].itemImage,
                 customerName: 'AFNAN',
-                invoiceNo: '${index+1}',
+                invoiceNo: '${index + 1}',
                 brandName: itemModelList.value[index].itemBrandName,
                 itemPrice: itemModelList.value[index].itemPrice,
-              ); 
+              );
             },
           )
         ],
       ),
+      floatingActionButton: FloatingActionButtonForAll(
+        text: 'Add new sale',
+        onPressed: () {},
+        color: MyColors.red,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
 
-class CustomContainer extends StatelessWidget {
-  final bool haveBgColor;
-  final String title;
-  final String subtitle;
-
-  const CustomContainer(
-      {super.key,
-      required this.title,
-      required this.subtitle,
-      this.haveBgColor = true});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 115,
-      width: 145,
-      decoration: BoxDecoration(
-          color: (haveBgColor == true) ? MyColors.green : null,
-          borderRadius: BorderRadius.circular(17),
-          border: Border.all(color: MyColors.green, width: 1.5)),
-      child: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-                color: (haveBgColor == true) ? MyColors.white : MyColors.green,
-                fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            subtitle,
-            style: TextStyle(
-                color: (haveBgColor == true) ? MyColors.white : MyColors.green,
-                fontSize: 24,
-                fontWeight: FontWeight.w700),
-          )
-        ],
-      )),
-    );
-  }
-}
