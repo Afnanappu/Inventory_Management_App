@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/constants/font_styles.dart';
 
+// ignore: must_be_immutable
 class MyButton extends StatelessWidget {
   Color color;
   String text;
@@ -29,6 +29,7 @@ class MyButton extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class MyCustomButton extends StatelessWidget {
   void Function()? onTap;
   final Color color;
@@ -53,7 +54,7 @@ class MyCustomButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: TextStyle(
+          style:const TextStyle(
             color: MyColors.green,
             fontSize: 11,
             fontWeight: FontWeight.w500

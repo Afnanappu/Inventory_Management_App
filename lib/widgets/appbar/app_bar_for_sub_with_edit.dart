@@ -3,6 +3,7 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 
+// ignore: must_be_immutable
 class AppBarForSubWithEdit extends StatelessWidget {
   AppBarForSubWithEdit({
     super.key,
@@ -25,7 +26,7 @@ class AppBarForSubWithEdit extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(
+          icon:const Icon(
             Icons.arrow_back_ios_new_sharp,
             size: 20,
           )),
