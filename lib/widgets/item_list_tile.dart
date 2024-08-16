@@ -24,9 +24,7 @@ class ItemListTile extends StatelessWidget {
           color: MyColors.lightGrey,
           borderRadius: BorderRadius.circular(15),
         ),
-        child: ListTile(
-          
-          isThreeLine: true,
+        child: ListTile(          
           leading: Image.asset(
             image,
           ),

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/screens/main_home_screen.dart';
 import 'package:inventory_management_app/screens/first_screens/splash_screen.dart';
-import 'package:inventory_management_app/screens/main_screens/home/home_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
 
 void main() {

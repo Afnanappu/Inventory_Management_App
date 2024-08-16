@@ -22,7 +22,7 @@ class BrandShowDialog {
         title: Text(title),
         content: (haveTextField == true)
             ? customFormField(
-                context: context, text: text!, controller: controller!)
+                context: context, labelText: text!, controller: controller!,)
             : null,
         actions: [
           MyButton(

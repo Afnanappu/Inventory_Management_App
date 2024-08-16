@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/models/item_model.dart';
+import 'package:inventory_management_app/screens/main_screens/item/add_new_item.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/item_list_tile.dart';
@@ -23,7 +24,6 @@ class ItemScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: itemModelList.value.length,
         itemBuilder: (context, index) {
-
           return ItemListTile(
               image: itemModelList.value[index].itemImage,
               itemPrice: itemModelList.value[index].itemPrice,
@@ -31,7 +31,16 @@ class ItemScreen extends StatelessWidget {
               itemStock: itemModelList.value[index].stock.stock);
         },
       ),
-      floatingActionButton: FloatingActionButtonForAll(text: "Add new item", onPressed: (){}, color: MyColors.red),
+      floatingActionButton: FloatingActionButtonForAll(
+          text: "Add new item",
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => ItemAddNew(),
+              ),
+            );
+          },
+          color: MyColors.red),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

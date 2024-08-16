@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/screens/main_screens/home/brand_items.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
@@ -15,21 +16,22 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MyScreenSize.initialize(context);
-    
+
     return Scaffold(
       //App bar
-      appBar:  PreferredSize(
-        preferredSize:const Size(double.maxFinite, 60),
-        child: AppBarForMain(title: 'Shop Name',onPressed: (){
-           Navigator.of(context).pushNamed("/NotificationScreen");
-          }),
+      appBar: PreferredSize(
+        preferredSize: const Size(double.maxFinite, 60),
+        child: AppBarForMain(
+            title: 'Shop Name',
+            onPressed: () {
+              Navigator.of(context).pushNamed("/NotificationScreen");
+            }),
       ),
 
       //body
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: MyScreenSize.screenHeight18),
         child: CustomScrollView(
-
           slivers: [
             //space
             SliverToBoxAdapter(
@@ -105,7 +107,14 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButtonForAll(text: 'Add new sale', onPressed: (){}, color: MyColors.red,),
+      floatingActionButton: FloatingActionButtonForAll(
+        text: 'Add new sale',
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => SaleAddNew()));
+        },
+        color: MyColors.red,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

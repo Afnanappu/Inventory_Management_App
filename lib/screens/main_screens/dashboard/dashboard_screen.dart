@@ -34,6 +34,8 @@ class DashboardScreen extends StatelessWidget {
             child: SizedBox(
               child: DropdownButtonFormField(
                 dropdownColor: MyColors.white,
+                
+
                 padding: const EdgeInsets.only(left: 20),
                 value: list[0],
                 decoration: const InputDecoration(border: InputBorder.none),
@@ -79,38 +81,51 @@ class DashboardScreen extends StatelessWidget {
             child: SizedBox(
               height: 200,
               width: double.maxFinite,
-              child: LineChart(
-                LineChartData(
-                    gridData: const FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                    ),
-                    titlesData: const FlTitlesData(show: true),
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border.all(color: MyColors.lightGrey, width: 1),
-                    ),
-                    betweenBarsData: [],
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: const [
-                          FlSpot(0, 0),
-                          FlSpot(1, 1),
-                          FlSpot(2, 0.5),
-                          FlSpot(3, 0.5),
-                          FlSpot(4, 1),
-                          FlSpot(5, 1),
-                          FlSpot(6, 2),
-                        ],
-                        color: Colors.blue,
-                        barWidth: 3,
-                        dotData: const FlDotData(show: true),
-                        belowBarData: BarAreaData(
-                          show: true,
-                          color: const Color.fromARGB(42, 40, 137, 217),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  right: 15,
+                  top: 15,
+                ),
+                child: LineChart(
+                  LineChartData(
+                      gridData: const FlGridData(
+                        show: true,
+                        drawVerticalLine: false,
+                      ),
+                      titlesData: const FlTitlesData(
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
                         ),
-                      )
-                    ]),
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                      ),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border.all(color: MyColors.lightGrey, width: 1),
+                      ),
+                      betweenBarsData: [],
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: const [
+                            FlSpot(0, 0),
+                            FlSpot(1, 1),
+                            FlSpot(2, 0.5),
+                            FlSpot(3, 0.5),
+                            FlSpot(4, 1),
+                            FlSpot(5, 1),
+                            FlSpot(6, 2),
+                          ],
+                          color: Colors.blue,
+                          barWidth: 3,
+                          dotData: const FlDotData(show: true),
+                          belowBarData: BarAreaData(
+                            show: true,
+                            color: const Color.fromARGB(42, 40, 137, 217),
+                          ),
+                        )
+                      ]),
+                ),
               ),
             ),
           ),
@@ -162,4 +177,3 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 }
-

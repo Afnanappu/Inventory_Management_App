@@ -20,16 +20,16 @@ class SaleListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Container(
         decoration: BoxDecoration(
           color: MyColors.lightGrey,
           borderRadius: BorderRadius.circular(15),
         ),
         child: ListTile(
-          isThreeLine: true,
           leading: Image.asset(
             image,
+            fit: BoxFit.contain,
           ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -39,20 +39,20 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  customFormField(context: context, text: 'Username', controller: _userController, validator: (value){
+                  customFormField(context: context, labelText: 'Username', controller: _userController, validator: (value){
                     if(value==null || value.isEmpty){
                       return 'Field is empty';
-                    }else if(value != 'a'){
+                    }else if(value != 'afnan'){
                       return "Username doesn't match";
                     }
                     else{
                       return null;
                     }
                   }),
-                  customFormField(context: context, text: 'Password', controller: _userPassword, validator: (value){
+                  customFormField(context: context, labelText: 'Password', controller: _userPassword, validator: (value){
                     if(value==null || value.isEmpty){
                       return 'Field is empty';
-                    }else if(value != '1'){
+                    }else if(value != '12345'){
                       return "Password doesn't match";
                     }
                     else{
