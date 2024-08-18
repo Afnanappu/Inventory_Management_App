@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/widgets/circle_icons.dart';
 
+// ignore: must_be_immutable
 class AppBarForItemFullDetails extends StatelessWidget {
   void Function()? onPressed;
   AppBarForItemFullDetails({super.key, required onPressed});
