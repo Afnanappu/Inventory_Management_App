@@ -4,7 +4,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/main_home_screen.dart';
-import 'package:inventory_management_app/screens/first_screens/splash_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
 
 void main() async {
