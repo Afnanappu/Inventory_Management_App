@@ -7,7 +7,7 @@ class FloatingActionButtonForAll extends StatelessWidget {
   final String text;
   final IconData icon;
   final Color color;
-  FloatingActionButtonForAll(
+  const FloatingActionButtonForAll(
       {super.key,
       required this.text,
       required this.onPressed,

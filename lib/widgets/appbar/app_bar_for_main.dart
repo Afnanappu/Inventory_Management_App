@@ -29,14 +29,12 @@ class AppBarForMain extends StatelessWidget {
         IconButton(
           onPressed: onPressed,
           icon: Container(
+            padding:const EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: (haveBorder == true)?Border.all(color: MyColors.darkGrey):null,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Icon(icon),
-            ),
+            child: Icon(icon),
           ),
         ),
         SizedBox(

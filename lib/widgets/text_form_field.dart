@@ -9,14 +9,15 @@ Widget customFormField({
   String? Function(String?)? validator,
   bool? isFormEnabled = true,
   Color formFillColor = MyColors.lightGrey,
-  TextInputType keyboardType =  TextInputType.text,
+  TextInputType keyboardType = TextInputType.text,
   double vPadding = 15,
 }) {
   return Padding(
-    padding:  EdgeInsets.symmetric(vertical: vPadding),
+    padding: EdgeInsets.symmetric(vertical: vPadding),
     child: TextFormField(
       controller: controller,
       validator: validator,
+      style: const TextStyle(color: MyColors.black),
       enabled: isFormEnabled,
       cursorOpacityAnimates: true,
       cursorColor: MyColors.blackShade,
@@ -32,7 +33,6 @@ Widget customFormField({
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
-          
         ),
         fillColor: formFillColor,
         filled: true,

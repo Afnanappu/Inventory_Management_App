@@ -111,7 +111,7 @@ class HomeScreen extends StatelessWidget {
         text: 'Add new sale',
         onPressed: () {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (ctx) => SaleAddNew()));
+              .push(MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
         },
         color: MyColors.red,
       ),

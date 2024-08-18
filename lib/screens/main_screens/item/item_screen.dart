@@ -25,10 +25,11 @@ class ItemScreen extends StatelessWidget {
         itemCount: itemModelList.value.length,
         itemBuilder: (context, index) {
           return ItemListTile(
-              image: itemModelList.value[index].itemImage,
-              itemPrice: itemModelList.value[index].itemPrice,
-              itemName: itemModelList.value[index].itemName,
-              itemStock: itemModelList.value[index].stock.stock);
+            image: itemModelList.value[index].itemImage,
+            itemPrice: itemModelList.value[index].itemPrice,
+            itemName: itemModelList.value[index].itemName,
+            itemStock: itemModelList.value[index].stock.stock,
+          );
         },
       ),
       floatingActionButton: FloatingActionButtonForAll(
@@ -36,7 +37,7 @@ class ItemScreen extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (ctx) => ItemAddNew(),
+                builder: (ctx) => const ItemAddNew(),
               ),
             );
           },

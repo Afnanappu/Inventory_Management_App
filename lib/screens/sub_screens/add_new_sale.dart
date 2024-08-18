@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 
+// ignore: must_be_immutable
 class SaleAddNew extends StatelessWidget {
-  SaleAddNew({super.key});
-  var dt;
+  const SaleAddNew({super.key});
+  // var dt;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

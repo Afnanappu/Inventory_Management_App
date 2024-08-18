@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/screens/first_screens/login_screen.dart';
@@ -24,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     MyScreenSize.initialize(context);
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: MyScreenSize.screenHeight,
         width: MyScreenSize.screenWidth,
         child: LottieBuilder.asset(
@@ -36,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   Future<void> afterDelayed() async {
     await Future.delayed(const Duration(seconds: 5));
+    // ignore: use_build_context_synchronously
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (ctx) => LoginScreen()));
   }

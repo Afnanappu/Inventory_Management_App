@@ -5,7 +5,7 @@ import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/list_tile.dart';
 import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'busines profile/business_profile.dart';
+import 'business profile/business_profile.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});

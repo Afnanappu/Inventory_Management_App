@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/functions/pick_image.dart';
@@ -18,6 +18,8 @@ class AccountProfile extends StatefulWidget {
 }
 
 class _AccountProfileState extends State<AccountProfile> {
+  final box = Hive.openBox<ProfileModel>('profile');
+
   final _formKey = GlobalKey<FormState>();
 
   final _businessName = TextEditingController();
@@ -27,21 +29,31 @@ class _AccountProfileState extends State<AccountProfile> {
   final _address = TextEditingController();
 
   bool isEditable = false;
+  String? image;
+  ProfileModel? profile;
+
+  @override
+  void initState() {
+    _loadData();
+    super.initState();
+  }
+
+  void _loadData() async {
+    profile = await getProfile('profile');
+    if (profile != null) {
+      _businessName.text = profile!.name ?? 'not found';
+      _phoneNo.text = profile!.phone ?? 'not found';
+      _email.text = profile!.email ?? 'not found';
+      _address.text = profile!.address ?? 'not found';
+      image = profile!.image;
+    }
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    (ProfileModel.profile.name != null)
-        ? _businessName.text = ProfileModel.profile.name!
-        : null;
-    (ProfileModel.profile.phone != null)
-        ? _phoneNo.text = ProfileModel.profile.phone!
-        : null;
-    (ProfileModel.profile.email != null)
-        ? _email.text = ProfileModel.profile.email!
-        : null;
-    (ProfileModel.profile.address != null)
-        ? _address.text = ProfileModel.profile.address!
-        : null;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -65,22 +77,21 @@ class _AccountProfileState extends State<AccountProfile> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      if(isEditable == true){
+                      if (isEditable == true) {
                         await pickImageFromFile().then(
-                        (value) {
-                          ProfileModel.profile.image = value;
-                        },
-                      );
-                      setState(() {});
+                          (value) {
+                            image = value;
+                          },
+                        );
+                        setState(() {});
                       }
                     },
                     child: CircleAvatar(
                       backgroundColor: MyColors.lightGrey,
-                      backgroundImage: (ProfileModel.profile.image != null)
-                          ? FileImage(File(ProfileModel.profile.image!))
-                          : null,
+                      backgroundImage:
+                          (image != null) ? FileImage(File(image!)) : null,
                       radius: 76,
-                      child: (ProfileModel.profile.image == null)
+                      child: (image == null)
                           ? const Text(
                               'No image selected',
                               style: MyFontStyle.smallLightGrey,
@@ -110,7 +121,6 @@ class _AccountProfileState extends State<AccountProfile> {
                       controller: _phoneNo,
                       keyboardType: TextInputType.phone,
                       isFormEnabled: isEditable,
-                      
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Field is empty';
@@ -155,10 +165,18 @@ class _AccountProfileState extends State<AccountProfile> {
                           text: 'Save',
                           function: () {
                             if (_formKey.currentState!.validate()) {
-                              ProfileModel.profile.name = _businessName.text;
-                              ProfileModel.profile.phone = _phoneNo.text;
-                              ProfileModel.profile.email = _email.text;
-                              ProfileModel.profile.address = _address.text;
+                              final profile = ProfileModel(
+                                name: _businessName.text,
+                                phone: _phoneNo.text,
+                                email: _email.text,
+                                address: _address.text,
+                                image: image,
+                              );
+                              updateProfile(profile);
+                              // ProfileModel.profile.name =;
+                              // ProfileModel.profile.phone =;
+                              // ProfileModel.profile.email =;
+                              // ProfileModel.profile.address =;
                               setState(() {
                                 isEditable = false;
                               });

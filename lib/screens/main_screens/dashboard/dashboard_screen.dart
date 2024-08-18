@@ -33,9 +33,8 @@ class DashboardScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: SizedBox(
               child: DropdownButtonFormField(
-                dropdownColor: MyColors.white,
-                
 
+                dropdownColor: MyColors.white,
                 padding: const EdgeInsets.only(left: 20),
                 value: list[0],
                 decoration: const InputDecoration(border: InputBorder.none),

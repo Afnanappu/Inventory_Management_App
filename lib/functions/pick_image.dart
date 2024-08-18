@@ -1,8 +1,8 @@
 import 'package:image_picker/image_picker.dart';
 
 Future pickImageFromFile() async {
-  final image = await ImagePicker.platform
-      .getImageFromSource(source: ImageSource.gallery);
+  // ignore: invalid_use_of_visible_for_testing_member
+  final image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
   if (image != null) {
     return image.path;

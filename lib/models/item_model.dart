@@ -12,7 +12,6 @@ List<String> colors = ['Black', 'White', 'Yellow'];
 List<String> ram = ['4', '8', '16'];
 List<String> rom = ['32', '64', '128'];
 
-List<String> itemImageList = [];
 
 ValueNotifier<List<ItemModel>> itemModelList = ValueNotifier([
   ItemModel(
