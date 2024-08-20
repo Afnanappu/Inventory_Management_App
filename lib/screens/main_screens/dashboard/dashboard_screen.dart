@@ -2,11 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
-import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/custom_container.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
-import 'package:inventory_management_app/widgets/sale_list_tile.dart';
 
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({super.key});
@@ -153,18 +151,28 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
           ),
-          SliverList.builder(
-            itemCount: 3,
-            itemBuilder: (context, index) {
-              return SaleListTile(
-                image: itemModelList.value[index].itemImage,
-                customerName: 'AFNAN',
-                invoiceNo: '${index + 1}',
-                brandName: itemModelList.value[index].itemBrandName,
-                itemPrice: itemModelList.value[index].itemPrice,
-              );
-            },
-          )
+
+          //todo: add recent sales here.
+          // ValueListenableBuilder(
+          //   valueListenable: itemBrandList,
+          //   builder: (BuildContext context, List<ItemBrand> itemBrand, Widget? child) { 
+          //     return SliverList.builder(
+          //     itemCount: 4,
+          //     itemBuilder: (context, index) {
+            
+            
+          //       return SaleListTile(
+          //         image: itemBrand[index].itemModelList[],
+          //         customerName: 'AFNAN',
+          //         invoiceNo: '${index + 1}',
+          //         brandName: itemModelList.value[index].itemBrandName,
+          //         itemPrice: itemModelList.value[index].itemPrice,
+          //       );
+          //     },
+          //   );
+          //    },
+             
+          // )
         ],
       ),
       floatingActionButton: FloatingActionButtonForAll(

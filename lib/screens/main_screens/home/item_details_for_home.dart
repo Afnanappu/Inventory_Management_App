@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
+import 'package:inventory_management_app/database/add_item.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/item_full_details_screen.dart';
 
@@ -11,14 +12,14 @@ class ItemDetailsForHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: itemModelList,
-      builder: (BuildContext context, List<ItemModel> item, Widget? child) =>
+      valueListenable: itemModelListNotifiers,
+      builder: (BuildContext context, List<ItemModel> itemModelList, _) =>
           SliverGrid.builder(
-        itemCount: item.length,
+        itemCount: itemModelList.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 15),
         itemBuilder: (BuildContext context, int index) {
-          final itemModel = item[index];
+          final itemModel = itemModelList[index];
           return Center(
             child: GridTile(
                 child: Column(
@@ -27,7 +28,9 @@ class ItemDetailsForHome extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ItemFullDetails(image: itemModel.itemImage,),
+                      builder: (context) => ItemFullDetails(
+                        image: itemModel.itemImage,
+                      ),
                     ));
                   },
                   child: Container(
@@ -53,7 +56,7 @@ class ItemDetailsForHome extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 )),
                 Text(
-                  itemModel.itemPrice,
+                  '${itemModel.itemPrice}',
                   style: MyFontStyle.itemPriceInMain,
                 ),
               ],

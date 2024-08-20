@@ -1,11 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
+import 'package:inventory_management_app/database/add_item.dart';
 import 'package:inventory_management_app/functions/pick_image.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/buttons.dart';
+import 'package:inventory_management_app/widgets/drop_down_for_all.dart';
 import 'package:inventory_management_app/widgets/text_form_field.dart';
 
 class ItemAddNew extends StatefulWidget {
@@ -17,8 +19,6 @@ class ItemAddNew extends StatefulWidget {
 
 class _ItemAddNewState extends State<ItemAddNew> {
   final _itemNameController = TextEditingController();
-
-  final _itemBrandController = TextEditingController();
 
   final _itemPriceController = TextEditingController();
 
@@ -32,6 +32,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
   final _itemDescriptionController = TextEditingController();
 
   String? image;
+
+  String nowBrandName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +81,28 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     labelText: 'Item name',
                     controller: _itemNameController,
                     vPadding: 20),
-                customFormField(
-                  context: context,
-                  labelText: 'Item brand',
-                  controller: _itemBrandController,
-                  vPadding: 0,
+                ValueListenableBuilder(
+                  valueListenable: itemBrandListNotifiers,
+                  builder: (context, itemBrand, child) => DropDownForAll(
+                    items: itemBrand.map(
+                      (e) {
+                        return DropdownMenuItem(
+                          value: e.itemBrandName,
+                          child: Text(e.itemBrandName),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (e) {
+                      nowBrandName = e;
+                    },
+                  ),
                 ),
+                // customFormField(
+                //   context: context,
+                //   labelText: 'Item brand',
+                //   controller: _itemBrandController,
+                //   vPadding: 0,
+                // ),
                 customFormField(
                     context: context,
                     labelText: 'Price',
@@ -118,10 +136,32 @@ class _ItemAddNewState extends State<ItemAddNew> {
                   labelText: 'Description',
                   controller: _itemDescriptionController,
                 ),
+
+                //---------- Save button ----------//
                 MyButton(
                   color: MyColors.green,
                   text: 'Add to items',
                   function: () {
+                    final item = ItemModel(
+                      itemName: _itemNameController.text,
+                      itemBrand: nowBrandName,
+                      itemImage: image!,
+                      itemPrice: double.parse(_itemPriceController.text),
+                      color: [ItemCOLOR.Black],
+                      ram: [ItemRAM.GB4],
+                      rom: [ItemROM.GB64],
+                      description: _itemDescriptionController.text,
+                      stock: int.parse(
+                        _itemStockController.text,
+                      ),
+                    );
+
+                    addItemToDB(item);
+
+                    // itemAddToItemBrand(ItemBrandModel(
+                    //     itemBrandName: itemBrandModel.itemBrandName,
+                    //     itemModelList: itemBrandModel.itemModelList));
+                    // print('${itemBrandModel.itemBrandName}: ${ _itemNameController.text}');
                     Navigator.of(context).pop();
                   },
                 ),

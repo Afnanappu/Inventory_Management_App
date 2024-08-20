@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/main_home_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
@@ -12,6 +13,13 @@ void main() async {
   if (!Hive.isAdapterRegistered(ProfileModelAdapter().typeId)) {
     Hive.registerAdapter(ProfileModelAdapter());
   }
+  if (!Hive.isAdapterRegistered(ItemBrandModelAdapter().typeId)) {
+    Hive.registerAdapter(ItemBrandModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(ItemModelAdapter().typeId)) {
+    Hive.registerAdapter(ItemModelAdapter());
+  }
+
   runApp(const InventoryManagementApp());
 }
 

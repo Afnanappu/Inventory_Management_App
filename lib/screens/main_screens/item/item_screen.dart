@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/add_item.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/item/add_new_item.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
@@ -11,6 +12,7 @@ class ItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getAllItemBrand();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -21,16 +23,19 @@ class ItemScreen extends StatelessWidget {
           onPressed: () {},
         ),
       ),
-      body: ListView.builder(
-        itemCount: itemModelList.value.length,
-        itemBuilder: (context, index) {
-          return ItemListTile(
-            image: itemModelList.value[index].itemImage,
-            itemPrice: itemModelList.value[index].itemPrice,
-            itemName: itemModelList.value[index].itemName,
-            itemStock: itemModelList.value[index].stock.stock,
-          );
-        },
+      body: ValueListenableBuilder(
+        valueListenable: itemModelListNotifiers,
+        builder: (context, itemModel, child) => ListView.builder(
+          itemCount: itemModel.length,
+          itemBuilder: (context, index) {
+            return ItemListTile(
+              image: itemModel[index].itemImage,
+              itemPrice: '${itemModel[index].itemPrice}',
+              itemName: itemModel[index].itemName,
+              itemStock: '${itemModel[index].stock}',
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButtonForAll(
           text: "Add new item",
