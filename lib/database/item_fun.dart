@@ -13,8 +13,8 @@ Future<void> addItemToDB(ItemModel item) async {
   item.id = await itemBox.add(item);
 
   notifyItemListeners();
-  print(
-      'New item is added to itemModel DB and the length of all the item int the DB is: ${itemBox.values.length}');
+  print('A new item is added to database and the item id = ${item.id} and the length of all brand is ${itemBox.values.length}');
+
 }
 
 //Function to get all item from database and added to itemModelListNotifiers.
@@ -23,6 +23,8 @@ Future<void> getAllItemFormDB() async {
   itemModelListNotifiers.value.clear();
   itemModelListNotifiers.value = itemBox.values.cast<ItemModel>().toList();
   notifyItemListeners();
+  print('fetching all items from database');
+
 }
 
 //Created a function that can notify itemModelListNotifiers.

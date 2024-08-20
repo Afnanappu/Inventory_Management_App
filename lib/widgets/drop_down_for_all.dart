@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 
+// ignore: must_be_immutable
 class DropDownForAll extends StatelessWidget {
   List<DropdownMenuItem<dynamic>> items;
   String? Function(dynamic)? validator;
@@ -23,7 +24,7 @@ class DropDownForAll extends StatelessWidget {
         '---Select brand---',
         style: MyFontStyle.smallLightGrey,
       ),
-      
+
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

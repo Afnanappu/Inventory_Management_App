@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/delete_brand.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/edit_brand.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
-import 'package:inventory_management_app/screens/main_screens/account/brands/dialog_for_add_brand.dart';
+import 'package:inventory_management_app/screens/main_screens/account/brands/add_brand.dart';
 import 'package:inventory_management_app/widgets/list_tile.dart';
 
 class AccountBrands extends StatelessWidget {
@@ -30,12 +32,19 @@ class AccountBrands extends StatelessWidget {
               title: 'Add Brand',
               icon: Icons.add,
               onTap: () {
-                BrandShowDialog(
-                  context: context,
-                  title: 'Add new Brand',
-                  text: 'Enter brand name',
-                  controller: _addBrandController, buttonText: 'Add', buttonColor: MyColors.green,message: 'Brand added successfully'
-                );
+                BrandAddNew(
+                    context: context,
+                    title: 'Add new Brand',
+                    text: 'Enter brand name',
+                    controller: _addBrandController,
+                    buttonText: 'Add',
+                    buttonColor: MyColors.green,
+                    message: 'Brand added successfully',
+                    buttonFunction: () {
+                      final brand = ItemBrandModel(
+                          itemBrandName: _addBrandController.text);
+                      addBrandToDB(brand);
+                    });
               },
             ),
             myListTile(
@@ -43,8 +52,8 @@ class AccountBrands extends StatelessWidget {
               title: 'Edit Brand',
               icon: Icons.edit_outlined,
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (ctx) =>  BrandAddNew()));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (ctx) => BrandEdit()));
               },
             ),
             myListTile(
@@ -52,7 +61,6 @@ class AccountBrands extends StatelessWidget {
               title: 'Delete Brand',
               icon: Icons.delete_outline,
               onTap: () {
-               
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (ctx) => const BrandDelete()));
               },

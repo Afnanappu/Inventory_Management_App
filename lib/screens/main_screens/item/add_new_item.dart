@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
-import 'package:inventory_management_app/database/add_item.dart';
+import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/pick_image.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
@@ -132,6 +132,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                   keyboardType: TextInputType.number,
                 ),
                 customFormField(
+                  vPadding: 0,
                   context: context,
                   labelText: 'Description',
                   controller: _itemDescriptionController,
@@ -158,10 +159,6 @@ class _ItemAddNewState extends State<ItemAddNew> {
 
                     addItemToDB(item);
 
-                    // itemAddToItemBrand(ItemBrandModel(
-                    //     itemBrandName: itemBrandModel.itemBrandName,
-                    //     itemModelList: itemBrandModel.itemModelList));
-                    // print('${itemBrandModel.itemBrandName}: ${ _itemNameController.text}');
                     Navigator.of(context).pop();
                   },
                 ),

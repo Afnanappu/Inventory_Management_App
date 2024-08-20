@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/database/add_item.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/item/add_new_item.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
@@ -12,7 +11,6 @@ class ItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getAllItemBrand();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),

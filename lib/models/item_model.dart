@@ -14,11 +14,11 @@ List<String> brandItemList = [
 // List<String> ram = ['4', '8', '16'];
 // List<String> rom = ['32', '64', '128'];
 
-ValueNotifier<List<ItemBrandModel>> itemBrandListNotifiers = ValueNotifier([]);
+final all = ItemBrandModel(itemBrandName: 'All');
+
+ValueNotifier<List<ItemBrandModel>> itemBrandListNotifiers = ValueNotifier([all]);
 
 ValueNotifier<List<ItemModel>> itemModelListNotifiers = ValueNotifier([]);
-
-
 
 @HiveType(typeId: 1)
 class ItemBrandModel {
