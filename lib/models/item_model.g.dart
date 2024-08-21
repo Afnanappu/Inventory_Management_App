@@ -58,9 +58,9 @@ class ItemModelAdapter extends TypeAdapter<ItemModel> {
       itemBrand: fields[2] as String,
       itemImage: fields[3] as String,
       itemPrice: fields[4] as double,
-      color: (fields[5] as List).cast<ItemCOLOR>(),
-      ram: (fields[6] as List).cast<ItemRAM>(),
-      rom: (fields[7] as List).cast<ItemROM>(),
+      color: (fields[5] as List).cast<String>(),
+      ram: (fields[6] as List).cast<String>(),
+      rom: (fields[7] as List).cast<String>(),
       description: fields[8] as String,
       stock: fields[9] as int,
     )..id = fields[0] as int?;

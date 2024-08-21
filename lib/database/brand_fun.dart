@@ -10,7 +10,7 @@ late Box brandBox;
 
 //Function to get all item brand from database and added to itemBrandListNotifiers.
 Future<void> getAllItemBrandFromDB() async {
-  brandBox = await Hive.openBox(BRAND_BOX);
+  brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
   itemBrandListNotifiers.value.clear();
   itemBrandListNotifiers.value =
       brandBox.values.cast<ItemBrandModel>().toList();
@@ -21,9 +21,8 @@ Future<void> getAllItemBrandFromDB() async {
 
 //Function to add brand to database
 Future<void> addBrandToDB(ItemBrandModel brand) async {
-  brandBox = await Hive.openBox(BRAND_BOX);
+  brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
   brand.id = await brandBox.add(brand);
-  notifyBrandListeners();
   getAllItemBrandFromDB();
   print(
       'A new brand is added to database and the brand id = ${brand.id} and the length of all brand is ${brandBox.values.length}');
@@ -31,11 +30,21 @@ Future<void> addBrandToDB(ItemBrandModel brand) async {
 
 //Function to delete brand from database.
 Future<void> deleteBrandFromDB(int brandIndex) async {
-  brandBox = await Hive.openBox(BRAND_BOX);
+  brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
   await brandBox.deleteAt(brandIndex);
-  notifyBrandListeners();
   getAllItemBrandFromDB();
   print('The brand in the index $brandIndex is deleted');
+}
+
+//Function to Edit brand from database.
+Future<void> editBrandFromDB(
+  int brandIndex,
+  ItemBrandModel brand,
+) async {
+  brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
+  brandBox.putAt(brandIndex, brand);
+  getAllItemBrandFromDB();
+  print('The brand at index $brandIndex is edited');
 }
 
 //Created a function that can notify itemBrandListNotifiers.

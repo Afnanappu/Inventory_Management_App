@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
@@ -28,7 +30,7 @@ class ItemDetailsForHome extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ItemFullDetails(
-                        image: itemModel.itemImage,
+                        itemModel: itemModel,
                       ),
                     ));
                   },
@@ -41,8 +43,8 @@ class ItemDetailsForHome extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(13),
-                      child: Image.asset(
-                        itemModel.itemImage,
+                      child: Image.file(
+                        File(itemModel.itemImage),
                         fit: BoxFit.contain,
                       ),
                     ),

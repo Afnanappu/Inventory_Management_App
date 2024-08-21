@@ -48,4 +48,14 @@ class MyFontStyle{
         color: MyColors.darkGrey,
         fontWeight: FontWeight.w600,
       );
+  static const mediumLightGrey = TextStyle(
+        fontSize: 17,
+        color: MyColors.darkGrey,
+        fontWeight: FontWeight.w500,
+      );
+  static const mediumBlackShade = TextStyle(
+        fontSize: 17,
+        color: MyColors.blackShade,
+        fontWeight: FontWeight.w500,
+      );
 }

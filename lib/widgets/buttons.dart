@@ -6,24 +6,30 @@ class MyButton extends StatelessWidget {
   Color color;
   String text;
   void Function() function;
-  MyButton(
-      {super.key,
-      required this.color,
-      required this.text,
-      required this.function});
+  double vPadding;
+  MyButton({
+    super.key,
+    required this.color,
+    required this.text,
+    required this.function,
+    this.vPadding = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: function,
-      style: ButtonStyle(
-        backgroundColor: WidgetStateColor.resolveWith(
-          (states) => MyColors.green,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: vPadding),
+      child: ElevatedButton(
+        onPressed: function,
+        style: ButtonStyle(
+          backgroundColor: WidgetStateColor.resolveWith(
+            (states) => MyColors.green,
+          ),
         ),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(color: MyColors.white),
+        child: Text(
+          text,
+          style: const TextStyle(color: MyColors.white),
+        ),
       ),
     );
   }
@@ -54,12 +60,8 @@ class MyCustomButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style:const TextStyle(
-            color: MyColors.green,
-            fontSize: 11,
-            fontWeight: FontWeight.w500
-
-          ),
+          style: const TextStyle(
+              color: MyColors.green, fontSize: 11, fontWeight: FontWeight.w500),
         ),
       ),
     );

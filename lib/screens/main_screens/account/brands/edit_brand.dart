@@ -36,12 +36,16 @@ class BrandEdit extends StatelessWidget {
                 BrandAddNew(
                   context: context,
                   index: index,
+                  controllerValue:  brand[index].itemBrandName,
                   title: 'Edit brand',
                   text: 'Brand name',
                   controller: _editBrandController,
                   buttonText: 'Save',
                   buttonColor: MyColors.green,
                   message: 'Brand edited successfully',
+                  buttonFunctionWithArgAndBrand: (index, brand) {
+                    editBrandFromDB(index, brand);
+                  },
                 );
               },
             ),

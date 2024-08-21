@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
@@ -25,8 +27,8 @@ class ItemListTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: ListTile(          
-          leading: Image.asset(
-            image,
+          leading: Image.file(
+            File(image),
           ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

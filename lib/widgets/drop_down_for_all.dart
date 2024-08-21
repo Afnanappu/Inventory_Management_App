@@ -9,22 +9,28 @@ class DropDownForAll extends StatelessWidget {
   List<DropdownMenuItem<dynamic>> items;
   String? Function(dynamic)? validator;
   void Function(dynamic)? onChanged;
-  Color formFillColor = MyColors.lightGrey;
+  void Function()? onTap;
+  Color formFillColor;
   DropDownForAll({
     super.key,
     required this.items,
     required this.onChanged,
     this.validator,
+    this.onTap,
+    this.formFillColor = MyColors.lightGrey,
   });
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
       hint: const Text(
-        '---Select brand---',
+        'Select brand',
         style: MyFontStyle.smallLightGrey,
       ),
-
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      borderRadius: BorderRadius.circular(20),
+      dropdownColor: MyColors.white,
+      onTap: onTap,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

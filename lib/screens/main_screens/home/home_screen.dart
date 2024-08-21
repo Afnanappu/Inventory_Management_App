@@ -3,6 +3,7 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/screens/main_screens/home/brand_items.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     MyScreenSize.initialize(context);
     getAllItemBrandFromDB();
+    getAllItemFormDB();
     return Scaffold(
       //App bar
       appBar: PreferredSize(
@@ -105,6 +107,13 @@ class HomeScreen extends StatelessWidget {
 
             //Item Details
             const ItemDetailsForHome(),
+
+            //space
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: MyScreenSize.screenHeight*0.1,
+              ),
+            ),
           ],
         ),
       ),

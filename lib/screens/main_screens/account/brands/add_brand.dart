@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/buttons.dart';
 import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 import 'package:inventory_management_app/widgets/text_form_field.dart';
@@ -11,14 +12,21 @@ class BrandAddNew {
     String? text,
     int? index,
     TextEditingController? controller,
+     String? controllerValue,
     required String buttonText,
     required Color buttonColor,
     required String message,
+    String errorMessage = 'Error',
     bool haveTextField = true,
     String? content,
     void Function()? buttonFunction,
     void Function(int)? buttonFunctionWithArg,
+    void Function(int, ItemBrandModel)? buttonFunctionWithArgAndBrand,
   }) {
+if(controllerValue!=null){
+    controller!.text = controllerValue;
+
+}
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -35,15 +43,30 @@ class BrandAddNew {
               color: buttonColor,
               text: buttonText,
               function: () {
-                if (buttonFunction != null) {
-                  buttonFunction();
+                try {
+                  if (buttonFunction != null) {
+                    buttonFunction();
+                  }
+                  if (buttonFunctionWithArg != null && index != null) {
+                    buttonFunctionWithArg(index);
+                  }
+                  if (buttonFunctionWithArgAndBrand != null && index != null) {
+                    final brand =
+                        ItemBrandModel(itemBrandName: controller!.text);
+                    buttonFunctionWithArgAndBrand(index, brand);
+                  }
+                  CustomSnackBarMessage(
+                      context: context,
+                      message: message,
+                      color: MyColors.green);
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  CustomSnackBarMessage(
+                      context: context,
+                      message: errorMessage,
+                      color: MyColors.red);
+                  Navigator.of(context).pop();
                 }
-                if (buttonFunctionWithArg != null && index!=null) {
-                  buttonFunctionWithArg(index);
-                }
-                CustomSnackBarMessage(
-                    context: context, message: message, color: MyColors.green);
-                Navigator.of(context).pop();
               })
         ],
       ),

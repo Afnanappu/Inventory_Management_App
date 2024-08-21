@@ -6,7 +6,7 @@ Widget customFormField({
   required BuildContext context,
   required String labelText,
   required TextEditingController controller,
-  String? Function(String?)? validator,
+  String? Function(String? value)? validator,
   bool? isFormEnabled = true,
   Color formFillColor = MyColors.lightGrey,
   TextInputType keyboardType = TextInputType.text,
