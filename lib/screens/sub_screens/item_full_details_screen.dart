@@ -4,18 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
+import 'package:inventory_management_app/screens/main_screens/item/add_or_edit_new_item.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_item_full_details.dart';
 import 'package:inventory_management_app/widgets/button_add_sale.dart';
-import 'package:inventory_management_app/widgets/buttons.dart';
 
 // ignore: must_be_immutable
 class ItemFullDetails extends StatelessWidget {
   final ItemModel itemModel;
-  ItemFullDetails({super.key, required this.itemModel});
+  final int index;
+  ItemFullDetails({super.key, required this.itemModel, required this.index});
 
   String rams = '';
   String roms = '';
+  ItemBrandModel?  brand;
+  void getBrand() async {
+   brand = await findItemBrandFromDB(itemModel.brandId);
+  }
 
   void _listToString() {
     for (var ram in itemModel.ram) {
@@ -30,6 +36,8 @@ class ItemFullDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getBrand();
+
     _listToString();
     return Scaffold(
       body: ListView(
@@ -49,7 +57,18 @@ class ItemFullDetails extends StatelessWidget {
               ),
               PreferredSize(
                 preferredSize: const Size(double.maxFinite, 60),
-                child: AppBarForItemFullDetails(onPressed: () {}),
+                child: AppBarForItemFullDetails(onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) => ItemAddNew(
+                        itemModel: itemModel,
+                        isAddingItem: false,
+                        index: index,
+                      ),
+                    ),
+                  );
+                  print('item edit page is opened');
+                }),
               ),
             ],
           ),
@@ -76,7 +95,7 @@ class ItemFullDetails extends StatelessWidget {
                           itemModel.itemName,
                           style: const TextStyle(
                             color: MyColors.blackShade,
-                            fontSize: 28,
+                            fontSize: 25,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -93,7 +112,7 @@ class ItemFullDetails extends StatelessWidget {
                             color: (itemModel.stock > 5)
                                 ? MyColors.green
                                 : MyColors.red,
-                            fontSize: 15,
+                            fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -106,8 +125,8 @@ class ItemFullDetails extends StatelessWidget {
                           itemModel.description,
                           style: const TextStyle(
                             color: MyColors.blackShade,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         const SizedBox(
@@ -140,7 +159,7 @@ class ItemFullDetails extends StatelessWidget {
                                   )),
                                   Expanded(
                                     child: Text(
-                                      itemModel.itemBrand,
+                                      brand!.itemBrandName,
                                       style: MyFontStyle.mediumBlackShade,
                                     ),
                                   ),
@@ -254,7 +273,7 @@ class ItemFullDetails extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '₹${itemModel.itemPrice}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: MyColors.blackShade,
                       fontSize: 22,
                       fontWeight: FontWeight.w700,

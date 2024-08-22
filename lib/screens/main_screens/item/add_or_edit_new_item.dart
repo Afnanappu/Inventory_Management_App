@@ -12,7 +12,17 @@ import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 import 'package:inventory_management_app/widgets/text_form_field.dart';
 
 class ItemAddNew extends StatefulWidget {
-  const ItemAddNew({super.key});
+  const ItemAddNew({
+    super.key,
+    this.itemModel,
+    this.isAddingItem = true,
+    this.removeBelowRoute = true,
+    this.index,
+  });
+  final ItemModel? itemModel;
+  final bool isAddingItem;
+  final int? index;
+  final bool removeBelowRoute;
 
   @override
   State<ItemAddNew> createState() => _ItemAddNewState();
@@ -37,7 +47,22 @@ class _ItemAddNewState extends State<ItemAddNew> {
 
   String? image;
 
-  String nowBrandName = '';
+  int nowBrandId = 0;
+
+  @override
+  void initState() {
+    if (widget.itemModel != null) {
+      image = widget.itemModel!.itemImage;
+      _itemNameController.text = widget.itemModel!.itemName;
+      _itemPriceController.text = widget.itemModel!.itemPrice.toString();
+      _itemStockController.text = widget.itemModel!.stock.toString();
+      _itemColorController.text = widget.itemModel!.color.join(', ');
+      _itemRamController.text = widget.itemModel!.ram.join(', ');
+      _itemStorageController.text = widget.itemModel!.rom.join(', ');
+      _itemDescriptionController.text = widget.itemModel!.description;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +70,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
         child: AppBarForSubWithEdit(
-          title: 'Add Item',
+          title: (widget.isAddingItem == true) ? 'Add Item' : 'Edit Item',
           isAddIcon: false,
         ),
       ),
@@ -75,7 +100,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                           image: (image != null)
                               ? DecorationImage(
                                   image: FileImage(File(image!)),
-                                  fit: BoxFit.cover)
+                                  fit: BoxFit.contain)
                               : null,
                           color: MyColors.lightGrey,
                           borderRadius: BorderRadius.circular(10)),
@@ -93,7 +118,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     vPadding: 20,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'item name is empty, provide any name';
+                        return 'item name is empty, provide a name';
                       } else {
                         return null;
                       }
@@ -104,49 +129,89 @@ class _ItemAddNewState extends State<ItemAddNew> {
                   ValueListenableBuilder(
                     valueListenable: itemBrandListNotifiers,
                     builder: (context, itemBrand, child) => DropDownForAll(
+                      validator: (value) {
+                        if (value == null) {
+                          return 'No brand is selected, select one';
+                        } else {
+                          return null;
+                        }
+                      },
                       items: itemBrand.map(
                         (e) {
                           return DropdownMenuItem(
-                            value: e.itemBrandName,
+                            value: e.id,
                             child: Text(e.itemBrandName),
                           );
                         },
                       ).toList(),
                       onChanged: (e) {
-                        nowBrandName = e;
+                        setState(() {
+                          nowBrandId = e;
+                        });
                       },
                     ),
                   ),
 
                   //price
                   customFormField(
-                      context: context,
-                      labelText: 'Price',
-                      controller: _itemPriceController,
-                      keyboardType: TextInputType.number),
+                    context: context,
+                    labelText: 'Price',
+                    controller: _itemPriceController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'item price is empty, provide a price';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
 
                   //stock count
                   customFormField(
-                      vPadding: 0,
-                      context: context,
-                      labelText: 'Stock Count',
-                      controller: _itemStockController,
-                      keyboardType: TextInputType.number),
+                    vPadding: 0,
+                    context: context,
+                    labelText: 'Stock Count',
+                    controller: _itemStockController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'item stock count is empty, provide a stock count';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
 
                   //color
                   customFormField(
                     context: context,
                     labelText: 'Color',
                     controller: _itemColorController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'item have no color!, try to provide';
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
 
                   //ram
                   customFormField(
-                      vPadding: 0,
-                      context: context,
-                      labelText: 'Ram',
-                      controller: _itemRamController,
-                      keyboardType: TextInputType.number),
+                    vPadding: 0,
+                    context: context,
+                    labelText: 'Ram',
+                    controller: _itemRamController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'item have no ram!, try to provide';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
 
                   //storage
                   customFormField(
@@ -154,6 +219,13 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     labelText: 'Storage',
                     controller: _itemStorageController,
                     keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'item have no storage!, try to provide';
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
 
                   //description
@@ -162,13 +234,22 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     context: context,
                     labelText: 'Description',
                     controller: _itemDescriptionController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'item description is empty, provide description';
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
 
                   //---------- Save button ----------//
                   MyButton(
                     vPadding: 5,
                     color: MyColors.green,
-                    text: 'Add to items',
+                    text: (widget.isAddingItem == true)
+                        ? 'Add to items'
+                        : 'Save Changes',
                     function: () {
                       try {
                         if (_formKey.currentState!.validate()) {
@@ -180,8 +261,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
                                 color: MyColors.red);
                           } else {
                             final item = ItemModel(
+                              brandId: nowBrandId,
                               itemName: _itemNameController.text,
-                              itemBrand: nowBrandName,
                               itemImage: image!,
                               itemPrice:
                                   double.parse(_itemPriceController.text),
@@ -193,12 +274,19 @@ class _ItemAddNewState extends State<ItemAddNew> {
                                 _itemStockController.text,
                               ),
                             );
-
-                            addItemToDB(item);
-                            CustomSnackBarMessage(
-                                context: context,
-                                message: 'Item added successfully',
-                                color: MyColors.green);
+                            if (widget.isAddingItem == true) {
+                              addItemToDB(item);
+                              CustomSnackBarMessage(
+                                  context: context,
+                                  message: 'Item added successfully',
+                                  color: MyColors.green);
+                            } else {
+                              editItemFromDB(widget.itemModel!.id!, item);
+                              if (widget.removeBelowRoute == true) {
+                                Navigator.of(context)
+                                    .removeRouteBelow(ModalRoute.of(context)!);
+                              }
+                            }
                             Navigator.of(context).pop();
                           }
                         }

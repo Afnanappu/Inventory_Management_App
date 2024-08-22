@@ -10,14 +10,12 @@ List<String> brandItemList = [
   'OnePlus',
 ];
 
-// List<String> colors = ['Black', 'White', 'Yellow'];
-// List<String> ram = ['4', '8', '16'];
-// List<String> rom = ['32', '64', '128'];
+ ValueNotifier<List<ItemModel>> filteredItemModelList = ValueNotifier([]);
 
 final all = ItemBrandModel(itemBrandName: 'All');
 
 ValueNotifier<List<ItemBrandModel>> itemBrandListNotifiers =
-    ValueNotifier([all]);
+    ValueNotifier([]);
 
 ValueNotifier<List<ItemModel>> itemModelListNotifiers = ValueNotifier([]);
 
@@ -30,21 +28,7 @@ class ItemBrandModel {
   ItemBrandModel({this.id, required this.itemBrandName});
 }
 
-// class ItemStock {
-//   int? id;
-//   int stock;
 
-//   ItemStock({required this.stock, this.id});
-// }
-
-// // ignore: constant_identifier_names
-// enum ItemRAM { GB4, GB6, GB8 }
-
-// // ignore: constant_identifier_names
-// enum ItemROM { GB64, GB128, GB256 }
-
-// // ignore: constant_identifier_names
-// enum ItemCOLOR { Black, White, Blue }
 
 @HiveType(typeId: 2)
 class ItemModel {
@@ -55,7 +39,7 @@ class ItemModel {
   String itemName;
 
   @HiveField(2)
-  String itemBrand;
+  int brandId;
 
   @HiveField(3)
   String itemImage;
@@ -79,8 +63,8 @@ class ItemModel {
   int stock;
 
   ItemModel({
+    required this.brandId,
     required this.itemName,
-    required this.itemBrand,
     required this.itemImage,
     required this.itemPrice,
     required this.color,
@@ -90,6 +74,23 @@ class ItemModel {
     required this.stock,
   });
 }
+
+
+// class ItemStock {
+//   int? id;
+//   int stock;
+
+//   ItemStock({required this.stock, this.id});
+// }
+
+// // ignore: constant_identifier_names
+// enum ItemRAM { GB4, GB6, GB8 }
+
+// // ignore: constant_identifier_names
+// enum ItemROM { GB64, GB128, GB256 }
+
+// // ignore: constant_identifier_names
+// enum ItemCOLOR { Black, White, Blue }
 
 // ItemModel(
 //   itemName: 'OnePlus Nord 4 5G',

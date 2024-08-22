@@ -6,7 +6,7 @@ import 'package:inventory_management_app/models/item_model.dart';
 const BRAND_BOX = 'BrandBox';
 
 //Opened a box so we can use it any time.
-late Box brandBox;
+late Box<ItemBrandModel> brandBox;
 
 //Function to get all item brand from database and added to itemBrandListNotifiers.
 Future<void> getAllItemBrandFromDB() async {
@@ -14,40 +14,50 @@ Future<void> getAllItemBrandFromDB() async {
   itemBrandListNotifiers.value.clear();
   itemBrandListNotifiers.value =
       brandBox.values.cast<ItemBrandModel>().toList();
-
+  // brandBox.clear();
   notifyBrandListeners();
-  print('fetching all brands from database');
+  print(
+      'fetching all brands from database\nThe number of brand in the DB is ${brandBox.values.length}');
 }
 
 //Function to add brand to database
 Future<void> addBrandToDB(ItemBrandModel brand) async {
   brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
   brand.id = await brandBox.add(brand);
+  await brandBox.put(brand.id, brand);
   getAllItemBrandFromDB();
   print(
       'A new brand is added to database and the brand id = ${brand.id} and the length of all brand is ${brandBox.values.length}');
 }
 
 //Function to delete brand from database.
-Future<void> deleteBrandFromDB(int brandIndex) async {
+Future<void> deleteBrandFromDB(int brandId) async {
   brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
-  await brandBox.deleteAt(brandIndex);
+  await brandBox.delete(brandId);
   getAllItemBrandFromDB();
-  print('The brand in the index $brandIndex is deleted');
+  print(
+      'The brand in the index $brandId is deleted. The available brands is ${brandBox.values.length}');
 }
 
 //Function to Edit brand from database.
 Future<void> editBrandFromDB(
-  int brandIndex,
+  int brandId,
   ItemBrandModel brand,
 ) async {
   brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
-  brandBox.putAt(brandIndex, brand);
+  brandBox.put(brandId, brand);
   getAllItemBrandFromDB();
-  print('The brand at index $brandIndex is edited');
+  print('The brand at index $brandId is edited');
 }
 
 //Created a function that can notify itemBrandListNotifiers.
 void notifyBrandListeners() {
   itemBrandListNotifiers.notifyListeners();
+}
+
+Future<ItemBrandModel> findItemBrandFromDB(int brandId) async {
+  brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
+  return brandBox.values.firstWhere(
+    (brand) => brand.id == brandId,
+  );
 }

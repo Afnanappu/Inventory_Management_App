@@ -9,8 +9,8 @@ class BrandItems extends StatefulWidget {
   State<BrandItems> createState() => _BrandItemsState();
 }
 
+int selectedButtonIndex = 0;
 class _BrandItemsState extends State<BrandItems> {
-  int selectedButtonIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -29,6 +29,8 @@ class _BrandItemsState extends State<BrandItems> {
                 onPressed: () {
                   setState(() {
                     selectedButtonIndex = index;
+                    filteredItemModelList.value = itemModelListNotifiers.value
+                        .where((item) => item.brandId == brand[index].id).toList();
                   });
                 },
                 style: ButtonStyle(

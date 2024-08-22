@@ -35,7 +35,7 @@ class BrandEdit extends StatelessWidget {
               onTap: () {
                 BrandAddNew(
                   context: context,
-                  index: index,
+                  brandId: brand[index].id,
                   controllerValue:  brand[index].itemBrandName,
                   title: 'Edit brand',
                   text: 'Brand name',
@@ -43,8 +43,8 @@ class BrandEdit extends StatelessWidget {
                   buttonText: 'Save',
                   buttonColor: MyColors.green,
                   message: 'Brand edited successfully',
-                  buttonFunctionWithArgAndBrand: (index, brand) {
-                    editBrandFromDB(index, brand);
+                  buttonFunctionWithArgAndBrand: (brandId, brand) {
+                    editBrandFromDB(brandId, brand);
                   },
                 );
               },

@@ -54,8 +54,8 @@ class ItemModelAdapter extends TypeAdapter<ItemModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ItemModel(
+      brandId: fields[2] as int,
       itemName: fields[1] as String,
-      itemBrand: fields[2] as String,
       itemImage: fields[3] as String,
       itemPrice: fields[4] as double,
       color: (fields[5] as List).cast<String>(),
@@ -75,7 +75,7 @@ class ItemModelAdapter extends TypeAdapter<ItemModel> {
       ..writeByte(1)
       ..write(obj.itemName)
       ..writeByte(2)
-      ..write(obj.itemBrand)
+      ..write(obj.brandId)
       ..writeByte(3)
       ..write(obj.itemImage)
       ..writeByte(4)

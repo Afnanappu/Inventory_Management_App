@@ -35,7 +35,7 @@ class BrandDelete extends StatelessWidget {
                 BrandAddNew(
                   context: context,
                   title: 'Delete brand',
-                  index: index,
+                  brandId: brand[index].id,
                   buttonText: 'Delete',
                   buttonColor: MyColors.red,
                   message: 'Brand deleted successfully',

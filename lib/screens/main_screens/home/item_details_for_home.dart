@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/item_full_details_screen.dart';
 
 class ItemDetailsForHome extends StatelessWidget {
   const ItemDetailsForHome({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+    getAllItemBrandFromDB();
+
     return ValueListenableBuilder(
-      valueListenable: itemModelListNotifiers,
+      valueListenable: filteredItemModelList,
       builder: (BuildContext context, List<ItemModel> itemModelList, _) =>
           SliverGrid.builder(
         itemCount: itemModelList.length,
@@ -31,6 +35,7 @@ class ItemDetailsForHome extends StatelessWidget {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ItemFullDetails(
                         itemModel: itemModel,
+                        index: index,
                       ),
                     ));
                   },

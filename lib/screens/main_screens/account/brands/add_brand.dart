@@ -10,9 +10,9 @@ class BrandAddNew {
     required BuildContext context,
     required String title,
     String? text,
-    int? index,
+    int? brandId,
     TextEditingController? controller,
-     String? controllerValue,
+    String? controllerValue,
     required String buttonText,
     required Color buttonColor,
     required String message,
@@ -23,10 +23,9 @@ class BrandAddNew {
     void Function(int)? buttonFunctionWithArg,
     void Function(int, ItemBrandModel)? buttonFunctionWithArgAndBrand,
   }) {
-if(controllerValue!=null){
-    controller!.text = controllerValue;
-
-}
+    if (controllerValue != null) {
+      controller!.text = controllerValue;
+    }
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -47,13 +46,15 @@ if(controllerValue!=null){
                   if (buttonFunction != null) {
                     buttonFunction();
                   }
-                  if (buttonFunctionWithArg != null && index != null) {
-                    buttonFunctionWithArg(index);
+                  if (buttonFunctionWithArg != null && brandId != null) {
+                    buttonFunctionWithArg(brandId);
                   }
-                  if (buttonFunctionWithArgAndBrand != null && index != null) {
-                    final brand =
-                        ItemBrandModel(itemBrandName: controller!.text);
-                    buttonFunctionWithArgAndBrand(index, brand);
+                  if (buttonFunctionWithArgAndBrand != null &&
+                      brandId != null) {
+                    final brand = ItemBrandModel(
+                        itemBrandName: controller!.text, id: brandId);
+                    buttonFunctionWithArgAndBrand(brandId, brand);
+                    print('brand is edited');
                   }
                   CustomSnackBarMessage(
                       context: context,

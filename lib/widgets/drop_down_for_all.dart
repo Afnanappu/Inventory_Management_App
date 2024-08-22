@@ -10,6 +10,7 @@ class DropDownForAll extends StatelessWidget {
   String? Function(dynamic)? validator;
   void Function(dynamic)? onChanged;
   void Function()? onTap;
+  dynamic nowValue;
   Color formFillColor;
   DropDownForAll({
     super.key,

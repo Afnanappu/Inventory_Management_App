@@ -4,6 +4,7 @@ import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/screens/main_screens/home/brand_items.dart';
@@ -106,12 +107,23 @@ class HomeScreen extends StatelessWidget {
             ),
 
             //Item Details
-            const ItemDetailsForHome(),
+            (itemModelListNotifiers.value.isEmpty)
+                ? Expanded(
+                    child: SliverToBoxAdapter(
+                      child: Container(
+                        width: double.infinity,
+                        height: MyScreenSize.screenHeight * .4,
+                        alignment: AlignmentDirectional.center,
+                        child: const Text('No item added'),
+                      ),
+                    ),
+                  )
+                :  ItemDetailsForHome(),
 
             //space
             SliverToBoxAdapter(
               child: SizedBox(
-                height: MyScreenSize.screenHeight*0.1,
+                height: MyScreenSize.screenHeight * 0.1,
               ),
             ),
           ],

@@ -3,7 +3,7 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/screens/main_screens/item/add_new_item.dart';
+import 'package:inventory_management_app/screens/main_screens/item/add_or_edit_new_item.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/item_list_tile.dart';
@@ -24,20 +24,20 @@ class ItemScreen extends StatelessWidget {
           onPressed: () {},
         ),
       ),
-      body: ValueListenableBuilder(
-        valueListenable: itemModelListNotifiers,
-        builder: (context, itemModel, child) => ListView.builder(
-          itemCount: itemModel.length,
-          itemBuilder: (context, index) {
-            return ItemListTile(
-              image: itemModel[index].itemImage,
-              itemPrice: '${itemModel[index].itemPrice}',
-              itemName: itemModel[index].itemName,
-              itemStock: '${itemModel[index].stock}',
-            );
-          },
-        ),
-      ),
+      body: (itemModelListNotifiers.value.isEmpty)
+          ? const Center(child: Text('No item added'))
+          : ValueListenableBuilder(
+              valueListenable: itemModelListNotifiers,
+              builder: (context, itemModel, child) => ListView.builder(
+                itemCount: itemModel.length,
+                itemBuilder: (context, index) {
+                  return ItemListTile(
+                    index: index,
+                    itemModel: itemModel[index],
+                  );
+                },
+              ),
+            ),
       floatingActionButton: FloatingActionButtonForAll(
           text: "Add new item",
           onPressed: () {

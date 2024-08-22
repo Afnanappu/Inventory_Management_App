@@ -5,7 +5,7 @@ import 'package:inventory_management_app/widgets/circle_icons.dart';
 // ignore: must_be_immutable
 class AppBarForItemFullDetails extends StatelessWidget {
   void Function()? onPressed;
-  AppBarForItemFullDetails({super.key, required onPressed});
+  AppBarForItemFullDetails({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,12 @@ class AppBarForItemFullDetails extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.only(right: 20),
             child: customCircleIconButton(
-                onPressed: onPressed, icon: Icons.edit_outlined)),
+                onPressed: () {
+                  if (onPressed != null) {
+                    onPressed!();
+                  }
+                },
+                icon: Icons.edit_outlined)),
       ],
     );
   }
