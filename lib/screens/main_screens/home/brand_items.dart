@@ -10,6 +10,7 @@ class BrandItems extends StatefulWidget {
 }
 
 int selectedButtonIndex = 0;
+
 class _BrandItemsState extends State<BrandItems> {
   @override
   Widget build(BuildContext context) {
@@ -20,60 +21,117 @@ class _BrandItemsState extends State<BrandItems> {
         builder: (context, brand, child) => ListView.builder(
           //todo: Add the see all button functions
           // physics: NeverScrollableScrollPhysics(),
-          itemCount: brand.length,
+          itemCount: brand.length + 1,
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    selectedButtonIndex = index;
-                    filteredItemModelList.value = itemModelListNotifiers.value
-                        .where((item) => item.brandId == brand[index].id).toList();
-                  });
-                },
-                style: ButtonStyle(
-                  foregroundColor: WidgetStateProperty.resolveWith(
-                    (states) {
-                      if (selectedButtonIndex == index) {
-                        return MyColors.white;
-                      }
-                      return MyColors.blackShade;
-                    },
-                  ),
-                  // minimumSize: WidgetStatePropertyAll(Size.zero),
-                  shape:
-                      WidgetStateProperty.resolveWith<RoundedRectangleBorder>(
-                    (states) {
-                      if (selectedButtonIndex == index) {
+          itemBuilder: (context, itemIndex) {
+            int index = itemIndex - 1;
+            if (itemIndex == 0) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedButtonIndex = index;
+                      filteredItemModelList.value = itemModelListNotifiers.value
+                          .map((e) => e,)
+                          .toList();
+                    });
+                  },
+                  style: ButtonStyle(
+                    foregroundColor: WidgetStateProperty.resolveWith(
+                      (states) {
+                        if (selectedButtonIndex == index) {
+                          return MyColors.white;
+                        }
+                        return MyColors.blackShade;
+                      },
+                    ),
+                    // minimumSize: WidgetStatePropertyAll(Size.zero),
+                    shape:
+                        WidgetStateProperty.resolveWith<RoundedRectangleBorder>(
+                      (states) {
+                        if (selectedButtonIndex == index) {
+                          return RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: const BorderSide(
+                              color: MyColors.green,
+                            ),
+                          );
+                        }
                         return RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: const BorderSide(
-                            color: MyColors.green,
+                            color: MyColors.blackShade,
                           ),
                         );
-                      }
-                      return RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(
-                          color: MyColors.blackShade,
-                        ),
-                      );
-                    },
+                      },
+                    ),
+                    backgroundColor: WidgetStateProperty.resolveWith(
+                      (Set<WidgetState> states) {
+                        if (selectedButtonIndex == index) {
+                          return MyColors.green;
+                        }
+                        return MyColors.white;
+                      },
+                    ),
                   ),
-                  backgroundColor: WidgetStateProperty.resolveWith(
-                    (Set<WidgetState> states) {
-                      if (selectedButtonIndex == index) {
-                        return MyColors.green;
-                      }
-                      return MyColors.white;
-                    },
-                  ),
+                  child:const Text('All'),
                 ),
-                child: Text(brand[index].itemBrandName),
-              ),
-            );
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedButtonIndex = index;
+                      filteredItemModelList.value = itemModelListNotifiers.value
+                          .where((item) => item.brandId == brand[index].id)
+                          .toList();
+                    });
+                  },
+                  style: ButtonStyle(
+                    foregroundColor: WidgetStateProperty.resolveWith(
+                      (states) {
+                        if (selectedButtonIndex == index) {
+                          return MyColors.white;
+                        }
+                        return MyColors.blackShade;
+                      },
+                    ),
+                    // minimumSize: WidgetStatePropertyAll(Size.zero),
+                    shape:
+                        WidgetStateProperty.resolveWith<RoundedRectangleBorder>(
+                      (states) {
+                        if (selectedButtonIndex == index) {
+                          return RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: const BorderSide(
+                              color: MyColors.green,
+                            ),
+                          );
+                        }
+                        return RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(
+                            color: MyColors.blackShade,
+                          ),
+                        );
+                      },
+                    ),
+                    backgroundColor: WidgetStateProperty.resolveWith(
+                      (Set<WidgetState> states) {
+                        if (selectedButtonIndex == index) {
+                          return MyColors.green;
+                        }
+                        return MyColors.white;
+                      },
+                    ),
+                  ),
+                  child: Text(brand[index].itemBrandName),
+                ),
+              );
+            }
           },
         ),
       ),
