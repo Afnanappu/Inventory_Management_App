@@ -44,6 +44,20 @@ Future<void> editItemFromDB(int itemId, ItemModel item) async {
   print('The item in the index $itemId is edited');
 }
 
+
+ItemModel getItemFromDB(int itemId) {
+
+  final item = itemModelListNotifiers.value.firstWhere(
+    (item) => item.id == itemId,
+  );
+  return item;
+}
+
+
+
+
+
+
 //Created a function that can notify itemModelListNotifiers.
 void notifyItemListeners() {
   itemModelListNotifiers.notifyListeners();

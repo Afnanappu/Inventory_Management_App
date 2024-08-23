@@ -39,10 +39,11 @@ class BrandDelete extends StatelessWidget {
                   buttonText: 'Delete',
                   buttonColor: MyColors.red,
                   message: 'Brand deleted successfully',
+                  errorMessage: "Brand can't delete because there are item under it",
                   haveTextField: false,
                   content: 'Are you sure?',
-                  buttonFunctionWithArg: (brandIndex) {
-                    deleteBrandFromDB(brandIndex);
+                  buttonFunctionWithArg: (brandId) {
+                    deleteBrandFromDB(brandId);
                   },
                 );
               },

@@ -47,7 +47,19 @@ class BrandCRUD {
                     buttonFunction();
                   }
                   if (buttonFunctionWithArg != null && brandId != null) {
-                    buttonFunctionWithArg(brandId);
+                    final isPossibleToDelete = itemModelListNotifiers.value.any(
+                      (element) => element.brandId == brandId,
+                    );
+
+                    if (!isPossibleToDelete) {
+                      buttonFunctionWithArg(brandId);
+                    }else{
+                      CustomSnackBarMessage(
+                      context: context,
+                      message: errorMessage,
+                      color: MyColors.red);
+                  Navigator.of(context).pop();
+                    }
                   }
                   if (buttonFunctionWithArgAndBrand != null &&
                       brandId != null) {

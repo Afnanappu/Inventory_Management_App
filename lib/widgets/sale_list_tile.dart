@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/widgets/buttons.dart';
@@ -9,13 +12,16 @@ class SaleListTile extends StatelessWidget {
   final String invoiceNo;
   final String brandName;
   final String itemPrice;
-  const SaleListTile(
-      {super.key,
-      required this.image,
-      required this.customerName,
-      required this.invoiceNo,
-      required this.brandName,
-      required this.itemPrice});
+  final DateTime saleAddDate;
+  const SaleListTile({
+    super.key,
+    required this.image,
+    required this.customerName,
+    required this.invoiceNo,
+    required this.brandName,
+    required this.itemPrice,
+    required this.saleAddDate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +33,8 @@ class SaleListTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: ListTile(
-          leading: Image.asset(
-            image,
+          leading: Image.file(
+            File(image),
             fit: BoxFit.contain,
           ),
           title: Row(
@@ -59,8 +65,8 @@ class SaleListTile extends StatelessWidget {
                         fontSize: 13,
                         fontWeight: FontWeight.w600),
                   ),
-                  const Text(
-                    '05-Aug, 24',
+                  Text(
+                    DateFormat('dd/MM/yy').format(saleAddDate),
                     style: MyFontStyle.saleTileInvoice,
                   ),
                 ],

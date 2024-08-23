@@ -4,6 +4,7 @@ import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
+import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
@@ -129,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   )
-                : ItemDetailsForHome(),
+                :const ItemDetailsForHome(),
 
             //space
             SliverToBoxAdapter(
@@ -143,8 +144,9 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButtonForAll(
         text: 'Add new sale',
         onPressed: () {
+          saleItemsListNotifier.value.clear();
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (ctx) => SaleAddNew()));
+              .push(MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
         },
         color: MyColors.red,
       ),

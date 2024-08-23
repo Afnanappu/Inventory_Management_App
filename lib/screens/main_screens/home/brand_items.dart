@@ -10,7 +10,7 @@ class BrandItems extends StatefulWidget {
   State<BrandItems> createState() => _BrandItemsState();
 }
 
-int selectedButtonIndex = 0;
+int selectedButtonIndex = -1;
 
 class _BrandItemsState extends State<BrandItems> {
   @override

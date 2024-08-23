@@ -2,10 +2,17 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/database/customer_fun.dart';
+import 'package:inventory_management_app/database/item_fun.dart';
+import 'package:inventory_management_app/database/sales_fun.dart';
+import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/screens/main_screens/dashboard/all_sale_data.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/custom_container.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
+import 'package:inventory_management_app/widgets/sale_list_tile.dart';
 
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({super.key});
@@ -18,6 +25,8 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getAllCustomersFormDB();
+    getAllSalesFromDB();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -141,7 +150,10 @@ class DashboardScreen extends StatelessWidget {
                   //See all
                   //todo: Add the see all button functions
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => const AllSaleDataScreen()));
+                    },
                     child: const Text(
                       'See all',
                       style: TextStyle(color: MyColors.green),
@@ -153,32 +165,38 @@ class DashboardScreen extends StatelessWidget {
           ),
 
           //todo: add recent sales here.
-          // ValueListenableBuilder(
-          //   valueListenable: itemBrandList,
-          //   builder: (BuildContext context, List<ItemBrand> itemBrand, Widget? child) {
-          //     return SliverList.builder(
-          //     itemCount: 4,
-          //     itemBuilder: (context, index) {
+          ValueListenableBuilder(
+            valueListenable: customerListNotifier,
+            builder: (BuildContext context, List<CustomerModel> customers, _) {
+              return SliverList.builder(
+                itemCount: (customers.length < 4) ? customers.length : 4,
+                itemBuilder: (context, index) {
+                  final customer = customers[index];
+                  final sale = getSaleFromFromDB(customer.saleId.first);
+                  final item = getItemFromDB(sale.itemId);
+                  final brand = getItemBrandFromDB(item.brandId);
 
-          //       return SaleListTile(
-          //         image: itemBrand[index].itemModelList[],
-          //         customerName: 'AFNAN',
-          //         invoiceNo: '${index + 1}',
-          //         brandName: itemModelList.value[index].itemBrandName,
-          //         itemPrice: itemModelList.value[index].itemPrice,
-          //       );
-          //     },
-          //   );
-          //    },
-
-          // )
+                  return SaleListTile(
+                    image: item.itemImage,
+                    customerName: customer.customerName,
+                    invoiceNo: customer.customerId.toString(),
+                    brandName: brand.itemBrandName,
+                    itemPrice: item.itemPrice.toString(),
+                    saleAddDate: customer.saleDateTime,
+                  );
+                },
+              );
+            },
+          )
         ],
       ),
       floatingActionButton: FloatingActionButtonForAll(
         text: 'Add new sale',
         onPressed: () {
+          saleItemsListNotifier.value.clear();
+
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (ctx) => SaleAddNew()));
+              .push(MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
         },
         color: MyColors.red,
       ),

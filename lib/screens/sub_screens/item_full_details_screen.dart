@@ -27,8 +27,8 @@ class _ItemFullDetailsState extends State<ItemFullDetails> {
 
   ItemBrandModel? brand;
 
-  void getBrand() async {
-    brand = await findItemBrandFromDB(widget.brandId);
+  void getBrand() {
+    brand =  getItemBrandFromDB(widget.brandId);
     setState(() {});
   }
 
