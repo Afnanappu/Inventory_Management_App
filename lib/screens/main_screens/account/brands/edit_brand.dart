@@ -33,7 +33,7 @@ class BrandEdit extends StatelessWidget {
               haveLeading: false,
               haveTrailing: true,
               onTap: () {
-                BrandAddNew(
+                BrandCRUD(
                   context: context,
                   brandId: brand[index].id,
                   controllerValue:  brand[index].itemBrandName,

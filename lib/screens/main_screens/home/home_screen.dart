@@ -13,14 +13,25 @@ import 'package:inventory_management_app/screens/main_screens/home/item_details_
 import 'package:inventory_management_app/widgets/price_filter.dart';
 import 'package:inventory_management_app/widgets/search_bar.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    getAllItemBrandFromDB();
+    getAllItemFormDB();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     MyScreenSize.initialize(context);
-    getAllItemBrandFromDB();
-    getAllItemFormDB();
+
     return Scaffold(
       //App bar
       appBar: PreferredSize(
@@ -118,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   )
-                :  ItemDetailsForHome(),
+                : ItemDetailsForHome(),
 
             //space
             SliverToBoxAdapter(
@@ -133,7 +144,7 @@ class HomeScreen extends StatelessWidget {
         text: 'Add new sale',
         onPressed: () {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
+              .push(MaterialPageRoute(builder: (ctx) => SaleAddNew()));
         },
         color: MyColors.red,
       ),

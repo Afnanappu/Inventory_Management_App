@@ -32,7 +32,7 @@ class AccountBrands extends StatelessWidget {
               title: 'Add Brand',
               icon: Icons.add,
               onTap: () {
-                BrandAddNew(
+                BrandCRUD(
                     context: context,
                     title: 'Add new Brand',
                     text: 'Enter brand name',

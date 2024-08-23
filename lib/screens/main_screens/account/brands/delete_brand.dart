@@ -32,7 +32,7 @@ class BrandDelete extends StatelessWidget {
               haveTrailing: true,
               trailIcon: Icons.delete_outline,
               onTap: () {
-                BrandAddNew(
+                BrandCRUD(
                   context: context,
                   title: 'Delete brand',
                   brandId: brand[index].id,

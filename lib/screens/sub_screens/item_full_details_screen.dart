@@ -11,34 +11,47 @@ import 'package:inventory_management_app/widgets/appbar/app_bar_for_item_full_de
 import 'package:inventory_management_app/widgets/button_add_sale.dart';
 
 // ignore: must_be_immutable
-class ItemFullDetails extends StatelessWidget {
+class ItemFullDetails extends StatefulWidget {
   final ItemModel itemModel;
-  final int index;
-  ItemFullDetails({super.key, required this.itemModel, required this.index});
+  final int brandId;
+  ItemFullDetails({super.key, required this.itemModel, required this.brandId});
 
+  @override
+  State<ItemFullDetails> createState() => _ItemFullDetailsState();
+}
+
+class _ItemFullDetailsState extends State<ItemFullDetails> {
   String rams = '';
+
   String roms = '';
-  ItemBrandModel?  brand;
+
+  ItemBrandModel? brand;
+
   void getBrand() async {
-   brand = await findItemBrandFromDB(itemModel.brandId);
+    brand = await findItemBrandFromDB(widget.brandId);
+    setState(() {});
   }
 
   void _listToString() {
-    for (var ram in itemModel.ram) {
+    for (var ram in widget.itemModel.ram) {
       rams = '$rams${ram}GB, ';
     }
     rams = rams.substring(0, rams.length - 2);
-    for (var rom in itemModel.rom) {
+    for (var rom in widget.itemModel.rom) {
       roms = '$roms${rom}GB, ';
     }
     roms = roms.substring(0, roms.length - 2);
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     getBrand();
-
     _listToString();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         children: [
@@ -51,7 +64,7 @@ class ItemFullDetails extends StatelessWidget {
                     child: SizedBox(
                   height: MyScreenSize.screenHeight * 0.3,
                   child: Image.file(
-                    File(itemModel.itemImage),
+                    File(widget.itemModel.itemImage),
                   ),
                 )),
               ),
@@ -61,9 +74,8 @@ class ItemFullDetails extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (ctx) => ItemAddNew(
-                        itemModel: itemModel,
+                        itemModel: widget.itemModel,
                         isAddingItem: false,
-                        index: index,
                       ),
                     ),
                   );
@@ -92,7 +104,7 @@ class ItemFullDetails extends StatelessWidget {
                       children: [
                         //item name
                         Text(
-                          itemModel.itemName,
+                          widget.itemModel.itemName,
                           style: const TextStyle(
                             color: MyColors.blackShade,
                             fontSize: 25,
@@ -105,11 +117,11 @@ class ItemFullDetails extends StatelessWidget {
 
                         //item stock
                         Text(
-                          (itemModel.stock > 5)
-                              ? '${itemModel.stock} items'
-                              : 'Only ${itemModel.stock} item left',
+                          (widget.itemModel.stock > 5)
+                              ? '${widget.itemModel.stock} items'
+                              : 'Only ${widget.itemModel.stock} item left',
                           style: TextStyle(
-                            color: (itemModel.stock > 5)
+                            color: (widget.itemModel.stock > 5)
                                 ? MyColors.green
                                 : MyColors.red,
                             fontSize: 13,
@@ -122,7 +134,7 @@ class ItemFullDetails extends StatelessWidget {
 
                         //item description
                         Text(
-                          itemModel.description,
+                          widget.itemModel.description,
                           style: const TextStyle(
                             color: MyColors.blackShade,
                             fontSize: 14,
@@ -159,7 +171,7 @@ class ItemFullDetails extends StatelessWidget {
                                   )),
                                   Expanded(
                                     child: Text(
-                                      brand!.itemBrandName,
+                                      brand?.itemBrandName ?? 'Null',
                                       style: MyFontStyle.mediumBlackShade,
                                     ),
                                   ),
@@ -180,7 +192,7 @@ class ItemFullDetails extends StatelessWidget {
                                   )),
                                   Expanded(
                                     child: Text(
-                                      itemModel.itemName,
+                                      widget.itemModel.itemName,
                                       style: MyFontStyle.mediumBlackShade,
                                     ),
                                   ),
@@ -201,7 +213,7 @@ class ItemFullDetails extends StatelessWidget {
                                   )),
                                   Expanded(
                                     child: Text(
-                                      itemModel.color.join(','),
+                                      widget.itemModel.color.join(','),
                                       style: MyFontStyle.mediumBlackShade,
                                     ),
                                   ),
@@ -272,7 +284,7 @@ class ItemFullDetails extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    '₹${itemModel.itemPrice}',
+                    '₹${widget.itemModel.itemPrice}',
                     style: const TextStyle(
                       color: MyColors.blackShade,
                       fontSize: 22,

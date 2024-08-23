@@ -8,14 +8,22 @@ import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/item_full_details_screen.dart';
 
-class ItemDetailsForHome extends StatelessWidget {
+class ItemDetailsForHome extends StatefulWidget {
   const ItemDetailsForHome({super.key});
 
+  @override
+  State<ItemDetailsForHome> createState() => _ItemDetailsForHomeState();
+}
+
+class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
+  @override
+  void initState() {
+    getAllItemBrandFromDB();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    getAllItemBrandFromDB();
-
     return ValueListenableBuilder(
       valueListenable: filteredItemModelList,
       builder: (BuildContext context, List<ItemModel> itemModelList, _) =>
@@ -35,7 +43,7 @@ class ItemDetailsForHome extends StatelessWidget {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ItemFullDetails(
                         itemModel: itemModel,
-                        index: index,
+                        brandId: itemModel.brandId,
                       ),
                     ));
                   },

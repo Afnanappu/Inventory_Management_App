@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/functions/pick_image.dart';
@@ -18,7 +17,6 @@ class AccountProfile extends StatefulWidget {
 }
 
 class _AccountProfileState extends State<AccountProfile> {
-  final box = Hive.openBox<ProfileModel>('profile');
 
   final _formKey = GlobalKey<FormState>();
 

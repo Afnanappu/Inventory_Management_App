@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 
 class BrandItems extends StatefulWidget {
@@ -12,6 +13,12 @@ class BrandItems extends StatefulWidget {
 int selectedButtonIndex = 0;
 
 class _BrandItemsState extends State<BrandItems> {
+  @override
+  void initState() {
+    getAllItemBrandFromDB();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -33,7 +40,9 @@ class _BrandItemsState extends State<BrandItems> {
                     setState(() {
                       selectedButtonIndex = index;
                       filteredItemModelList.value = itemModelListNotifiers.value
-                          .map((e) => e,)
+                          .map(
+                            (e) => e,
+                          )
                           .toList();
                     });
                   },
@@ -75,7 +84,7 @@ class _BrandItemsState extends State<BrandItems> {
                       },
                     ),
                   ),
-                  child:const Text('All'),
+                  child: const Text('All'),
                 ),
               );
             } else {

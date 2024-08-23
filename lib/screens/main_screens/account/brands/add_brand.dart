@@ -5,8 +5,8 @@ import 'package:inventory_management_app/widgets/buttons.dart';
 import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 import 'package:inventory_management_app/widgets/text_form_field.dart';
 
-class BrandAddNew {
-  BrandAddNew({
+class BrandCRUD {
+  BrandCRUD({
     required BuildContext context,
     required String title,
     String? text,

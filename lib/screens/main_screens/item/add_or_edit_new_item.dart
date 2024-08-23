@@ -17,11 +17,9 @@ class ItemAddNew extends StatefulWidget {
     this.itemModel,
     this.isAddingItem = true,
     this.removeBelowRoute = true,
-    this.index,
   });
   final ItemModel? itemModel;
   final bool isAddingItem;
-  final int? index;
   final bool removeBelowRoute;
 
   @override
@@ -52,7 +50,10 @@ class _ItemAddNewState extends State<ItemAddNew> {
   @override
   void initState() {
     if (widget.itemModel != null) {
+      nowBrandId = widget.itemModel!.brandId;
+
       image = widget.itemModel!.itemImage;
+
       _itemNameController.text = widget.itemModel!.itemName;
       _itemPriceController.text = widget.itemModel!.itemPrice.toString();
       _itemStockController.text = widget.itemModel!.stock.toString();
@@ -129,6 +130,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                   ValueListenableBuilder(
                     valueListenable: itemBrandListNotifiers,
                     builder: (context, itemBrand, child) => DropDownForAll(
+                      nowValue: nowBrandId,
                       validator: (value) {
                         if (value == null) {
                           return 'No brand is selected, select one';
@@ -148,7 +150,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                         setState(() {
                           nowBrandId = e;
                         });
-                      },
+                      }, hintText: 'Select brand',
                     ),
                   ),
 

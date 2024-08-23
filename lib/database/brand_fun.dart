@@ -33,10 +33,17 @@ Future<void> addBrandToDB(ItemBrandModel brand) async {
 //Function to delete brand from database.
 Future<void> deleteBrandFromDB(int brandId) async {
   brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
-  await brandBox.delete(brandId);
-  getAllItemBrandFromDB();
-  print(
-      'The brand in the index $brandId is deleted. The available brands is ${brandBox.values.length}');
+  final isPossibleToDelete = itemModelListNotifiers.value.any(
+    (element) => element.brandId == brandId,
+  );
+  if (!isPossibleToDelete) {
+    await brandBox.delete(brandId);
+    getAllItemBrandFromDB();
+    print(
+        'The brand in the index $brandId is deleted. The available brands is ${brandBox.values.length}');
+  } else {
+    print('brand at id=$brandId cannot delete because it contains items in its under');
+  }
 }
 
 //Function to Edit brand from database.
@@ -57,7 +64,8 @@ void notifyBrandListeners() {
 
 Future<ItemBrandModel> findItemBrandFromDB(int brandId) async {
   brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
-  return brandBox.values.firstWhere(
+  final brand = brandBox.values.firstWhere(
     (brand) => brand.id == brandId,
   );
+  return brand;
 }

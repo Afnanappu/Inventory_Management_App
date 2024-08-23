@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/custom_container.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
@@ -31,7 +32,6 @@ class DashboardScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: SizedBox(
               child: DropdownButtonFormField(
-
                 dropdownColor: MyColors.white,
                 padding: const EdgeInsets.only(left: 20),
                 value: list[0],
@@ -155,12 +155,11 @@ class DashboardScreen extends StatelessWidget {
           //todo: add recent sales here.
           // ValueListenableBuilder(
           //   valueListenable: itemBrandList,
-          //   builder: (BuildContext context, List<ItemBrand> itemBrand, Widget? child) { 
+          //   builder: (BuildContext context, List<ItemBrand> itemBrand, Widget? child) {
           //     return SliverList.builder(
           //     itemCount: 4,
           //     itemBuilder: (context, index) {
-            
-            
+
           //       return SaleListTile(
           //         image: itemBrand[index].itemModelList[],
           //         customerName: 'AFNAN',
@@ -171,13 +170,16 @@ class DashboardScreen extends StatelessWidget {
           //     },
           //   );
           //    },
-             
+
           // )
         ],
       ),
       floatingActionButton: FloatingActionButtonForAll(
         text: 'Add new sale',
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => SaleAddNew()));
+        },
         color: MyColors.red,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

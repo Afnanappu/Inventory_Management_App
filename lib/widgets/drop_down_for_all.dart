@@ -10,22 +10,27 @@ class DropDownForAll extends StatelessWidget {
   String? Function(dynamic)? validator;
   void Function(dynamic)? onChanged;
   void Function()? onTap;
+  String hintText;
   dynamic nowValue;
   Color formFillColor;
-  DropDownForAll({
-    super.key,
-    required this.items,
-    required this.onChanged,
-    this.validator,
-    this.onTap,
-    this.formFillColor = MyColors.lightGrey,
-  });
+  bool haveBorder;
+  DropDownForAll(
+      {super.key,
+      this.nowValue,
+      required this.items,
+      required this.hintText,
+      required this.onChanged,
+      this.validator,
+      this.onTap,
+      this.formFillColor = MyColors.lightGrey,
+      this.haveBorder = false});
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      hint: const Text(
-        'Select brand',
+      value: nowValue,
+      hint: Text(
+        hintText,
         style: MyFontStyle.smallLightGrey,
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -35,8 +40,11 @@ class DropDownForAll extends StatelessWidget {
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: (haveBorder == false)
+              ? BorderSide.none
+              : const BorderSide(color: MyColors.darkGrey),
         ),
+        focusColor: MyColors.blackShade,
         fillColor: formFillColor,
         filled: true,
         labelStyle: MyFontStyle.smallLightGrey,

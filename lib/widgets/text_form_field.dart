@@ -7,7 +7,8 @@ Widget customFormField({
   required String labelText,
   required TextEditingController controller,
   String? Function(String? value)? validator,
-  bool? isFormEnabled = true,
+  bool isFormEnabled = true,
+  bool haveBorder = false,
   Color formFillColor = MyColors.lightGrey,
   TextInputType keyboardType = TextInputType.text,
   double vPadding = 15,
@@ -32,7 +33,7 @@ Widget customFormField({
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderSide: (haveBorder == false)?BorderSide.none:const BorderSide(color: MyColors.darkGrey,),
         ),
         fillColor: formFillColor,
         filled: true,

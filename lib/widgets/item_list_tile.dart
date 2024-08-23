@@ -50,7 +50,6 @@ class ItemListTile extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (ctx) => ItemAddNew(
-                            index: index,
                             itemModel: itemModel,
                             isAddingItem: false,
                             removeBelowRoute: false,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/item/add_or_edit_new_item.dart';
