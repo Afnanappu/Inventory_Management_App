@@ -45,7 +45,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
 
   String? image;
 
-  int nowBrandId = 0;
+  int? nowBrandId;
 
   @override
   void initState() {
@@ -128,31 +128,33 @@ class _ItemAddNewState extends State<ItemAddNew> {
 
                   //brand (drop drown button)
                   ValueListenableBuilder(
-                    valueListenable: itemBrandListNotifiers,
-                    builder: (context, itemBrand, child) => DropDownForAll(
-                      nowValue: nowBrandId,
-                      validator: (value) {
-                        if (value == null) {
-                          return 'No brand is selected, select one';
-                        } else {
-                          return null;
-                        }
-                      },
-                      items: itemBrand.map(
-                        (e) {
-                          return DropdownMenuItem(
-                            value: e.id,
-                            child: Text(e.itemBrandName),
-                          );
-                        },
-                      ).toList(),
-                      onChanged: (e) {
-                        setState(() {
-                          nowBrandId = e;
-                        });
-                      }, hintText: 'Select brand',
-                    ),
-                  ),
+                      valueListenable: itemBrandListNotifiers,
+                      builder: (context, brands, child) {
+                        return DropDownForAll(
+                          nowValue: nowBrandId,
+                          validator: (value) {
+                            if (value == null) {
+                              return 'No brand is selected, select one';
+                            } else {
+                              return null;
+                            }
+                          },
+                          items: brands.map(
+                            (e) {
+                              return DropdownMenuItem(
+                                value: e.id,
+                                child: Text(e.itemBrandName),
+                              );
+                            },
+                          ).toList(),
+                          onChanged: (e) {
+                            setState(() {
+                              nowBrandId = e;
+                            });
+                          },
+                          hintText: 'Select brand',
+                        );
+                      }),
 
                   //price
                   customFormField(
@@ -263,7 +265,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                                 color: MyColors.red);
                           } else {
                             final item = ItemModel(
-                              brandId: nowBrandId,
+                              brandId: nowBrandId!,
                               itemName: _itemNameController.text,
                               itemImage: image!,
                               itemPrice:

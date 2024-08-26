@@ -37,7 +37,7 @@ class _AccountProfileState extends State<AccountProfile> {
   }
 
   void _loadData() async {
-    profile = await getProfile('profile');
+    profile = await getProfile();
     if (profile != null) {
       _businessName.text = profile!.name ?? 'not found';
       _phoneNo.text = profile!.phone ?? 'not found';

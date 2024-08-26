@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
+import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
@@ -14,9 +15,14 @@ import 'package:inventory_management_app/widgets/custom_container.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/sale_list_tile.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   DashboardScreen({super.key});
 
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
   final List<String> list = [
     'This week',
     'This month',
@@ -24,9 +30,23 @@ class DashboardScreen extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    _loadDB().then(
+      (value) => setState(() {
+        print('customers and sales in loaded after waiting');
+      }),
+    );
+    super.initState();
+  }
+
+  Future<void> _loadDB() async {
+    await getAllCustomersFormDB();
+    await getAllSalesFromDB();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    getAllCustomersFormDB();
-    getAllSalesFromDB();
+    _loadDB();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -165,29 +185,41 @@ class DashboardScreen extends StatelessWidget {
           ),
 
           //todo: add recent sales here.
-          ValueListenableBuilder(
-            valueListenable: customerListNotifier,
-            builder: (BuildContext context, List<CustomerModel> customers, _) {
-              return SliverList.builder(
-                itemCount: (customers.length < 4) ? customers.length : 4,
-                itemBuilder: (context, index) {
-                  final customer = customers[index];
-                  final sale = getSaleFromFromDB(customer.saleId.first);
-                  final item = getItemFromDB(sale.itemId);
-                  final brand = getItemBrandFromDB(item.brandId);
-
-                  return SaleListTile(
-                    image: item.itemImage,
-                    customerName: customer.customerName,
-                    invoiceNo: customer.customerId.toString(),
-                    brandName: brand.itemBrandName,
-                    itemPrice: item.itemPrice.toString(),
-                    saleAddDate: customer.saleDateTime,
-                  );
-                },
-              );
-            },
-          )
+          (customerListNotifier.value.isEmpty)
+              ? SliverToBoxAdapter(
+                  child: Container(
+                    width: double.infinity,
+                    height: MyScreenSize.screenHeight * .2,
+                    alignment: AlignmentDirectional.center,
+                    child: const Text('No sale is added'),
+                  ),
+                )
+              : ValueListenableBuilder(
+                  valueListenable: customerListNotifier,
+                  builder:
+                      (BuildContext context, List<CustomerModel> customers, _) {
+                    return SliverList.builder(
+                      itemCount: (customers.length < 4) ? customers.length : 4,
+                      itemBuilder: (context, index) {
+                        final customerRev = customers.reversed.toList();
+                        final customer = customerRev[index];
+                        final sale = getSaleFromFromDB(customer.saleId.first);
+                        final item = getItemFromDB(sale.itemId);
+                        final brand = getItemBrandFromDB(item.brandId);
+                        final sumOfSales =
+                            getSumOfAllSaleOfOneCustomer(customer.saleId);
+                        return SaleListTile(
+                          image: item.itemImage,
+                          customerName: customer.customerName,
+                          invoiceNo: customer.customerId.toString(),
+                          brandName: brand.itemBrandName,
+                          itemPrice: sumOfSales.toString(),
+                          saleAddDate: customer.saleDateTime,
+                        );
+                      },
+                    );
+                  },
+                )
         ],
       ),
       floatingActionButton: FloatingActionButtonForAll(

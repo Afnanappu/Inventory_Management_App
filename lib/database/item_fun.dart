@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inventory_management_app/functions/generate_unique_id.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 
 // ignore: constant_identifier_names
@@ -21,42 +22,42 @@ Future<void> getAllItemFormDB() async {
 //Function to add item to database
 Future<void> addItemToDB(ItemModel item) async {
   itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  item.id = await itemBox.add(item);
-  itemBox.put(item.id, item);
-  getAllItemFormDB();
+  //todo:put unique id
+
+  int id = generateUniqueId();
+  item.id = id;
+  await itemBox.put(id, item);
+
+  await getAllItemFormDB();
   print(
-      'A new item is added to database and the item id = ${item.id} and the brand id is = ${item.brandId} and the length of all item is ${itemBox.values.length}');
+      'A new item is added to database and the item id = $id and the brand id is = ${item.brandId} and the length of all item is ${itemBox.values.length}');
 }
 
 //Function to delete from database.
 Future<void> deleteItemFromDB(int itemId) async {
   itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  await itemBox.deleteAt(itemId);
+  await itemBox.delete(itemId);
+
   getAllItemFormDB();
-  print('The item in the index $itemId is deleted and the length of all item is ${itemBox.values.length}');
+  print(
+      'The item in the index $itemId is deleted and the length of all item is ${itemBox.values.length}');
 }
 
 //Function to delete from database.
 Future<void> editItemFromDB(int itemId, ItemModel item) async {
   itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
   await itemBox.put(itemId, item);
+
   getAllItemFormDB();
   print('The item in the index $itemId is edited');
 }
 
-
 ItemModel getItemFromDB(int itemId) {
-
   final item = itemModelListNotifiers.value.firstWhere(
     (item) => item.id == itemId,
   );
   return item;
 }
-
-
-
-
-
 
 //Created a function that can notify itemModelListNotifiers.
 void notifyItemListeners() {

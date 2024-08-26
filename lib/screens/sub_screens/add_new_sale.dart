@@ -9,6 +9,7 @@ import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sal
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/button_add_sale.dart';
 import 'package:inventory_management_app/widgets/sale_add_item.dart';
+import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 import 'package:inventory_management_app/widgets/text_form_field.dart';
 
 // ignore: must_be_immutable
@@ -24,9 +25,17 @@ class _SaleAddNewState extends State<SaleAddNew> {
 
   final _customerPhoneController = TextEditingController();
 
+  double totalAmount = 0;
+
   final _formKey = GlobalKey<FormState>();
 
   DateTime selectedDate = DateTime.now();
+
+  @override
+  void dispose() {
+    currentSaleItemNotifier.value.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +126,8 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 labelText: 'Phone no',
                 haveBorder: true,
                 controller: _customerPhoneController,
+                keyboardType: TextInputType.phone,
                 formFillColor: MyColors.white,
-                isFormEnabled: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'phone no is empty';
@@ -130,52 +139,106 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 },
               ),
               ValueListenableBuilder(
-                valueListenable: saleItemsListNotifier,
-                builder: (context, saleItem, child) => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: saleItem.length,
-                    itemBuilder: (context, index) {
-                      final item = getItemFromDB(saleItem[index].itemId);
-                      final sale = saleItem[index];
+                  valueListenable: currentSaleItemNotifier,
+                  builder: (context, saleItem, child) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: saleItem.length,
+                        itemBuilder: (context, index) {
+                          final item = getItemFromDB(saleItem[index].itemId);
+                          final sale = saleItem[index];
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: ListTile(
-                          tileColor: MyColors.lightGrey,
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                item.itemName,
-                                style: const TextStyle(
-                                    color: MyColors.blackShade,
-                                    fontWeight: FontWeight.w600),
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: ListTile(
+                              tileColor:
+                                  const Color.fromARGB(255, 243, 255, 227),
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      item.itemName,
+                                      softWrap: true,
+                                      overflow: TextOverflow.clip,
+                                      style: const TextStyle(
+                                          color: MyColors.blackShade,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${item.itemPrice * sale.itemCount}',
+                                    style: const TextStyle(
+                                        color: MyColors.blackShade,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                '${item.itemPrice * sale.itemCount}',
-                                style: const TextStyle(
-                                    color: MyColors.blackShade,
-                                    fontWeight: FontWeight.w600),
+                              subtitle: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Subtotal'),
+                                  Text(
+                                      '${sale.itemCount} x ${item.itemPrice} = ${item.itemPrice * sale.itemCount}'),
+                                ],
                               ),
-                            ],
-                          ),
-                          subtitle: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Subtotal'),
-                              Text(
-                                  '${sale.itemCount} x ${item.itemPrice} = ${item.itemPrice * sale.itemCount}'),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-              saleAddItem(onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const AddNewItemInSale()));
+                            ),
+                          );
+                        });
+                  }),
+              saleAddItem(onTap: () async {
+                final String sumString = await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (ctx) => const AddNewItemInSale()),
+                );
+                var sum = double.parse(sumString);
+
+                setState(() {
+                  totalAmount += sum;
+                });
               }),
+              const SizedBox(
+                height: 15,
+              ),
+              //total Amount
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Total Amount',
+                    style: TextStyle(
+                        color: MyColors.blackShade,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 180, minWidth: 100),
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                color: MyColors.blackShade,
+                                style: BorderStyle.solid))),
+                    child: ListTile(
+                      leading: const Text('₹',
+                          style: TextStyle(
+                              color: MyColors.blackShade,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600)),
+                      title: Text(
+                        '$totalAmount',
+                        style: const TextStyle(
+                          color: MyColors.blackShade,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ),
@@ -187,13 +250,43 @@ class _SaleAddNewState extends State<SaleAddNew> {
           children: [
             Expanded(
               child: buttonAddSale(
-                text: 'Save&New',
-                haveBorder: true,
-                btnColor: MyColors.transparent,
-                //todo: Add function to save data
-                onTap: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (ctx) => const SaleAddNew())),
-              ),
+                  text: 'Save&New',
+                  haveBorder: true,
+                  btnColor: MyColors.transparent,
+                  //todo: Add function to save data
+                  onTap: () async {
+                    if (_formKey.currentState!.validate() &&
+                        currentSaleItemNotifier.value.isNotEmpty) {
+                      final sales = currentSaleItemNotifier.value;
+
+                      final salesIdList = await addSalesToDB(sales);
+
+                      final customer = CustomerModel(
+                        customerName: _customerNameController.text,
+                        customerPhone: _customerPhoneController.text,
+                        saleId: salesIdList,
+                        saleDateTime: DateTime.now(),
+                      );
+
+                      await addCustomerToDB(customer);
+
+                      currentSaleItemNotifier.value.clear();
+                      notifySaleItems();
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (ctx) => const SaleAddNew()));
+                      CustomSnackBarMessage(
+                        context: context,
+                        message: 'Sale is added successfully',
+                        color: MyColors.green,
+                        duration: 2,
+                      );
+                    } else if (currentSaleItemNotifier.value.isEmpty) {
+                      CustomSnackBarMessage(
+                          context: context,
+                          message: 'Add an item to save',
+                          color: Colors.red);
+                    }
+                  }),
             ),
             Expanded(
               child: buttonAddSale(
@@ -201,25 +294,41 @@ class _SaleAddNewState extends State<SaleAddNew> {
 
                 //todo: Add function to save data
                 onTap: () async {
-                  if (_formKey.currentState!.validate()) {
-                    final sales = saleItemsListNotifier.value;
+                  if (_formKey.currentState!.validate() &&
+                      currentSaleItemNotifier.value.isNotEmpty) {
+                    final sales = currentSaleItemNotifier.value;
 
-                    await addSalesToDB(sales);
+                    final salesIdList = await addSalesToDB(sales);
 
                     final customer = CustomerModel(
                       customerName: _customerNameController.text,
                       customerPhone: _customerPhoneController.text,
-                      saleId: saleItemsListNotifier.value
-                          .map(
-                            (e) => e.saleId!,
-                          )
-                          .toList(),
+                      saleId: salesIdList,
                       saleDateTime: DateTime.now(),
                     );
 
                     await addCustomerToDB(customer);
 
+                    // await decreaseTheStockCountFromDB(
+                    //   saleItemsListNotifier.value
+                    //       .map(
+                    //         (e) => e.saleId!,
+                    //       )
+                    //       .toList(),
+                    // );
+
                     Navigator.of(context).pop();
+                    CustomSnackBarMessage(
+                        context: context,
+                        message: 'Sale is added successfully',
+                        color: MyColors.green,
+                        duration: 2,
+                      );
+                  } else if (currentSaleItemNotifier.value.isEmpty) {
+                    CustomSnackBarMessage(
+                        context: context,
+                        message: 'Add an item to save',
+                        color: Colors.red);
                   }
                 },
               ),

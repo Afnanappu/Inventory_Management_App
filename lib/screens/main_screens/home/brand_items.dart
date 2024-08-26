@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 
 class BrandItems extends StatefulWidget {
@@ -13,11 +12,18 @@ class BrandItems extends StatefulWidget {
 int selectedButtonIndex = -1;
 
 class _BrandItemsState extends State<BrandItems> {
-  @override
-  void initState() {
-    getAllItemBrandFromDB();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+    // _loadBrand();
+  //   setState(() {
+  //     selectedButtonIndex = -1;
+  //   });
+  //   super.initState();
+  // }
+
+  // void _loadBrand() async {
+  //   await getAllItemBrandFromDB();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +51,7 @@ class _BrandItemsState extends State<BrandItems> {
                           )
                           .toList();
                     });
+                    filteredItemModelList.notifyListeners();
                   },
                   style: ButtonStyle(
                     foregroundColor: WidgetStateProperty.resolveWith(
@@ -98,6 +105,7 @@ class _BrandItemsState extends State<BrandItems> {
                           .where((item) => item.brandId == brand[index].id)
                           .toList();
                     });
+                    filteredItemModelList.notifyListeners();
                   },
                   style: ButtonStyle(
                     foregroundColor: WidgetStateProperty.resolveWith(

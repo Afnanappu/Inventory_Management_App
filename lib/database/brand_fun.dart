@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inventory_management_app/functions/generate_unique_id.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 
 //Name of the DB
@@ -23,7 +24,9 @@ Future<void> getAllItemBrandFromDB() async {
 //Function to add brand to database
 Future<void> addBrandToDB(ItemBrandModel brand) async {
   brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
-  brand.id = await brandBox.add(brand);
+  //todo:put unique id
+   brand.id = generateUniqueId();
+  
   await brandBox.put(brand.id, brand);
   getAllItemBrandFromDB();
   print(

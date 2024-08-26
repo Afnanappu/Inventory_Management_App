@@ -44,6 +44,7 @@ class AccountBrands extends StatelessWidget {
                       final brand = ItemBrandModel(
                           itemBrandName: _addBrandController.text);
                       addBrandToDB(brand);
+                      _addBrandController.text = '';
                     });
               },
             ),

@@ -19,29 +19,33 @@ class AllSaleDataScreen extends StatelessWidget {
           isAddIcon: false,
         ),
       ),
-      body: ValueListenableBuilder(
-        valueListenable: customerListNotifier,
-        builder: (BuildContext context, List<CustomerModel> customers, _) {
-          return ListView.builder(
-            itemCount: customers.length,
-            itemBuilder: (context, index) {
-              final customer = customers[index];
-              final sale = getSaleFromFromDB(customer.saleId.first);
-              final item = getItemFromDB(sale.itemId);
-              final brand = getItemBrandFromDB(item.brandId);
-
-              return SaleListTile(
-                image: item.itemImage,
-                customerName: customer.customerName,
-                invoiceNo: customer.customerId.toString(),
-                brandName: brand.itemBrandName,
-                itemPrice: item.itemPrice.toString(),
-                saleAddDate: customer.saleDateTime,
-              );
-            },
-          );
-        },
-      ),
+      body: (customerListNotifier.value.isEmpty)
+          ? const Center(child: Text('No sale is added'))
+          : ValueListenableBuilder(
+              valueListenable: customerListNotifier,
+              builder:
+                  (BuildContext context, List<CustomerModel> customers, _) {
+                return ListView.builder(
+                  itemCount: customers.length,
+                  itemBuilder: (context, index) {
+                    final customer = customers[index];
+                    final sale = getSaleFromFromDB(customer.saleId.first);
+                    final item = getItemFromDB(sale.itemId);
+                    final brand = getItemBrandFromDB(item.brandId);
+                    final sumOfSales =
+                        getSumOfAllSaleOfOneCustomer(customer.saleId);
+                    return SaleListTile(
+                      image: item.itemImage,
+                      customerName: customer.customerName,
+                      invoiceNo: customer.customerId.toString(),
+                      brandName: brand.itemBrandName,
+                      itemPrice: sumOfSales.toString(),
+                      saleAddDate: customer.saleDateTime,
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }

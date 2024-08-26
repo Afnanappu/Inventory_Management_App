@@ -29,7 +29,7 @@ Future<void> updateProfile(ProfileModel value) async {
   print('\n\nprofile is added\n\n');
 }
 
-Future<ProfileModel?> getProfile(String key) async {
+Future<ProfileModel?> getProfile() async {
   final box = await Hive.openBox<ProfileModel>('profile');
-  return box.get(key);
+  return box.get('profile');
 }

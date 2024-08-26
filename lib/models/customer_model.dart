@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 part 'customer_model.g.dart';
 
+ValueNotifier<List<SaleModel>> currentSaleItemNotifier = ValueNotifier([]);
 ValueNotifier<List<SaleModel>> saleItemsListNotifier = ValueNotifier([]);
 ValueNotifier<List<CustomerModel>> customerListNotifier = ValueNotifier([]);
 

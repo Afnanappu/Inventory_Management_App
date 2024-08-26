@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inventory_management_app/functions/generate_unique_id.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 
 // ignore: constant_identifier_names
@@ -12,7 +13,7 @@ Future<void> getAllCustomersFormDB() async {
   customerListNotifier.value.clear();
   customerListNotifier.value =
       customerBox.values.cast<CustomerModel>().toList();
-  // itemBox.clear();
+  // customerBox.clear();
   notifyCustomers();
   print(
       'fetching all customers from database\nThe number of customer in the DB is ${customerBox.values.length}');
@@ -20,10 +21,13 @@ Future<void> getAllCustomersFormDB() async {
 
 Future<void> addCustomerToDB(CustomerModel customer) async {
   customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
-  customer.customerId = await customerBox.add(customer);
-  customerBox.put(customer.customerId, customer);
+  //todo:put unique id
+
+  int id = generateUniqueId();
+  customer.customerId = id;
+  await customerBox.put(id, customer);
   print(
-      'A new customer is added to database and the customer id = ${customer.customerId} and the length of all customer is ${customerBox.values.length}');
+      'A new customer is added to database and the customer id = $id and the length of all customer is ${customerBox.values.length}');
   for (var val in customerBox.values) {
     print(val.customerName);
   }

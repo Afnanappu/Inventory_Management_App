@@ -147,13 +147,14 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                   //todo: Add function to save data
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      final sale = SaleModel(
-                          itemId: item!.id!,
-                          itemCount: int.parse(_itemStockController.text));
-                      saleItemsListNotifier.value.add(sale);
-                      notifySaleItems();
-
-                      Navigator.of(context).pop();
+                      final itemCount = int.parse(_itemStockController.text);
+                      final itemPrice = double.parse(_itemPriceController.text);
+                      final sale =
+                          SaleModel(itemId: item!.id!, itemCount: itemCount);
+                      currentSaleItemNotifier.value.add(sale);
+                      currentSaleItemNotifier.notifyListeners();
+                      final sum = itemCount.toDouble() * itemPrice;
+                      Navigator.of(context).pop(sum.toString());
                     }
                   }),
             ),
