@@ -265,6 +265,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                                 color: MyColors.red);
                           } else {
                             final item = ItemModel(
+                              id: (widget.itemModel!=null)?widget.itemModel!.id!:null,
                               brandId: nowBrandId!,
                               itemName: _itemNameController.text,
                               itemImage: image!,

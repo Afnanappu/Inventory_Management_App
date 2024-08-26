@@ -22,15 +22,13 @@ Future<void> getAllItemFormDB() async {
 //Function to add item to database
 Future<void> addItemToDB(ItemModel item) async {
   itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  //todo:put unique id
 
-  int id = generateUniqueId();
-  item.id = id;
-  await itemBox.put(id, item);
+  item.id = generateUniqueId();
+  await itemBox.put(item.id, item);
 
   await getAllItemFormDB();
   print(
-      'A new item is added to database and the item id = $id and the brand id is = ${item.brandId} and the length of all item is ${itemBox.values.length}');
+      'A new item is added to database and the item id = ${item.id} and the brand id is = ${item.brandId} and the length of all item is ${itemBox.values.length}');
 }
 
 //Function to delete from database.
@@ -57,6 +55,26 @@ ItemModel getItemFromDB(int itemId) {
     (item) => item.id == itemId,
   );
   return item;
+}
+
+Future<void> decreaseOneItemStockFromDB(int itemId, int quantity) async {
+  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
+  final item = itemBox.values.firstWhere((item) => item.id == itemId);
+  final newStock = item.stock - quantity;
+  final newItem = ItemModel(
+    id: item.id,
+    brandId: item.brandId,
+    itemName: item.itemName,
+    itemImage: item.itemImage,
+    itemPrice: item.itemPrice,
+    color: item.color,
+    ram: item.ram,
+    rom: item.rom,
+    description: item.description,
+    stock: newStock,
+  );
+  await itemBox.put(item.id, newItem);
+  print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
 }
 
 //Created a function that can notify itemModelListNotifiers.

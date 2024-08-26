@@ -55,17 +55,25 @@ double getSumOfAllSaleOfOneCustomer(List<int> salesId) {
   return sum;
 }
 
-Future<void> decreaseTheStockCountFromDB(List<int> salesId) async {
+Future<void> decreaseListOfStockFromDB(List<int> salesId) async {
   salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
 
   for (var id in salesId) {
     final sale = getSaleFromFromDB(id);
-    final item = getItemFromDB(sale.itemId);
-    final newItem = SaleModel(itemId: item.id!, itemCount: item.stock--);
-    salesBox.put(item.id, newItem);
-    print('The item stock at id = ${item.id} is changed');
-    getAllSalesFromDB();
+    await decreaseOneItemStockFromDB(sale.itemId, sale.itemCount);
   }
+  getAllItemFormDB();
+  getAllSalesFromDB();
+
+  // salesBox.values.firstWhere((sale)=> sale.saleId == saleId);
+  // for (var id in salesId) {
+  //   final sale = getSaleFromFromDB(id);
+  //   final item = getItemFromDB(sale.itemId);
+  //   final newItem = SaleModel(itemId: item.id!, itemCount: item.stock--);
+  //   salesBox.put(item.id, newItem);
+  //   print('The item stock at id = ${item.id} is changed');
+  //   getAllSalesFromDB();
+  // }
   print('Updating finished');
 }
 

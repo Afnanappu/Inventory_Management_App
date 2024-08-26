@@ -50,6 +50,7 @@ class ItemModel {
   int stock;
 
   ItemModel({
+    this.id,
     required this.brandId,
     required this.itemName,
     required this.itemImage,

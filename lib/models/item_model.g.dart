@@ -54,6 +54,7 @@ class ItemModelAdapter extends TypeAdapter<ItemModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ItemModel(
+      id: fields[0] as int?,
       brandId: fields[2] as int,
       itemName: fields[1] as String,
       itemImage: fields[3] as String,
@@ -63,7 +64,7 @@ class ItemModelAdapter extends TypeAdapter<ItemModel> {
       rom: (fields[7] as List).cast<String>(),
       description: fields[8] as String,
       stock: fields[9] as int,
-    )..id = fields[0] as int?;
+    );
   }
 
   @override

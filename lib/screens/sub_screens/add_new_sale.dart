@@ -309,21 +309,15 @@ class _SaleAddNewState extends State<SaleAddNew> {
 
                     await addCustomerToDB(customer);
 
-                    // await decreaseTheStockCountFromDB(
-                    //   saleItemsListNotifier.value
-                    //       .map(
-                    //         (e) => e.saleId!,
-                    //       )
-                    //       .toList(),
-                    // );
+                    await decreaseListOfStockFromDB(salesIdList);
 
                     Navigator.of(context).pop();
                     CustomSnackBarMessage(
-                        context: context,
-                        message: 'Sale is added successfully',
-                        color: MyColors.green,
-                        duration: 2,
-                      );
+                      context: context,
+                      message: 'Sale is added successfully',
+                      color: MyColors.green,
+                      duration: 2,
+                    );
                   } else if (currentSaleItemNotifier.value.isEmpty) {
                     CustomSnackBarMessage(
                         context: context,
