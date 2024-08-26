@@ -28,11 +28,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           },
           controller: _pageViewController,
           physics: const NeverScrollableScrollPhysics(),
-          children:  [
-           const HomeScreen(),
+          children: const [
+            HomeScreen(),
             DashboardScreen(),
-           const ItemScreen(),
-          const  AccountScreen()
+            ItemScreen(),
+            AccountScreen()
           ],
         ),
         //todo: Change the icon

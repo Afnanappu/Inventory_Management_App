@@ -20,7 +20,7 @@ Future<File> _saveToAppDir(XFile imgPath) async {
   final Directory appDir = await getApplicationDocumentsDirectory();
   final String path = appDir.path;
 
-  final fileName = DateTime.now().toIso8601String() + '.png';
+  final fileName = '${DateTime.now().toIso8601String()}.png';
   var newImage = File('$path/item images/$fileName');
   if (await newImage.exists()) {
     print('Directory $newImage is already exist');

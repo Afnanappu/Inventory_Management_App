@@ -16,7 +16,7 @@ import 'package:inventory_management_app/widgets/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/sale_list_tile.dart';
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({super.key});
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();

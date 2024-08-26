@@ -13,7 +13,6 @@ Future<void> getAllSalesFromDB() async {
   salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
   saleItemsListNotifier.value.clear();
   saleItemsListNotifier.value = salesBox.values.toList();
-  saleItemsListNotifier.notifyListeners();
 
   // salesBox.clear();
   notifySaleItems();
@@ -30,7 +29,6 @@ Future<List<int>> addSalesToDB(List<SaleModel> sales) async {
     salesIdList.add(id);
     print('The sale at id = $id is added to database');
   }
-  saleItemsListNotifier.notifyListeners();
   getAllSalesFromDB();
   print('${sales.length} sales is added to database');
 
@@ -64,16 +62,6 @@ Future<void> decreaseListOfStockFromDB(List<int> salesId) async {
   }
   getAllItemFormDB();
   getAllSalesFromDB();
-
-  // salesBox.values.firstWhere((sale)=> sale.saleId == saleId);
-  // for (var id in salesId) {
-  //   final sale = getSaleFromFromDB(id);
-  //   final item = getItemFromDB(sale.itemId);
-  //   final newItem = SaleModel(itemId: item.id!, itemCount: item.stock--);
-  //   salesBox.put(item.id, newItem);
-  //   print('The item stock at id = ${item.id} is changed');
-  //   getAllSalesFromDB();
-  // }
   print('Updating finished');
 }
 

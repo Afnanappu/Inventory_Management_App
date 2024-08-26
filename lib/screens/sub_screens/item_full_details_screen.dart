@@ -14,7 +14,7 @@ import 'package:inventory_management_app/widgets/button_add_sale.dart';
 class ItemFullDetails extends StatefulWidget {
   final ItemModel itemModel;
   final int brandId;
-  ItemFullDetails({super.key, required this.itemModel, required this.brandId});
+  const ItemFullDetails({super.key, required this.itemModel, required this.brandId});
 
   @override
   State<ItemFullDetails> createState() => _ItemFullDetailsState();
