@@ -8,6 +8,7 @@ import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/dashboard/all_sale_data.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
@@ -46,7 +47,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _loadDB();
+    getTheNumberOfItemSold();
+    getThePriceAmountOfItemSold();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -82,18 +84,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: 20,
             ),
           ),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomContainer(
-                  title: 'No. of Item sold',
-                  subtitle: '10',
-                  haveBgColor: false,
+                ValueListenableBuilder(
+                  valueListenable: numberOfItemSoldListNotifier,
+                  builder: (context, value, child) => CustomContainer(
+                    title: 'No. of Item sold',
+                    subtitle: value.toString(),
+                    haveBgColor: false,
+                  ),
                 ),
-                CustomContainer(
-                  title: 'Total sale',
-                  subtitle: '₹125,500',
+                ValueListenableBuilder(
+                  valueListenable: priceAmountOfItemSoldListNotifier,
+                  builder: (context, value, child) => CustomContainer(
+                    title: 'Total sale',
+                    subtitle: '₹$value',
+                  ),
                 ),
               ],
             ),
@@ -211,9 +219,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         return SaleListTile(
                           image: item.itemImage,
                           customerName: customer.customerName,
-                          invoiceNo: customer.customerId.toString(),
+                          invoiceNo: '${customer.customerId}',
                           brandName: brand.itemBrandName,
-                          itemPrice: sumOfSales.toString(),
+                          itemPrice: '₹$sumOfSales',
                           saleAddDate: customer.saleDateTime,
                         );
                       },
@@ -225,8 +233,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       floatingActionButton: FloatingActionButtonForAll(
         text: 'Add new sale',
         onPressed: () {
-          saleItemsListNotifier.value.clear();
-
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
         },

@@ -1,7 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/generate_unique_id.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 
 // ignore: constant_identifier_names
 const SALES_BOX = 'SalesBox';
@@ -15,7 +17,7 @@ Future<void> getAllSalesFromDB() async {
   saleItemsListNotifier.value = salesBox.values.toList();
 
   // salesBox.clear();
-  notifySaleItems();
+  notifyAnyListeners(saleItemsListNotifier);
   print('The number of sales in the DB is ${salesBox.values.length}');
 }
 
@@ -39,7 +41,6 @@ SaleModel getSaleFromFromDB(int saleId) {
   final sale = saleItemsListNotifier.value.firstWhere((sale) {
     return sale.saleId == saleId;
   });
-  print('getSaleFromFromDB is worked. $saleId is and get ${sale.saleId}');
   return sale;
 }
 
@@ -65,6 +66,24 @@ Future<void> decreaseListOfStockFromDB(List<int> salesId) async {
   print('Updating finished');
 }
 
-void notifySaleItems() {
-  saleItemsListNotifier.notifyListeners();
+void getTheNumberOfItemSold() {
+  numberOfItemSoldListNotifier.value = 0;
+  if (saleItemsListNotifier.value.isNotEmpty) {
+    for (var element in saleItemsListNotifier.value) {
+      numberOfItemSoldListNotifier.value += element.itemCount;
+    }
+  }
+  notifyAnyListeners(numberOfItemSoldListNotifier);
+}
+
+void getThePriceAmountOfItemSold() {
+  List<int> salesId = [];
+  if (saleItemsListNotifier.value.isNotEmpty) {
+    for (var sale in saleItemsListNotifier.value) {
+      salesId.add(sale.saleId!);
+    }
+    priceAmountOfItemSoldListNotifier.value =
+        getSumOfAllSaleOfOneCustomer(salesId);
+  }
+  notifyAnyListeners(priceAmountOfItemSoldListNotifier);
 }

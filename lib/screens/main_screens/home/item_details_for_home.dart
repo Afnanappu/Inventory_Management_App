@@ -15,17 +15,6 @@ class ItemDetailsForHome extends StatefulWidget {
 }
 
 class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
-  // @override
-  // void initState() {
-  //   _loadItem().then((value) => setState(() {
-  //         print('item is loaded after waiting');
-  //       }));
-  //   super.initState();
-  // }
-
-  // Future<void> _loadItem() async {
-  //   await getAllItemBrandFromDB();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +27,7 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                     width: double.infinity,
                     height: MyScreenSize.screenHeight * .4,
                     alignment: AlignmentDirectional.center,
-                    child: const Text('No item added'),
+                    child: const Text('No item found'),
                   ),
                 )
               : SliverGrid.builder(

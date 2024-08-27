@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 
 class SearchBarForMain extends StatefulWidget {
   const SearchBarForMain({super.key});
@@ -33,14 +34,24 @@ class _SearchBarForMainState extends State<SearchBarForMain> {
         }
       },
 
+      onChanged: (value) {
+        setState(() {
+          filteredItemModelList.value = itemModelListNotifiers.value
+              .where(
+                (item) =>
+                    item.itemName.toLowerCase().contains(value.toLowerCase()),
+              )
+              .toList();
+        });
+      },
+
       //When the user tap outside of the text field the focus is removed from the field.
       onTapOutside: (event) async {
         //Giving some delay to make it more realistic.
         await Future.delayed(const Duration(milliseconds: 400));
 
         setState(() {
-          isSearchClicked == false;
-          print("user taped outside of the text field");
+          isSearchClicked = false;
         });
 
         //To remove the focus.
@@ -63,22 +74,18 @@ class _SearchBarForMainState extends State<SearchBarForMain> {
           padding: const EdgeInsets.only(right: 15),
 
           //Check whether the search bar is focussed or not to change the icon in the suffixIcon.
-          child: (isSearchClicked == true)
-              ? InkWell(
-                  splashColor: Colors.black12,
-                  //Function to clear the text inside the text field.
-                  onTap: () {
-                    setState(() {
-                      _searchEditingController.text = '';
-                    });
-                  },
-                  child: const Icon(
-                    Icons.close,
-                  ),
-                )
-              : const Icon(
-                  Icons.search,
-                ),
+          child: IconButton(
+            onPressed: () {
+              if (isSearchClicked == true) {
+                setState(() {
+                  _searchEditingController.text = '';
+                });
+              }
+            },
+            icon: Icon(
+              (isSearchClicked == true) ? Icons.close : Icons.search,
+            ),
+          ),
         ),
       ),
     );

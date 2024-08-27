@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/functions/generate_unique_id.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 
@@ -14,7 +15,7 @@ Future<void> getAllItemFormDB() async {
   itemModelListNotifiers.value.clear();
   itemModelListNotifiers.value = itemBox.values.cast<ItemModel>().toList();
   // itemBox.clear();
-  notifyItemListeners();
+  notifyAnyListeners(itemModelListNotifiers);
   print(
       'fetching all items from database\nThe number of item in the DB is ${itemBox.values.length}');
 }
@@ -75,9 +76,4 @@ Future<void> decreaseOneItemStockFromDB(int itemId, int quantity) async {
   );
   await itemBox.put(item.id, newItem);
   print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
-}
-
-//Created a function that can notify itemModelListNotifiers.
-void notifyItemListeners() {
-  itemModelListNotifiers.notifyListeners();
 }

@@ -10,7 +10,7 @@ class CustomContainer extends StatelessWidget {
       {super.key,
       required this.title,
       required this.subtitle,
-      this.haveBgColor = true});
+      this.haveBgColor = true,});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,7 @@ class CustomContainer extends StatelessWidget {
                 color: (haveBgColor == true) ? MyColors.white : MyColors.green,
                 fontSize: 24,
                 fontWeight: FontWeight.w700),
+                softWrap: true,
           )
         ],
       )),

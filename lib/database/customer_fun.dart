@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/functions/generate_unique_id.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 
@@ -14,7 +15,7 @@ Future<void> getAllCustomersFormDB() async {
   customerListNotifier.value =
       customerBox.values.cast<CustomerModel>().toList();
   // customerBox.clear();
-  notifyCustomers();
+  notifyAnyListeners(customerListNotifier);
   print(
       'fetching all customers from database\nThe number of customer in the DB is ${customerBox.values.length}');
 }
@@ -42,6 +43,4 @@ Future<void> deleteCustomerFromDB(int customerId) async {
       'The customer in the id = $customerId is deleted and the length of all customers is ${customerBox.values.length}');
 }
 
-void notifyCustomers() {
-  customerListNotifier.notifyListeners();
-}
+

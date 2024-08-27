@@ -25,6 +25,7 @@ class AllSaleDataScreen extends StatelessWidget {
               valueListenable: customerListNotifier,
               builder:
                   (BuildContext context, List<CustomerModel> customers, _) {
+                customers = customers.reversed.toList();
                 return ListView.builder(
                   itemCount: customers.length,
                   itemBuilder: (context, index) {

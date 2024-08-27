@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
@@ -271,7 +272,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                       await addCustomerToDB(customer);
 
                       currentSaleItemNotifier.value.clear();
-                      notifySaleItems();
+                      notifyAnyListeners(saleItemsListNotifier);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (ctx) => const SaleAddNew()));
                       CustomSnackBarMessage(
@@ -310,6 +311,10 @@ class _SaleAddNewState extends State<SaleAddNew> {
                     await addCustomerToDB(customer);
 
                     await decreaseListOfStockFromDB(salesIdList);
+
+                    getTheNumberOfItemSold();
+
+                    getThePriceAmountOfItemSold();
 
                     Navigator.of(context).pop();
                     CustomSnackBarMessage(

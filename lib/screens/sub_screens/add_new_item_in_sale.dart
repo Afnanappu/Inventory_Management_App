@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/database/sales_fun.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
@@ -130,7 +130,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                           itemId: item!.id!,
                           itemCount: int.parse(_itemStockController.text));
                       saleItemsListNotifier.value.add(sale);
-                      notifySaleItems();
+                      notifyAnyListeners(saleItemsListNotifier);
 
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
@@ -152,7 +152,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                       final sale =
                           SaleModel(itemId: item!.id!, itemCount: itemCount);
                       currentSaleItemNotifier.value.add(sale);
-                      currentSaleItemNotifier.notifyListeners();
+                      notifyAnyListeners(currentSaleItemNotifier);
                       final sum = itemCount.toDouble() * itemPrice;
                       Navigator.of(context).pop(sum.toString());
                     }

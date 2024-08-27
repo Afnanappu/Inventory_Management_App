@@ -8,6 +8,10 @@ ValueNotifier<List<ItemBrandModel>> itemBrandListNotifiers = ValueNotifier([]);
 
 ValueNotifier<List<ItemModel>> itemModelListNotifiers = ValueNotifier([]);
 
+ValueNotifier<int> numberOfItemSoldListNotifier = ValueNotifier(0);
+
+ValueNotifier<double> priceAmountOfItemSoldListNotifier = ValueNotifier(0);
+
 @HiveType(typeId: 1)
 class ItemBrandModel {
   @HiveField(0)
