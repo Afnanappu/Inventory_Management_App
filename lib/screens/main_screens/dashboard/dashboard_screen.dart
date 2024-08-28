@@ -7,8 +7,10 @@ import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
+import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
+import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/main_screens/dashboard/all_sale_data.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
@@ -29,6 +31,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     'This month',
     'This year',
   ];
+  ProfileModel? profile;
+
+  String profileName = 'Shop Name';
 
   @override
   void initState() {
@@ -37,12 +42,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         print('customers and sales in loaded after waiting');
       }),
     );
+
     super.initState();
   }
 
   Future<void> _loadDB() async {
     await getAllCustomersFormDB();
     await getAllSalesFromDB();
+    profile = await getProfile();
+    if (profile != null) {
+      profileName = profile!.name!;
+    }
   }
 
   @override
@@ -53,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
         child: AppBarForMain(
-            title: 'Shop Name',
+            title: profileName,
             onPressed: () {
               Navigator.of(context).pushNamed("/NotificationScreen");
             }),
@@ -100,7 +110,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   valueListenable: priceAmountOfItemSoldListNotifier,
                   builder: (context, value, child) => CustomContainer(
                     title: 'Total sale',
-                    subtitle: '₹$value',
+                    subtitle: formatMoney(number: value),
                   ),
                 ),
               ],
@@ -221,7 +231,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           customerName: customer.customerName,
                           invoiceNo: '${customer.customerId}',
                           brandName: brand.itemBrandName,
-                          itemPrice: '₹$sumOfSales',
+                          itemPrice: formatMoney(number: sumOfSales),
                           saleAddDate: customer.saleDateTime,
                         );
                       },

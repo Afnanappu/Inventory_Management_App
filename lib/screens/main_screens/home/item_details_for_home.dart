@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
+import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/item_full_details_screen.dart';
 
@@ -75,7 +76,7 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                             overflow: TextOverflow.ellipsis,
                           )),
                           Text(
-                            '${itemModel.itemPrice}',
+                            formatMoney(number: itemModel.itemPrice),
                             style: MyFontStyle.itemPriceInMain,
                           ),
                         ],

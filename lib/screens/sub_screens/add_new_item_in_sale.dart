@@ -9,7 +9,8 @@ import 'package:inventory_management_app/widgets/drop_down_for_all.dart';
 import 'package:inventory_management_app/widgets/text_form_field.dart';
 
 class AddNewItemInSale extends StatefulWidget {
-  const AddNewItemInSale({super.key});
+  final ItemModel? itemModel;
+  const AddNewItemInSale({super.key, this.itemModel});
 
   @override
   State<AddNewItemInSale> createState() => _AddNewItemInSaleState();
@@ -27,6 +28,9 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
   @override
   void initState() {
     _itemStockController.text = '1';
+    if (widget.itemModel != null) {
+      item = widget.itemModel;
+    }
 
     super.initState();
   }
@@ -51,6 +55,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
           child: Column(
             children: [
               DropDownForAll(
+                nowValue: item,
                 formFillColor: MyColors.white,
                 haveBorder: true,
                 items: itemModelListNotifiers.value
@@ -99,8 +104,16 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                       formFillColor: MyColors.white,
                       haveBorder: true,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        int quantity = 1;
+                        if (value == null || value.isEmpty || 0 == int.parse(value)) {
                           return "add quantity";
+                        } else if (value.isNotEmpty) {
+                          quantity = int.parse(value);
+                          if (item != null && quantity > item!.stock) {
+                            return 'out of stock${item!.stock == 0 ? 'item' : ', try ${item!.stock}'} ';
+                          } else {
+                            return null;
+                          }
                         } else {
                           return null;
                         }

@@ -5,6 +5,7 @@ import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
+import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
@@ -132,9 +133,13 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'phone no is empty';
-                  } else if (value.length != 10) {
-                    return 'Enter a valid phone no';
-                  } else {
+                  } else if (value.length < 10) {
+                    return 'Enter 10 digit number';
+                  }
+                   else if (value.length > 10) {
+                    return 'Too many digits, try again';
+                  }
+                   else {
                     return null;
                   }
                 },
@@ -183,7 +188,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                                 children: [
                                   const Text('Subtotal'),
                                   Text(
-                                      '${sale.itemCount} x ${item.itemPrice} = ${item.itemPrice * sale.itemCount}'),
+                                      '${sale.itemCount} x ${formatMoney(number: item.itemPrice,haveSymbol: false)} = ${formatMoney(number: item.itemPrice * sale.itemCount)}'),
                                 ],
                               ),
                             ),
@@ -229,7 +234,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                               fontSize: 18,
                               fontWeight: FontWeight.w600)),
                       title: Text(
-                        '$totalAmount',
+                        formatMoney(number: totalAmount,haveSymbol: false),textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: MyColors.blackShade,
                           fontSize: 18,

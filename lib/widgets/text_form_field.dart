@@ -24,16 +24,23 @@ Widget customFormField({
       cursorColor: MyColors.blackShade,
       enableInteractiveSelection: true,
       keyboardType: keyboardType,
+      onTap: () {},
       cursorHeight: 18,
       onTapOutside: (event) {
         //To remove the focus.
         // ignore: use_build_context_synchronously
         FocusScope.of(context).unfocus();
       },
+      minLines: 1,
+      maxLines: null,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: (haveBorder == false)?BorderSide.none:const BorderSide(color: MyColors.darkGrey,),
+          borderSide: (haveBorder == false)
+              ? BorderSide.none
+              : const BorderSide(
+                  color: MyColors.darkGrey,
+                ),
         ),
         fillColor: formFillColor,
         filled: true,

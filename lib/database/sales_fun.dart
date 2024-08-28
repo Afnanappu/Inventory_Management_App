@@ -87,3 +87,16 @@ void getThePriceAmountOfItemSold() {
   }
   notifyAnyListeners(priceAmountOfItemSoldListNotifier);
 }
+
+void getSalesBasedOnDateTime({required DateTime startDate, DateTime? endDate}) {
+  List<CustomerModel> sales = [];
+  if (endDate != null) {
+    if (saleItemsListNotifier.value.isNotEmpty) {
+      sales = customerListNotifier.value
+          .where(
+            (element) => element.saleDateTime.isAfter(startDate),
+          )
+          .toList();
+    }
+  }
+}

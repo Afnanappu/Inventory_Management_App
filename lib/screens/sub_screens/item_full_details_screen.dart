@@ -5,8 +5,10 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/item/add_or_edit_new_item.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_item_full_details.dart';
 import 'package:inventory_management_app/widgets/button_add_sale.dart';
 
@@ -14,7 +16,8 @@ import 'package:inventory_management_app/widgets/button_add_sale.dart';
 class ItemFullDetails extends StatefulWidget {
   final ItemModel itemModel;
   final int brandId;
-  const ItemFullDetails({super.key, required this.itemModel, required this.brandId});
+  const ItemFullDetails(
+      {super.key, required this.itemModel, required this.brandId});
 
   @override
   State<ItemFullDetails> createState() => _ItemFullDetailsState();
@@ -28,7 +31,7 @@ class _ItemFullDetailsState extends State<ItemFullDetails> {
   ItemBrandModel? brand;
 
   void getBrand() {
-    brand =  getItemBrandFromDB(widget.brandId);
+    brand = getItemBrandFromDB(widget.brandId);
     setState(() {});
   }
 
@@ -284,7 +287,7 @@ class _ItemFullDetailsState extends State<ItemFullDetails> {
               children: [
                 Expanded(
                   child: Text(
-                    '₹${widget.itemModel.itemPrice}',
+                    formatMoney(number: widget.itemModel.itemPrice),
                     style: const TextStyle(
                       color: MyColors.blackShade,
                       fontSize: 22,
@@ -294,7 +297,12 @@ class _ItemFullDetailsState extends State<ItemFullDetails> {
                   ),
                 ),
                 Expanded(
-                  child: buttonAddSale(text: 'Add new sale', onTap: () {}),
+                  child: buttonAddSale(
+                      text: 'Add new sale',
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) =>  AddNewItemInSale(itemModel: widget.itemModel,)));
+                      }),
                 ),
               ],
             ),

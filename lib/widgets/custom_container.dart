@@ -39,8 +39,10 @@ class CustomContainer extends StatelessWidget {
             style: TextStyle(
                 color: (haveBgColor == true) ? MyColors.white : MyColors.green,
                 fontSize: 24,
+                
                 fontWeight: FontWeight.w700),
                 softWrap: true,
+                textAlign: TextAlign.center,
           )
         ],
       )),

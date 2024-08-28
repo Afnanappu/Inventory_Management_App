@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
+import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/item/add_or_edit_new_item.dart';
 import 'package:inventory_management_app/widgets/popup_icon_button_for_all.dart';
@@ -100,8 +101,8 @@ class ItemListTile extends StatelessWidget {
             children: [
               Text(
                 '${itemModel.stock} in stock',
-                style: const TextStyle(
-                    color: MyColors.green,
+                style:  TextStyle(
+                    color: (itemModel.stock>10)?MyColors.green:MyColors.red,
                     fontSize: 13,
                     fontWeight: FontWeight.w600),
               ),
@@ -109,7 +110,7 @@ class ItemListTile extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                '${itemModel.itemPrice}',
+                formatMoney(number: itemModel.itemPrice),
                 style: MyFontStyle.saleTile,
               ),
             ],
