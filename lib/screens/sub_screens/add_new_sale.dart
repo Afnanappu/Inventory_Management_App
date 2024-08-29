@@ -135,11 +135,9 @@ class _SaleAddNewState extends State<SaleAddNew> {
                     return 'phone no is empty';
                   } else if (value.length < 10) {
                     return 'Enter 10 digit number';
-                  }
-                   else if (value.length > 10) {
+                  } else if (value.length > 10) {
                     return 'Too many digits, try again';
-                  }
-                   else {
+                  } else {
                     return null;
                   }
                 },
@@ -188,7 +186,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                                 children: [
                                   const Text('Subtotal'),
                                   Text(
-                                      '${sale.itemCount} x ${formatMoney(number: item.itemPrice,haveSymbol: false)} = ${formatMoney(number: item.itemPrice * sale.itemCount)}'),
+                                      '${sale.itemCount} x ${formatMoney(number: item.itemPrice, haveSymbol: false)} = ${formatMoney(number: item.itemPrice * sale.itemCount)}'),
                                 ],
                               ),
                             ),
@@ -234,7 +232,8 @@ class _SaleAddNewState extends State<SaleAddNew> {
                               fontSize: 18,
                               fontWeight: FontWeight.w600)),
                       title: Text(
-                        formatMoney(number: totalAmount,haveSymbol: false),textAlign: TextAlign.center,
+                        formatMoney(number: totalAmount, haveSymbol: false),
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: MyColors.blackShade,
                           fontSize: 18,
@@ -310,16 +309,20 @@ class _SaleAddNewState extends State<SaleAddNew> {
                       customerName: _customerNameController.text,
                       customerPhone: _customerPhoneController.text,
                       saleId: salesIdList,
-                      saleDateTime: DateTime.now(),
+                      saleDateTime: selectedDate,
                     );
 
                     await addCustomerToDB(customer);
 
                     await decreaseListOfStockFromDB(salesIdList);
 
-                    getTheNumberOfItemSold();
+                    getTheNumberOfItemSold(
+                        start: DateTime.now().subtract(
+                            Duration(days: DateTime.now().weekday - 1)));
 
-                    getThePriceAmountOfItemSold();
+                    getThePriceAmountOfItemSold(
+                        start: DateTime.now().subtract(
+                            Duration(days: DateTime.now().weekday - 1)));
 
                     Navigator.of(context).pop();
                     CustomSnackBarMessage(

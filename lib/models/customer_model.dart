@@ -5,6 +5,8 @@ part 'customer_model.g.dart';
 ValueNotifier<List<SaleModel>> currentSaleItemNotifier = ValueNotifier([]);
 ValueNotifier<List<SaleModel>> saleItemsListNotifier = ValueNotifier([]);
 ValueNotifier<List<CustomerModel>> customerListNotifier = ValueNotifier([]);
+ValueNotifier<List<CustomerModel>> dateTimeFilterNotifier = ValueNotifier([]);
+
 
 @HiveType(typeId: 3)
 class CustomerModel {

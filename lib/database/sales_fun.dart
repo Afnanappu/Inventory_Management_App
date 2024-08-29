@@ -66,37 +66,62 @@ Future<void> decreaseListOfStockFromDB(List<int> salesId) async {
   print('Updating finished');
 }
 
-void getTheNumberOfItemSold() {
+void getTheNumberOfItemSold({required DateTime start, DateTime? end}) {
   numberOfItemSoldListNotifier.value = 0;
+  final List<int> newSaleIdList = [];
   if (saleItemsListNotifier.value.isNotEmpty) {
-    for (var element in saleItemsListNotifier.value) {
-      numberOfItemSoldListNotifier.value += element.itemCount;
+    final newCustomerList = customerListNotifier.value.where(
+      (element) => (end == null)
+          ? element.saleDateTime.isAfter(start)
+          : element.saleDateTime.isAfter(start) &&
+              element.saleDateTime.isBefore(end),
+    );
+    newSaleIdList.clear();
+    for (var element in newCustomerList) {
+      newSaleIdList.addAll(element.saleId);
+    }
+    for (var sale in saleItemsListNotifier.value) {
+      if (newSaleIdList.contains(sale.saleId)) {
+        numberOfItemSoldListNotifier.value += sale.itemCount;
+      }
     }
   }
   notifyAnyListeners(numberOfItemSoldListNotifier);
 }
 
-void getThePriceAmountOfItemSold() {
+void getThePriceAmountOfItemSold({required DateTime start, DateTime? end}) {
   List<int> salesId = [];
+
   if (saleItemsListNotifier.value.isNotEmpty) {
-    for (var sale in saleItemsListNotifier.value) {
-      salesId.add(sale.saleId!);
+    final newCustomerList = customerListNotifier.value.where(
+      (element) => (end == null)
+          ? element.saleDateTime.isAfter(start)
+          : element.saleDateTime.isAfter(start) &&
+              element.saleDateTime.isBefore(end),
+    );
+    for (var element in newCustomerList) {
+      salesId.addAll(element.saleId);
     }
     priceAmountOfItemSoldListNotifier.value =
         getSumOfAllSaleOfOneCustomer(salesId);
   }
+  print('amount filter worked');
   notifyAnyListeners(priceAmountOfItemSoldListNotifier);
 }
 
 void getSalesBasedOnDateTime({required DateTime startDate, DateTime? endDate}) {
-  List<CustomerModel> sales = [];
-  if (endDate != null) {
-    if (saleItemsListNotifier.value.isNotEmpty) {
-      sales = customerListNotifier.value
-          .where(
-            (element) => element.saleDateTime.isAfter(startDate),
-          )
-          .toList();
-    }
+  // List<CustomerModel> customer = [];
+  if (customerListNotifier.value.isNotEmpty) {
+    dateTimeFilterNotifier.value = customerListNotifier.value
+        .where(
+          (element) => endDate == null
+              ? element.saleDateTime.isAfter(startDate)
+              : element.saleDateTime.isAfter(startDate) &&
+                  element.saleDateTime.isBefore(endDate),
+        )
+        .toList();
+
+    print('date time filter is worked');
+    notifyAnyListeners(dateTimeFilterNotifier);
   }
 }

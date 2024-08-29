@@ -16,6 +16,7 @@ class AppBarForMain extends StatelessWidget {
   final IconData icon;
   void Function()? onPressed;
   bool haveBorder;
+  
 
   @override
   Widget build(BuildContext context) {

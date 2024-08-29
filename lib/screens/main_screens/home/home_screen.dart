@@ -16,6 +16,7 @@ import 'package:inventory_management_app/widgets/search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+  static String profileName = 'Shop Name';
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -35,14 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  String profileName = 'Shop Name';
 
   Future<void> _loadDB() async {
     await getAllItemBrandFromDB();
-    await getAllItemFormDB();
     profile = await getProfile();
     if (profile != null) {
-      profileName = profile!.name!;
+      HomeScreen.profileName = profile!.name!;
     }
   }
 
@@ -58,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
         child: AppBarForMain(
-            title: profileName,
+            title: HomeScreen.profileName,
             onPressed: () {
               Navigator.of(context).pushNamed("/NotificationScreen");
             }),
