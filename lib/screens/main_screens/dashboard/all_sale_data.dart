@@ -17,13 +17,16 @@ class AllSaleDataScreen extends StatelessWidget {
   final ValueNotifier<String?> _selectedValue = ValueNotifier(list[0]);
 
   final ValueNotifier<DateTime> pickedStartDateNotifier =
-      ValueNotifier(DateTime.now());
-  final ValueNotifier<DateTime> pickedEndDateNotifier =
-      ValueNotifier(DateTime.now());
+      ValueNotifier(getTheCurrentDateStartOrEnd(currentDate: CurrentDate.week));
+  final ValueNotifier<DateTime> pickedEndDateNotifier = ValueNotifier(
+      getTheCurrentDateStartOrEnd(currentDate: CurrentDate.week, start: false));
 
   Future<void> _loadData() async {
     await getAllCustomersFormDB();
     await getAllSalesFromDB();
+    getTheCurrentDate(CurrentDate.week);
+
+    // notifyAnyListeners(dateTimeFilterNotifier);
   }
 
   @override
@@ -38,91 +41,145 @@ class AllSaleDataScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          
-          Row(
-            children: [
-              Expanded(
-                child: DropdownButtonFormField(
-                  dropdownColor: MyColors.white,
-                  padding: const EdgeInsets.only(left: 20),
-                  value: _selectedValue.value,
-                  decoration: const InputDecoration(border: InputBorder.none),
-                  items: list.map(
-                    (e) {
-                      return DropdownMenuItem(
-                        value: e,
-                        child: Text(e),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    _selectedValue.value = value;
-                    if (_selectedValue.value == list[0]) {
-                      getTheCurrentDate(CurrentDate.week);
-                    } else if (_selectedValue.value == list[1]) {
-                      getTheCurrentDate(CurrentDate.month);
-                    } else {
-                      getTheCurrentDate(CurrentDate.year);
-                    }
-                  },
-                ),
-              ),
-              
-            const Divider(height: 30,color: Colors.red,thickness: 5,),
-            
-              //Date
-              Row(
-                children: [
-                  //Date From
-                  IconButton(
-                    onPressed: () async {
-                      final pickedDate =
-                          await pickDateFromUser(context: context);
-                      if (pickedDate != null) {
-                        pickedStartDateNotifier.value = pickedDate;
-                      }
-                    },
-                    icon: Row(
-                      children: [
-                        const Icon(Icons.calendar_month_outlined),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        ValueListenableBuilder(
-                          valueListenable: pickedStartDateNotifier,
-                          builder: (context, value, child) => Text(
-                            formatDateTime(date: value),style: const TextStyle(color: MyColors.blackShade, fontWeight: FontWeight.w600),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+          //divider
+          const Divider(),
 
-                  const Text(
-                    'TO',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  
-                  //Date To
-                  TextButton(style: ButtonStyle(foregroundColor: WidgetStateColor.resolveWith((_) => MyColors.blackShade,)),
-                    onPressed: () async {
-                      final pickedDate =
-                          await pickDateFromUser(context: context);
-                      if (pickedDate != null) {
-                        pickedEndDateNotifier.value = pickedDate;
+          //filter
+          IntrinsicHeight(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+
+                  //dropdown
+                  child: DropdownButtonFormField(
+                    dropdownColor: MyColors.white,
+                    padding: const EdgeInsets.only(left: 20),
+                    value: _selectedValue.value,
+                    decoration: const InputDecoration(border: InputBorder.none),
+                    items: list.map(
+                      (e) {
+                        return DropdownMenuItem(
+                          value: e,
+                          child: Text(e),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) {
+                      _selectedValue.value = value;
+                      if (_selectedValue.value == list[0]) {
+                        getTheCurrentDate(CurrentDate.week);
+                        pickedStartDateNotifier.value =
+                            getTheCurrentDateStartOrEnd(
+                                currentDate: CurrentDate.week);
+                        pickedEndDateNotifier.value =
+                            getTheCurrentDateStartOrEnd(
+                                currentDate: CurrentDate.week, start: false);
+                      } else if (_selectedValue.value == list[1]) {
+                        getTheCurrentDate(CurrentDate.month);
+                        pickedStartDateNotifier.value =
+                            getTheCurrentDateStartOrEnd(
+                                currentDate: CurrentDate.month);
+                        pickedEndDateNotifier.value =
+                            getTheCurrentDateStartOrEnd(
+                                currentDate: CurrentDate.month, start: false);
+                      } else {
+                        getTheCurrentDate(CurrentDate.year);
+                        pickedStartDateNotifier.value =
+                            getTheCurrentDateStartOrEnd(
+                                currentDate: CurrentDate.year);
+                        pickedEndDateNotifier.value =
+                            getTheCurrentDateStartOrEnd(
+                                currentDate: CurrentDate.year, start: false);
                       }
                     },
-                    child: ValueListenableBuilder(
-                      valueListenable: pickedEndDateNotifier,
-                      builder: (context, value, child) => Text(
-                        formatDateTime(date: value),
+                  ),
+                ),
+                
+                //divider
+                const VerticalDivider(
+                  color: MyColors.lightGrey,
+                  thickness: 1.5,
+                  width: 15,
+                  indent: 10,
+                  endIndent: 10,
+                ),
+
+                //Date
+                Row(
+                  children: [
+                    //Date From
+                    IconButton(
+                      onPressed: () async {
+                        final pickedDate = await pickDateFromUser(
+                            context: context,
+                            initialDate: pickedStartDateNotifier.value);
+                        if (pickedDate != null) {
+                          pickedStartDateNotifier.value = pickedDate;
+                          getSalesBasedOnDateTime(
+                              startDate: pickedDate,
+                              endDate: pickedEndDateNotifier.value);
+                        }
+                      },
+                      icon: Row(
+                        children: [
+                          const Icon(Icons.calendar_month_outlined),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          ValueListenableBuilder(
+                            valueListenable: pickedStartDateNotifier,
+                            builder: (context, value, child) => Text(
+                              formatDateTime(date: value),
+                              style: const TextStyle(
+                                  color: MyColors.blackShade,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  )
-                ],
-              ),
-            ],
+
+                    const Text(
+                      'TO',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+
+                    //Date To
+                    TextButton(
+                      style: ButtonStyle(
+                          foregroundColor: WidgetStateColor.resolveWith(
+                        (_) => MyColors.blackShade,
+                      )),
+                      onPressed: () async {
+                        final pickedDate = await pickDateFromUser(
+                            context: context,
+                            initialDate: pickedEndDateNotifier.value);
+                        if (pickedDate != null) {
+                          pickedEndDateNotifier.value = pickedDate;
+                          getSalesBasedOnDateTime(
+                              startDate: pickedStartDateNotifier.value,
+                              endDate: pickedDate);
+                        }
+                      },
+                      child: ValueListenableBuilder(
+                        valueListenable: pickedEndDateNotifier,
+                        builder: (context, value, child) => Text(
+                          formatDateTime(date: value),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
+
+          //divider
+          const Divider(),
+          
+
+          //list builder
           FutureBuilder(
             future: _loadData(),
             builder: (context, snapshot) {

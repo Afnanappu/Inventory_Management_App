@@ -110,7 +110,6 @@ void getThePriceAmountOfItemSold({required DateTime start, DateTime? end}) {
 }
 
 void getSalesBasedOnDateTime({required DateTime startDate, DateTime? endDate}) {
-  // List<CustomerModel> customer = [];
   if (customerListNotifier.value.isNotEmpty) {
     dateTimeFilterNotifier.value = customerListNotifier.value
         .where(

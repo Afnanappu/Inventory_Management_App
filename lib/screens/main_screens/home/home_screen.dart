@@ -3,7 +3,6 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
-import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';

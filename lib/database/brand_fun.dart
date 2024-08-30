@@ -18,8 +18,8 @@ Future<void> getAllItemBrandFromDB() async {
       brandBox.values.cast<ItemBrandModel>().toList();
   // brandBox.clear();
   notifyAnyListeners(itemBrandListNotifiers);
-  print(
-      'fetching all brands from database\nThe number of brand in the DB is ${brandBox.values.length}');
+  // print(
+  //     'fetching all brands from database\nThe number of brand in the DB is ${brandBox.values.length}');
 }
 
 //Function to add brand to database
@@ -30,8 +30,8 @@ Future<void> addBrandToDB(ItemBrandModel brand) async {
 
   await brandBox.put(brand.id, brand);
   getAllItemBrandFromDB();
-  print(
-      'A new brand is added to database and the brand id = ${brand.id} and the length of all brand is ${brandBox.values.length}');
+  // print(
+  //     'A new brand is added to database and the brand id = ${brand.id} and the length of all brand is ${brandBox.values.length}');
 }
 
 //Function to delete brand from database.
@@ -40,8 +40,8 @@ Future<void> deleteBrandFromDB(int brandId) async {
 
   await brandBox.delete(brandId);
   getAllItemBrandFromDB();
-  print(
-      'The brand in the index $brandId is deleted. The available brands is ${brandBox.values.length}');
+  // print(
+  //     'The brand in the index $brandId is deleted. The available brands is ${brandBox.values.length}');
 }
 
 //Function to Edit brand from database.
@@ -52,7 +52,7 @@ Future<void> editBrandFromDB(
   brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
   brandBox.put(brandId, brand);
   getAllItemBrandFromDB();
-  print('The brand at index $brandId is edited');
+  // print('The brand at index $brandId is edited');
 }
 
 

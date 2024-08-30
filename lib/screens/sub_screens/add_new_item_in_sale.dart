@@ -8,6 +8,7 @@ import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edi
 import 'package:inventory_management_app/widgets/button_add_sale.dart';
 import 'package:inventory_management_app/widgets/drop_down_for_all.dart';
 import 'package:inventory_management_app/widgets/text_form_field.dart';
+import 'package:inventory_management_app/functions/extension_methods.dart';
 
 class AddNewItemInSale extends StatefulWidget {
   final ItemModel? itemModel;
@@ -150,8 +151,8 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                   //todo: Add function to save data
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      final itemCount = int.parse(_itemStockController.text);
-                      final itemPrice = double.parse(_itemPriceController.text);
+                      final itemCount = _itemStockController.text.parseInt();
+                      final itemPrice = _itemPriceController.text.parseDouble();
                       final sale =
                           SaleModel(itemId: item!.id!, itemCount: itemCount);
                       currentSaleItemNotifier.value.add(sale);
@@ -173,8 +174,8 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                   //todo: Add function to save data
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      final itemCount = int.parse(_itemStockController.text);
-                      final itemPrice = double.parse(_itemPriceController.text);
+                      final itemCount = _itemStockController.text.parseInt();
+                      final itemPrice = _itemPriceController.text.parseDouble();
                       final sale =
                           SaleModel(itemId: item!.id!, itemCount: itemCount);
                       currentSaleItemNotifier.value.add(sale);

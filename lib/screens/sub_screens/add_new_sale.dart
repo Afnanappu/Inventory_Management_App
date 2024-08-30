@@ -1,5 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
@@ -297,15 +298,17 @@ class _SaleAddNewState extends State<SaleAddNew> {
                       //         Duration(days: DateTime.now().weekday - 1)));
                       currentSaleItemNotifier.value.clear();
                       notifyAnyListeners(currentSaleItemNotifier);
-                      
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (ctx) => const SaleAddNew()));
-                      CustomSnackBarMessage(
-                        context: context,
-                        message: 'Sale is added successfully',
-                        color: MyColors.green,
-                        duration: 2,
-                      );
+
+                      if (mounted) {
+                        CustomSnackBarMessage(
+                          context: context,
+                          message: 'Sale is added successfully',
+                          color: MyColors.green,
+                          duration: 2,
+                        );
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (ctx) => const SaleAddNew()));
+                      }
                     } else if (currentSaleItemNotifier.value.isEmpty) {
                       CustomSnackBarMessage(
                         context: context,
@@ -346,13 +349,15 @@ class _SaleAddNewState extends State<SaleAddNew> {
                         start: DateTime.now().subtract(
                             Duration(days: DateTime.now().weekday - 1)));
 
-                    Navigator.of(context).pop();
-                    CustomSnackBarMessage(
-                      context: context,
-                      message: 'Sale is added successfully',
-                      color: MyColors.green,
-                      duration: 2,
-                    );
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                      CustomSnackBarMessage(
+                        context: context,
+                        message: 'Sale is added successfully',
+                        color: MyColors.green,
+                        duration: 2,
+                      );
+                    }
                   } else if (currentSaleItemNotifier.value.isEmpty) {
                     CustomSnackBarMessage(
                       context: context,

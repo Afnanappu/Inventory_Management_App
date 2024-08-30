@@ -8,11 +8,12 @@ void getTheCurrentDate(CurrentDate currentDate) {
   final today = DateTime.now();
   late DateTime startDate;
   DateTime? endDate;
+
   switch (currentDate) {
     case CurrentDate.week:
       final weekStart = today.weekday - 1;
       startDate = today.subtract(Duration(days: weekStart));
-      endDate = startDate.add(Duration(days: weekStart + 6));
+      endDate = startDate.add(Duration(days: 6 - weekStart));
       print('This week');
       break;
 
@@ -25,6 +26,7 @@ void getTheCurrentDate(CurrentDate currentDate) {
       startDate = DateTime(today.year);
       print('This year');
     default:
+      print('Nothing worked in getTheCurrentDate()');
   }
   getSalesBasedOnDateTime(startDate: startDate, endDate: endDate);
   getTheNumberOfItemSold(start: startDate, end: endDate);
@@ -43,6 +45,45 @@ Future<DateTime?> pickDateFromUser(
   return pickedDate;
 }
 
-String formatDateTime({required DateTime date}){
+String formatDateTime({required DateTime date}) {
   return DateFormat('dd/MM/yy').format(date);
+}
+
+DateTime getTheCurrentDateStartOrEnd(
+    {required CurrentDate currentDate, bool start = true, DateTime? time}) {
+  time ??= DateTime.now();
+
+  switch (currentDate) {
+    case CurrentDate.week:
+      switch (start) {
+        case true:
+          return time.subtract(
+            Duration(days: time.weekday - 1),
+          );
+        case false:
+          return time.add(
+            Duration(
+              days: 6 - (time.weekday - 1),
+            ),
+          );
+      }
+    case CurrentDate.month:
+      switch (start) {
+        case true:
+          return DateTime(time.year, time.month, 1);
+        case false:
+          return DateTime(time.year, time.month + 1, 1).subtract(
+            const Duration(days: 1),
+          );
+      }
+    case CurrentDate.year:
+      switch (start) {
+        case true:
+          return DateTime(time.year, 1, 1);
+        case false:
+          return DateTime(time.year + 1, 1, 1).subtract(
+            const Duration(days: 1),
+          );
+      }
+  }
 }

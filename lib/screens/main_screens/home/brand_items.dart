@@ -148,7 +148,7 @@ class _BrandItemsState extends State<BrandItems> {
                   },
                 )
               : Wrap(
-                  children: [],
+                  children: const[],
                 )),
     );
   }

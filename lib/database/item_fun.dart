@@ -16,8 +16,8 @@ Future<void> getAllItemFormDB() async {
   itemModelListNotifiers.value = itemBox.values.cast<ItemModel>().toList();
   // itemBox.clear();
   notifyAnyListeners(itemModelListNotifiers);
-  print(
-      'fetching all items from database\nThe number of item in the DB is ${itemBox.values.length}');
+  // print(
+  //     'fetching all items from database\nThe number of item in the DB is ${itemBox.values.length}');
 }
 
 //Function to add item to database
@@ -28,8 +28,8 @@ Future<void> addItemToDB(ItemModel item) async {
   await itemBox.put(item.id, item);
 
   await getAllItemFormDB();
-  print(
-      'A new item is added to database and the item id = ${item.id} and the brand id is = ${item.brandId} and the length of all item is ${itemBox.values.length}');
+  // print(
+  //     'A new item is added to database and the item id = ${item.id} and the brand id is = ${item.brandId} and the length of all item is ${itemBox.values.length}');
 }
 
 //Function to delete from database.
@@ -38,8 +38,8 @@ Future<void> deleteItemFromDB(int itemId) async {
   await itemBox.delete(itemId);
 
   getAllItemFormDB();
-  print(
-      'The item in the index $itemId is deleted and the length of all item is ${itemBox.values.length}');
+  // print(
+  //     'The item in the index $itemId is deleted and the length of all item is ${itemBox.values.length}');
 }
 
 //Function to delete from database.
@@ -48,7 +48,7 @@ Future<void> editItemFromDB(int itemId, ItemModel item) async {
   await itemBox.put(itemId, item);
 
   getAllItemFormDB();
-  print('The item in the index $itemId is edited');
+  // print('The item in the index $itemId is edited');
 }
 
 ItemModel getItemFromDB(int itemId) {
@@ -75,5 +75,5 @@ Future<void> decreaseOneItemStockFromDB(int itemId, int quantity) async {
     stock: newStock,
   );
   await itemBox.put(item.id, newItem);
-  print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
+  // print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
 }
