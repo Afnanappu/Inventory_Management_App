@@ -15,6 +15,7 @@ class BrandItems extends StatefulWidget {
 int selectedButtonIndex = -1;
 
 class _BrandItemsState extends State<BrandItems> {
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -45,8 +46,8 @@ class _BrandItemsState extends State<BrandItems> {
                             notifyAnyListeners(filteredItemModelList);
                           },
                           style: ButtonStyle(
-                            fixedSize:
-                               const WidgetStatePropertyAll(Size.fromHeight(45)),
+                            fixedSize: const WidgetStatePropertyAll(
+                                Size.fromHeight(45)),
                             foregroundColor: WidgetStateProperty.resolveWith(
                               (states) {
                                 if (selectedButtonIndex == index) {

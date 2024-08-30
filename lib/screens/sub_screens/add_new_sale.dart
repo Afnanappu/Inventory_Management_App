@@ -5,6 +5,7 @@ import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
+import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
@@ -22,12 +23,12 @@ class SaleAddNew extends StatefulWidget {
   State<SaleAddNew> createState() => _SaleAddNewState();
 }
 
+ValueNotifier<double> totalAmountNotifier = ValueNotifier(0);
+
 class _SaleAddNewState extends State<SaleAddNew> {
   final _customerNameController = TextEditingController();
 
   final _customerPhoneController = TextEditingController();
-
-  double totalAmount = 0;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -36,6 +37,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
   @override
   void dispose() {
     currentSaleItemNotifier.value.clear();
+    totalAmountNotifier.value = 0;
     super.dispose();
   }
 
@@ -70,18 +72,16 @@ class _SaleAddNewState extends State<SaleAddNew> {
                       ],
                     ),
                   )),
+
+                  //DatePick
                   Expanded(
-                      child: SizedBox(
-                    child: Padding(
+                    child: SizedBox(
+                      child: Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: InkWell(
                           onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: selectedDate,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2050),
-                            );
+                            DateTime? pickedDate =
+                                await pickDateFromUser(context: context);
 
                             setState(() {
                               if (pickedDate != null) {
@@ -95,15 +95,16 @@ class _SaleAddNewState extends State<SaleAddNew> {
                               const Text('Date'),
                               Row(
                                 children: [
-                                  Text(DateFormat('dd/MM//yy')
-                                      .format(selectedDate)),
+                                  Text(formatDateTime(date: selectedDate)),
                                   const Icon(Icons.arrow_drop_down)
                                 ],
                               ),
                             ],
                           ),
-                        )),
-                  )),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               customFormField(
@@ -173,7 +174,9 @@ class _SaleAddNewState extends State<SaleAddNew> {
                                     ),
                                   ),
                                   Text(
-                                    '${item.itemPrice * sale.itemCount}',
+                                    formatMoney(
+                                        number:
+                                            item.itemPrice * sale.itemCount),
                                     style: const TextStyle(
                                         color: MyColors.blackShade,
                                         fontWeight: FontWeight.w600),
@@ -193,15 +196,17 @@ class _SaleAddNewState extends State<SaleAddNew> {
                           );
                         });
                   }),
-              saleAddItem(onTap: () async {
-                final String sumString = await Navigator.of(context).push(
+              saleAddItem(onTap: () {
+                Navigator.of(context).push(
                   MaterialPageRoute(builder: (ctx) => const AddNewItemInSale()),
                 );
-                var sum = double.parse(sumString);
 
-                setState(() {
-                  totalAmount += sum;
-                });
+                // final String sumString =
+                // var sum = double.parse(sumString);
+
+                // setState(() {
+                //   totalAmount += sum;
+                // });
               }),
               const SizedBox(
                 height: 15,
@@ -210,6 +215,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  //total amount
                   const Text(
                     'Total Amount',
                     style: TextStyle(
@@ -217,6 +223,8 @@ class _SaleAddNewState extends State<SaleAddNew> {
                         fontSize: 18,
                         fontWeight: FontWeight.w600),
                   ),
+
+                  //total amount price
                   Container(
                     constraints:
                         const BoxConstraints(maxWidth: 180, minWidth: 100),
@@ -231,13 +239,16 @@ class _SaleAddNewState extends State<SaleAddNew> {
                               color: MyColors.blackShade,
                               fontSize: 18,
                               fontWeight: FontWeight.w600)),
-                      title: Text(
-                        formatMoney(number: totalAmount, haveSymbol: false),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: MyColors.blackShade,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                      title: ValueListenableBuilder(
+                        valueListenable: totalAmountNotifier,
+                        builder: (context, value, child) => Text(
+                          formatMoney(number: value, haveSymbol: false),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: MyColors.blackShade,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
@@ -270,13 +281,23 @@ class _SaleAddNewState extends State<SaleAddNew> {
                         customerName: _customerNameController.text,
                         customerPhone: _customerPhoneController.text,
                         saleId: salesIdList,
-                        saleDateTime: DateTime.now(),
+                        saleDateTime: selectedDate,
                       );
 
                       await addCustomerToDB(customer);
 
+                      await decreaseListOfStockFromDB(salesIdList);
+
+                      // getTheNumberOfItemSold(
+                      //     start: DateTime.now().subtract(
+                      //         Duration(days: DateTime.now().weekday - 1)));
+
+                      // getThePriceAmountOfItemSold(
+                      //     start: DateTime.now().subtract(
+                      //         Duration(days: DateTime.now().weekday - 1)));
                       currentSaleItemNotifier.value.clear();
-                      notifyAnyListeners(saleItemsListNotifier);
+                      notifyAnyListeners(currentSaleItemNotifier);
+                      
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (ctx) => const SaleAddNew()));
                       CustomSnackBarMessage(
@@ -287,17 +308,18 @@ class _SaleAddNewState extends State<SaleAddNew> {
                       );
                     } else if (currentSaleItemNotifier.value.isEmpty) {
                       CustomSnackBarMessage(
-                          context: context,
-                          message: 'Add an item to save',
-                          color: Colors.red);
+                        context: context,
+                        message: 'Add an item to save',
+                        color: Colors.red,
+                      );
                     }
                   }),
             ),
+
+            //Save
             Expanded(
               child: buttonAddSale(
                 text: 'Save',
-
-                //todo: Add function to save data
                 onTap: () async {
                   if (_formKey.currentState!.validate() &&
                       currentSaleItemNotifier.value.isNotEmpty) {
@@ -333,9 +355,10 @@ class _SaleAddNewState extends State<SaleAddNew> {
                     );
                   } else if (currentSaleItemNotifier.value.isEmpty) {
                     CustomSnackBarMessage(
-                        context: context,
-                        message: 'Add an item to save',
-                        color: Colors.red);
+                      context: context,
+                      message: 'Add an item to save',
+                      color: Colors.red,
+                    );
                   }
                 },
               ),

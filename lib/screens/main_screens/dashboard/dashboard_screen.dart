@@ -36,11 +36,13 @@ class DashboardScreen extends StatelessWidget {
         start: today.subtract(Duration(days: today.weekday - 1)));
     await getAllCustomersFormDB();
     await getAllSalesFromDB();
+    
   }
 
   // Future<void>
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -90,6 +92,8 @@ class DashboardScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+
+                //Sold item
                 ValueListenableBuilder(
                   valueListenable: numberOfItemSoldListNotifier,
                   builder: (context, value, child) => CustomContainer(
@@ -98,6 +102,8 @@ class DashboardScreen extends StatelessWidget {
                     haveBgColor: false,
                   ),
                 ),
+
+                //Total sale
                 ValueListenableBuilder(
                   valueListenable: priceAmountOfItemSoldListNotifier,
                   builder: (context, value, child) => CustomContainer(

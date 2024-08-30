@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
+import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/widgets/buttons.dart';
 
 class SaleListTile extends StatelessWidget {
@@ -66,7 +67,7 @@ class SaleListTile extends StatelessWidget {
                         fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    DateFormat('dd/MM/yy').format(saleAddDate),
+                    formatDateTime(date: saleAddDate),
                     style: MyFontStyle.saleTileInvoice,
                   ),
                 ],

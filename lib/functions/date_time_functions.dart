@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 
 enum CurrentDate { week, month, year }
@@ -27,4 +29,20 @@ void getTheCurrentDate(CurrentDate currentDate) {
   getSalesBasedOnDateTime(startDate: startDate, endDate: endDate);
   getTheNumberOfItemSold(start: startDate, end: endDate);
   getThePriceAmountOfItemSold(start: startDate, end: endDate);
+}
+
+Future<DateTime?> pickDateFromUser(
+    {required BuildContext context, DateTime? initialDate}) async {
+  final pickedDate = await showDatePicker(
+    context: context,
+    initialDate: initialDate ??= DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2050),
+  );
+
+  return pickedDate;
+}
+
+String formatDateTime({required DateTime date}){
+  return DateFormat('dd/MM/yy').format(date);
 }

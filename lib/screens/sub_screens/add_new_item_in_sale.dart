@@ -3,6 +3,7 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/button_add_sale.dart';
 import 'package:inventory_management_app/widgets/drop_down_for_all.dart';
@@ -22,6 +23,8 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
   final _itemStockController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  int selectedItemQuantity = 0;
 
   ItemModel? item;
 
@@ -69,6 +72,11 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                 onChanged: (e) {
                   setState(() {
                     item = e;
+                    for (var element in currentSaleItemNotifier.value) {
+                      if (element.itemId == item!.id) {
+                        selectedItemQuantity += element.itemCount;
+                      }
+                    }
                   });
                 },
                 hintText: 'Select item',
@@ -105,12 +113,15 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                       haveBorder: true,
                       validator: (value) {
                         int quantity = 1;
-                        if (value == null || value.isEmpty || 0 == int.parse(value)) {
+                        int stock = item!.stock - selectedItemQuantity;
+                        if (value == null ||
+                            value.isEmpty ||
+                            0 == int.parse(value)) {
                           return "add quantity";
                         } else if (value.isNotEmpty) {
                           quantity = int.parse(value);
-                          if (item != null && quantity > item!.stock) {
-                            return 'out of stock${item!.stock == 0 ? 'item' : ', try ${item!.stock}'} ';
+                          if (item != null && quantity > stock) {
+                            return 'out of stock${stock == 0 ? 'item' : ', try $stock'} ';
                           } else {
                             return null;
                           }
@@ -139,12 +150,14 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                   //todo: Add function to save data
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      final sale = SaleModel(
-                          itemId: item!.id!,
-                          itemCount: int.parse(_itemStockController.text));
-                      saleItemsListNotifier.value.add(sale);
-                      notifyAnyListeners(saleItemsListNotifier);
-
+                      final itemCount = int.parse(_itemStockController.text);
+                      final itemPrice = double.parse(_itemPriceController.text);
+                      final sale =
+                          SaleModel(itemId: item!.id!, itemCount: itemCount);
+                      currentSaleItemNotifier.value.add(sale);
+                      notifyAnyListeners(currentSaleItemNotifier);
+                      final sum = itemCount.toDouble() * itemPrice;
+                      totalAmountNotifier.value += sum;
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (ctx) => const AddNewItemInSale(),
@@ -167,7 +180,8 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                       currentSaleItemNotifier.value.add(sale);
                       notifyAnyListeners(currentSaleItemNotifier);
                       final sum = itemCount.toDouble() * itemPrice;
-                      Navigator.of(context).pop(sum.toString());
+                      totalAmountNotifier.value += sum;
+                      Navigator.of(context).pop();
                     }
                   }),
             ),
