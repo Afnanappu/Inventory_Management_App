@@ -5,25 +5,26 @@ import 'package:inventory_management_app/database/sales_fun.dart';
 enum CurrentDate { week, month, year }
 
 void getTheCurrentDate(CurrentDate currentDate) {
-  final today = DateTime.now();
+  // final today = DateTime.now();
   late DateTime startDate;
   DateTime? endDate;
 
   switch (currentDate) {
     case CurrentDate.week:
-      final weekStart = today.weekday - 1;
-      startDate = today.subtract(Duration(days: weekStart));
-      endDate = startDate.add(Duration(days: 6 - weekStart));
+      startDate = getTheCurrentDateStartOrEnd(currentDate: CurrentDate.week);
+      endDate = getTheCurrentDateStartOrEnd(
+          currentDate: CurrentDate.week, start: false);
       print('This week');
       break;
 
     case CurrentDate.month:
-      startDate = DateTime(today.year, today.month, 1);
-      endDate = DateTime(today.year, today.month + 1, 1);
+      startDate = getTheCurrentDateStartOrEnd(currentDate: CurrentDate.month);
+      endDate = getTheCurrentDateStartOrEnd(
+          currentDate: CurrentDate.week, start: false);
       print('This month');
 
     case CurrentDate.year:
-      startDate = DateTime(today.year);
+      startDate =getTheCurrentDateStartOrEnd(currentDate: CurrentDate.year);
       print('This year');
     default:
       print('Nothing worked in getTheCurrentDate()');

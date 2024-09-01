@@ -1,6 +1,8 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
+import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/generate_unique_id.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
@@ -124,3 +126,26 @@ void getSalesBasedOnDateTime({required DateTime startDate, DateTime? endDate}) {
     notifyAnyListeners(dateTimeFilterNotifier);
   }
 }
+
+void getGraphBasedOnSales() {
+//  final start =  getTheCurrentDateStartOrEnd(currentDate: CurrentDate.week);
+//  final end =  getTheCurrentDateStartOrEnd(currentDate: CurrentDate.week, start: false);
+  dateTimeFilterNotifier.value.map((e) {});
+  // getSalesBasedOnDateTime(startDate: )
+  // getThePriceAmountOfItemSold(start: start)
+
+//   graphPointListNotifier.value = dateTimeFilterNotifier.value.map((e) {
+//     // final sum = getSumOfAllSaleOfOneCustomer(e.saleId);
+//     getSalesBasedOnDateTime(startDate: e.saleDateTime, endDate: e.saleDateTime);
+//     // if(e.saleDateTime)
+// getSumOfAllSaleOfOneCustomer(e.)
+//     return FlSpot(e.saleDateTime.weekday.toDouble(), e.saleId.length.toDouble());
+//   }).toList();
+
+  notifyAnyListeners(graphPointListNotifier);
+}
+
+// double findTheSumOfOneDay(DateTime today) {
+//   getThePriceAmountOfItemSold(start: today.subtract(const Duration(days: 1)), end: today.add(const Duration(days: 1)));
+
+// }

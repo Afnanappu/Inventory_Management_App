@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:fl_chart/fl_chart.dart';
 part 'item_model.g.dart';
+
 
 ValueNotifier<List<ItemModel>> filteredItemModelList = ValueNotifier([]);
 
 ValueNotifier<List<ItemBrandModel>> itemBrandListNotifiers = ValueNotifier([]);
 
 ValueNotifier<List<ItemModel>> itemModelListNotifiers = ValueNotifier([]);
+ValueNotifier<List<ItemModel>> itemFilterListNotifiers = ValueNotifier([]);
 
 ValueNotifier<int> numberOfItemSoldListNotifier = ValueNotifier(0);
 
 ValueNotifier<double> priceAmountOfItemSoldListNotifier = ValueNotifier(0);
+ValueNotifier<List<FlSpot>> graphPointListNotifier = ValueNotifier([]);
+
 
 @HiveType(typeId: 1)
 class ItemBrandModel {

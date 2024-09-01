@@ -77,3 +77,18 @@ Future<void> decreaseOneItemStockFromDB(int itemId, int quantity) async {
   await itemBox.put(item.id, newItem);
   // print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
 }
+
+void getTheFilterItem({int? limit, bool? isLess = true}) {
+  if (limit != null) {
+    itemFilterListNotifiers.value = itemModelListNotifiers.value
+        .where(
+          (element) =>
+              isLess == true ? element.stock < limit : element.stock > limit,
+        )
+        .toList();
+  } else {
+    itemFilterListNotifiers.value = itemModelListNotifiers.value;
+    print('filter is worked');
+  }
+  notifyAnyListeners(itemFilterListNotifiers);
+}

@@ -5,18 +5,22 @@ import 'package:inventory_management_app/constants/screen_size.dart';
 
 // ignore: must_be_immutable
 class AppBarForMain extends StatelessWidget {
-  AppBarForMain(
-      {super.key,
-      required this.title,
-      this.icon = Icons.notifications_none,
-      required this.onPressed,
-      this.haveBorder = true});
+  AppBarForMain({
+    super.key,
+    required this.title,
+    this.icon = Icons.notifications_none,
+    required this.onPressed,
+    this.haveBorder = true,
+    this.isPopupMenuButton = false,
+    this.popupMenuButton,
+  });
 
   final String title;
   final IconData icon;
   void Function()? onPressed;
-  bool haveBorder;
-  
+  final bool haveBorder;
+  final bool isPopupMenuButton;
+  final Widget? popupMenuButton;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +34,14 @@ class AppBarForMain extends StatelessWidget {
         IconButton(
           onPressed: onPressed,
           icon: Container(
-            padding:const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              border: (haveBorder == true)?Border.all(color: MyColors.darkGrey):null,
+              border: (haveBorder == true)
+                  ? Border.all(color: MyColors.darkGrey)
+                  : null,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Icon(icon),
+            child: isPopupMenuButton == false ? Icon(icon) : popupMenuButton,
           ),
         ),
         SizedBox(

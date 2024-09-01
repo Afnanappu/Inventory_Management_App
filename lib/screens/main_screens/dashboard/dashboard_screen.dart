@@ -14,6 +14,7 @@ import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/main_screens/dashboard/all_sale_data.dart';
 import 'package:inventory_management_app/screens/main_screens/home/home_screen.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/custom_container.dart';
 import 'package:inventory_management_app/widgets/sale_list_tile.dart';
@@ -31,18 +32,24 @@ class DashboardScreen extends StatelessWidget {
 
   Future<void> _fetchSaleData() async {
     getTheNumberOfItemSold(
-        start: today.subtract(Duration(days: today.weekday - 1)));
+        start: getTheCurrentDateStartOrEnd(
+      currentDate: CurrentDate.week,
+      start: true,
+    ));
     getThePriceAmountOfItemSold(
-        start: today.subtract(Duration(days: today.weekday - 1)));
+        start: getTheCurrentDateStartOrEnd(
+      currentDate: CurrentDate.week,
+      start: true,
+    ));
+    getGraphBasedOnSales();
     await getAllCustomersFormDB();
     await getAllSalesFromDB();
-    
   }
 
   // Future<void>
   @override
   Widget build(BuildContext context) {
-
+    getTheCurrentDate(CurrentDate.week);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -74,10 +81,13 @@ class DashboardScreen extends StatelessWidget {
                   _selectedValue.value = value;
                   if (_selectedValue.value == list[0]) {
                     getTheCurrentDate(CurrentDate.week);
+                    getGraphBasedOnSales();
                   } else if (_selectedValue.value == list[1]) {
                     getTheCurrentDate(CurrentDate.month);
+                    getGraphBasedOnSales();
                   } else {
                     getTheCurrentDate(CurrentDate.year);
+                    getGraphBasedOnSales();
                   }
                 },
               ),
@@ -92,7 +102,6 @@ class DashboardScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
                 //Sold item
                 ValueListenableBuilder(
                   valueListenable: numberOfItemSoldListNotifier,
@@ -128,45 +137,50 @@ class DashboardScreen extends StatelessWidget {
                   right: 15,
                   top: 15,
                 ),
-                child: LineChart(
-                  LineChartData(
-                      gridData: const FlGridData(
-                        show: true,
-                        drawVerticalLine: false,
-                      ),
-                      titlesData: const FlTitlesData(
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
+                child: ValueListenableBuilder(
+                  valueListenable: graphPointListNotifier,
+                  builder: (context, pointList, child) =>  LineChart(
+                    LineChartData(
+                        gridData: const FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
                         ),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                      ),
-                      borderData: FlBorderData(
-                        show: true,
-                        border: Border.all(color: MyColors.lightGrey, width: 1),
-                      ),
-                      betweenBarsData: [],
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: const [
-                            FlSpot(0, 0),
-                            FlSpot(1, 1),
-                            FlSpot(2, 0.5),
-                            FlSpot(3, 0.5),
-                            FlSpot(4, 1),
-                            FlSpot(5, 1),
-                            FlSpot(6, 2),
-                          ],
-                          color: Colors.blue,
-                          barWidth: 3,
-                          dotData: const FlDotData(show: true),
-                          belowBarData: BarAreaData(
-                            show: true,
-                            color: const Color.fromARGB(42, 40, 137, 217),
+                        titlesData: const FlTitlesData(
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
                           ),
-                        )
-                      ]),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border.all(color: MyColors.lightGrey, width: 1),
+                        ),
+                        betweenBarsData: [],
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: pointList,
+                            //  const [
+                            //   FlSpot(0, 0),
+                            //   FlSpot(1, 1),
+                            //   FlSpot(2, 0.5),
+                            //   FlSpot(3, 0.5),
+                            //   FlSpot(4, 1),
+                            //   FlSpot(5, 1),
+                            //   FlSpot(6, 2),
+                            // ],
+                            color: Colors.blue,
+                            barWidth: 3,
+                            // isCurved: true,
+                            dotData: const FlDotData(show: true),
+                            belowBarData: BarAreaData(
+                              show: true,
+                              color: const Color.fromARGB(42, 40, 137, 217),
+                            ),
+                          )
+                        ]),
+                  ),
                 ),
               ),
             ),
@@ -246,6 +260,16 @@ class DashboardScreen extends StatelessWidget {
                                   brandName: brand.itemBrandName,
                                   itemPrice: formatMoney(number: sumOfSales),
                                   saleAddDate: customer.saleDateTime,
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => SaleAddNew(
+                                          customer: customer,
+                                          isViewer: true,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             );
@@ -268,8 +292,4 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-final List<String> list = [
-  'This week',
-  'This month',
-  'This year',
-];
+final List<String> list = ['This week', 'This month', 'This year', 'All Sales'];

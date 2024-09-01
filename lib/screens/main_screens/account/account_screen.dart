@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_management_app/functions/help_and_support.dart';
 import 'package:inventory_management_app/screens/first_screens/login_screen.dart';
 import 'package:inventory_management_app/screens/main_screens/account/brands/brands.dart';
+import 'package:inventory_management_app/widgets/alert_dialog.dart';
+
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
+import 'package:inventory_management_app/widgets/bottom_sheet.dart';
 import 'package:inventory_management_app/widgets/list_tile.dart';
 import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,7 +23,7 @@ class AccountScreen extends StatelessWidget {
             title: "Account",
             icon: Icons.logout,
             onPressed: () {
-              _alertBox(
+              customAlertBox(
                   context: context,
                   title: 'LogOut',
                   content: 'Are you sure?',
@@ -68,22 +72,8 @@ class AccountScreen extends StatelessWidget {
                       context: context,
                       title: 'Help & Support',
                       icon: Icons.support_agent_outlined,
-                      onTap: () async {
-                         print('Generated URI: ');
-
-                         Uri email = Uri(
-                          scheme: 'https',
-                          path: 'https://flutter.dev',
-                        );
-                         print('Generated URI: $email');
-                        if (await canLaunchUrl(email)) {
-                          await launchUrl(
-                            email,
-                            mode: LaunchMode.externalApplication,
-                          );
-                        } else {
-                          throw 'Could not make call to $email';
-                        }
+                      onTap: () {
+                        CustomHelpBottomSheet(context: context);
                       },
                     ),
                     myListTile(
@@ -116,32 +106,5 @@ class AccountScreen extends StatelessWidget {
             ),
           ),
         ));
-  }
-
-  void _alertBox(
-      {required BuildContext context,
-      required String title,
-      required String content,
-      required void Function()? onPressedYes}) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              TextButton(
-                onPressed: onPressedYes,
-                child: const Text('Yes'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('No'),
-              ),
-            ],
-          );
-        });
   }
 }

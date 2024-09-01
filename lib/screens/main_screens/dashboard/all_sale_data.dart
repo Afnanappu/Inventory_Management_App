@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
@@ -7,8 +8,11 @@ import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/dashboard/dashboard_screen.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
+import 'package:inventory_management_app/widgets/custom_container.dart';
 import 'package:inventory_management_app/widgets/sale_list_tile.dart';
 
 class AllSaleDataScreen extends StatelessWidget {
@@ -25,6 +29,8 @@ class AllSaleDataScreen extends StatelessWidget {
     await getAllCustomersFormDB();
     await getAllSalesFromDB();
     getTheCurrentDate(CurrentDate.week);
+    // getTheNumberOfItemSold(start: pickedStartDateNotifier.value);
+    // getThePriceAmountOfItemSold(start: pickedStartDateNotifier.value);
 
     // notifyAnyListeners(dateTimeFilterNotifier);
   }
@@ -50,7 +56,6 @@ class AllSaleDataScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-
                   //dropdown
                   child: DropdownButtonFormField(
                     dropdownColor: MyColors.white,
@@ -95,7 +100,7 @@ class AllSaleDataScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                
+
                 //divider
                 const VerticalDivider(
                   color: MyColors.lightGrey,
@@ -119,6 +124,14 @@ class AllSaleDataScreen extends StatelessWidget {
                           getSalesBasedOnDateTime(
                               startDate: pickedDate,
                               endDate: pickedEndDateNotifier.value);
+                          getTheNumberOfItemSold(
+                            start: pickedDate,
+                            end: pickedEndDateNotifier.value,
+                          );
+                          getThePriceAmountOfItemSold(
+                            start: pickedDate,
+                            end: pickedEndDateNotifier.value,
+                          );
                         }
                       },
                       icon: Row(
@@ -158,8 +171,18 @@ class AllSaleDataScreen extends StatelessWidget {
                         if (pickedDate != null) {
                           pickedEndDateNotifier.value = pickedDate;
                           getSalesBasedOnDateTime(
-                              startDate: pickedStartDateNotifier.value,
-                              endDate: pickedDate);
+                            startDate: pickedStartDateNotifier.value,
+                            endDate: pickedDate,
+                          );
+
+                          getTheNumberOfItemSold(
+                            start: pickedStartDateNotifier.value,
+                            end: pickedDate,
+                          );
+                          getThePriceAmountOfItemSold(
+                            start: pickedStartDateNotifier.value,
+                            end: pickedDate,
+                          );
                         }
                       },
                       child: ValueListenableBuilder(
@@ -177,7 +200,36 @@ class AllSaleDataScreen extends StatelessWidget {
 
           //divider
           const Divider(),
-          
+
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                //item box
+                ValueListenableBuilder(
+                    valueListenable: numberOfItemSoldListNotifier,
+                    builder: (context, value, child) => CustomContainer(
+                          haveBgColor: false,
+                          title: 'No. of item sold',
+                          subtitle: '$value',
+                          height: MyScreenSize.screenWidth * 0.3,
+                        )),
+
+                //sale box
+                ValueListenableBuilder(
+                  valueListenable: priceAmountOfItemSoldListNotifier,
+                  builder: (context, value, child) => CustomContainer(
+                    title: 'Total sale',
+                    height: MyScreenSize.screenWidth * 0.3,
+                    subtitle: formatMoney(
+                      number: value,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
 
           //list builder
           FutureBuilder(
@@ -218,6 +270,16 @@ class AllSaleDataScreen extends StatelessWidget {
                                 brandName: brand.itemBrandName,
                                 itemPrice: formatMoney(number: sumOfSales),
                                 saleAddDate: customer.saleDateTime,
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => SaleAddNew(
+                                        customer: customer,
+                                        isViewer: true,
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           );

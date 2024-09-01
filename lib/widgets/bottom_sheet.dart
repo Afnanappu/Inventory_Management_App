@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_management_app/functions/help_and_support.dart';
 
-class CustomBottomSheet {
-  CustomBottomSheet({required BuildContext context}) {
+class CustomHelpBottomSheet {
+  CustomHelpBottomSheet({required BuildContext context}) {
     showModalBottomSheet(
       context: context,
       builder: (ctx) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const ListTile(
-            contentPadding: EdgeInsets.only(left: 30),
-            title:  Text('Call Us'),
-            leading:  Icon(Icons.call_outlined),
-           
+          ListTile(
+            contentPadding: const EdgeInsets.only(left: 30),
+            title: const Text('Call Us'),
+            leading: const Icon(Icons.call_outlined),
+            onTap: () => makeHelpAndSupport(path: '+919947907247'),
           ),
           ListTile(
-            contentPadding:const EdgeInsets.only(left: 30),
+            contentPadding: const EdgeInsets.only(left: 30),
             title: const Text('Mail Us'),
             leading: const Icon(Icons.mail_outline_outlined),
-            onTap: () {},
+            onTap: () => makeHelpAndSupport(
+              path: 'afnanp860@gmail.com',
+              isTel: false,
+            ),
           ),
         ],
       ),

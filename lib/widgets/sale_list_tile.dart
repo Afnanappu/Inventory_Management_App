@@ -13,6 +13,7 @@ class SaleListTile extends StatelessWidget {
   final String brandName;
   final String itemPrice;
   final DateTime saleAddDate;
+  final void Function()? onTap;
   const SaleListTile({
     super.key,
     required this.image,
@@ -21,6 +22,7 @@ class SaleListTile extends StatelessWidget {
     required this.brandName,
     required this.itemPrice,
     required this.saleAddDate,
+    required this.onTap,
   });
 
   @override
@@ -33,6 +35,7 @@ class SaleListTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: ListTile(
+          onTap: onTap,
           leading: Image.file(
             File(image),
             fit: BoxFit.contain,

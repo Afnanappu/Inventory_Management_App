@@ -18,7 +18,14 @@ import 'package:inventory_management_app/widgets/text_form_field.dart';
 
 // ignore: must_be_immutable
 class SaleAddNew extends StatefulWidget {
-  const SaleAddNew({super.key});
+  const SaleAddNew(
+      {super.key,
+      this.customer,
+      this.isEditable = false,
+      this.isViewer = false});
+  final CustomerModel? customer;
+  final bool isEditable;
+  final bool isViewer;
 
   @override
   State<SaleAddNew> createState() => _SaleAddNewState();
@@ -34,6 +41,23 @@ class _SaleAddNewState extends State<SaleAddNew> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    if (widget.customer != null) {
+      _customerNameController.text = widget.customer!.customerName;
+      _customerPhoneController.text = widget.customer!.customerPhone;
+      selectedDate = widget.customer!.saleDateTime;
+      currentSaleItemNotifier.value = widget.customer!.saleId
+          .map(
+            (e) => getSaleFromFromDB(e),
+          )
+          .toList();
+      totalAmountNotifier.value =
+          getSumOfAllSaleOfOneCustomer(widget.customer!.saleId);
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -81,14 +105,16 @@ class _SaleAddNewState extends State<SaleAddNew> {
                         padding: const EdgeInsets.only(left: 15),
                         child: InkWell(
                           onTap: () async {
-                            DateTime? pickedDate =
-                                await pickDateFromUser(context: context);
+                            if (!widget.isViewer) {
+                              DateTime? pickedDate =
+                                  await pickDateFromUser(context: context);
 
-                            setState(() {
-                              if (pickedDate != null) {
-                                selectedDate = pickedDate;
-                              }
-                            });
+                              setState(() {
+                                if (pickedDate != null) {
+                                  selectedDate = pickedDate;
+                                }
+                              });
+                            }
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +140,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 haveBorder: true,
                 controller: _customerNameController,
                 formFillColor: MyColors.white,
-                isFormEnabled: true,
+                isFormEnabled: !widget.isViewer,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Customer name is empty';
@@ -129,6 +155,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 context: context,
                 labelText: 'Phone no',
                 haveBorder: true,
+                isFormEnabled: !widget.isViewer,
                 controller: _customerPhoneController,
                 keyboardType: TextInputType.phone,
                 formFillColor: MyColors.white,
@@ -145,19 +172,21 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 },
               ),
               ValueListenableBuilder(
-                  valueListenable: currentSaleItemNotifier,
-                  builder: (context, saleItem, child) {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: saleItem.length,
-                        itemBuilder: (context, index) {
-                          final item = getItemFromDB(saleItem[index].itemId);
-                          final sale = saleItem[index];
+                valueListenable: currentSaleItemNotifier,
+                builder: (context, saleItem, child) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: saleItem.length,
+                    itemBuilder: (context, index) {
+                      final item = getItemFromDB(saleItem[index].itemId);
+                      final sale = saleItem[index];
 
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: ListTile(
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Stack(
+                          children: [
+                            ListTile(
                               tileColor:
                                   const Color.fromARGB(255, 243, 255, 227),
                               title: Row(
@@ -194,29 +223,71 @@ class _SaleAddNewState extends State<SaleAddNew> {
                                 ],
                               ),
                             ),
-                          );
-                        });
-                  }),
-              saleAddItem(onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (ctx) => const AddNewItemInSale()),
-                );
-
-                // final String sumString =
-                // var sum = double.parse(sumString);
-
-                // setState(() {
-                //   totalAmount += sum;
-                // });
-              }),
-              const SizedBox(
-                height: 15,
+                            (!widget.isViewer)
+                                ? FractionalTranslation(
+                                    translation: const Offset(0.06, -0.45),
+                                    child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                title: Text(
+                                                    'Remove selected item'),
+                                                content: Text('Are you sure?'),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        currentSaleItemNotifier
+                                                            .value
+                                                            .removeAt(index);
+                                                        notifyAnyListeners(
+                                                          currentSaleItemNotifier,
+                                                        );
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('Yes')),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('No'))
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          icon: const Icon(Icons.close),
+                                        )),
+                                  )
+                                : const SizedBox()
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
+
+              //add new item to sale
+              (!widget.isViewer)
+                  ? saleAddItem(onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (ctx) => const AddNewItemInSale()),
+                      );
+                    })
+                  : const SizedBox(
+                    ),
+                  const SizedBox(
+                      height: 15,
+                    ),
               //total Amount
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //total amount
                   const Text(
                     'Total Amount',
                     style: TextStyle(
@@ -261,116 +332,183 @@ class _SaleAddNewState extends State<SaleAddNew> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        height: 85,
-        color: MyColors.white,
-        child: Row(
-          children: [
-            Expanded(
-              child: buttonAddSale(
-                  text: 'Save&New',
-                  haveBorder: true,
-                  btnColor: MyColors.transparent,
-                  //todo: Add function to save data
+          height: 85,
+          color: MyColors.white,
+          child: (!widget.isViewer)
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: buttonAddSale(
+                          text: 'Save&New',
+                          haveBorder: true,
+                          btnColor: MyColors.transparent,
+                          //todo: Add function to save data
+                          onTap: () async {
+                            if (_formKey.currentState!.validate() &&
+                                currentSaleItemNotifier.value.isNotEmpty) {
+                              final sales = currentSaleItemNotifier.value;
+
+                              final salesIdList = await addSalesToDB(sales);
+
+                              final customer = CustomerModel(
+                                customerName: _customerNameController.text,
+                                customerPhone: _customerPhoneController.text,
+                                saleId: salesIdList,
+                                saleDateTime: selectedDate,
+                              );
+
+                              await addCustomerToDB(customer);
+
+                              await decreaseListOfStockFromDB(salesIdList);
+
+                              // getTheNumberOfItemSold(
+                              //     start: DateTime.now().subtract(
+                              //         Duration(days: DateTime.now().weekday - 1)));
+
+                              // getThePriceAmountOfItemSold(
+                              //     start: DateTime.now().subtract(
+                              //         Duration(days: DateTime.now().weekday - 1)));
+                              currentSaleItemNotifier.value.clear();
+                              notifyAnyListeners(currentSaleItemNotifier);
+
+                              if (mounted) {
+                                CustomSnackBarMessage(
+                                  context: context,
+                                  message: 'Sale is added successfully',
+                                  color: MyColors.green,
+                                  duration: 2,
+                                );
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (ctx) => const SaleAddNew()));
+                              }
+                            } else if (currentSaleItemNotifier.value.isEmpty) {
+                              CustomSnackBarMessage(
+                                context: context,
+                                message: 'Add an item to save',
+                                color: Colors.red,
+                              );
+                            }
+                          }),
+                    ),
+
+                    //Save
+                    Expanded(
+                      child: buttonAddSale(
+                        text: 'Save',
+                        onTap: () async {
+                          if (_formKey.currentState!.validate() &&
+                              currentSaleItemNotifier.value.isNotEmpty) {
+                            final sales = currentSaleItemNotifier.value;
+
+                            final salesIdList = await addSalesToDB(sales);
+
+                            final customer = CustomerModel(
+                              customerName: _customerNameController.text,
+                              customerPhone: _customerPhoneController.text,
+                              saleId: salesIdList,
+                              saleDateTime: selectedDate,
+                            );
+
+                            await addCustomerToDB(customer);
+
+                            await decreaseListOfStockFromDB(salesIdList);
+
+                            getTheNumberOfItemSold(
+                                start: DateTime.now().subtract(Duration(
+                                    days: DateTime.now().weekday - 1)));
+
+                            getThePriceAmountOfItemSold(
+                                start: DateTime.now().subtract(Duration(
+                                    days: DateTime.now().weekday - 1)));
+
+                            if (mounted) {
+                              Navigator.of(context).pop();
+                              CustomSnackBarMessage(
+                                context: context,
+                                message: 'Sale is added successfully',
+                                color: MyColors.green,
+                                duration: 2,
+                              );
+                            }
+                          } else if (currentSaleItemNotifier.value.isEmpty) {
+                            CustomSnackBarMessage(
+                              context: context,
+                              message: 'Add an item to save',
+                              color: Colors.red,
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              :
+              // (!widget.isEditable)
+              //     ?
+              buttonAddSale(
+                  text: 'Ok',
                   onTap: () async {
-                    if (_formKey.currentState!.validate() &&
-                        currentSaleItemNotifier.value.isNotEmpty) {
-                      final sales = currentSaleItemNotifier.value;
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => SaleAddNew(
+                    //       customer: widget.customer,
+                    //       isEditable: true,
+                    //     ),
+                    //   ),
+                    // );
+                    Navigator.of(context).pop();
+                  },
+                )
+          // : Expanded(
+          //     child: buttonAddSale(
+          //       text: 'Save',
+          //       onTap: () async {
+          //         if (_formKey.currentState!.validate() &&
+          //             currentSaleItemNotifier.value.isNotEmpty) {
+          //           final sales = currentSaleItemNotifier.value;
 
-                      final salesIdList = await addSalesToDB(sales);
+          //           final salesIdList = await addSalesToDB(sales);
 
-                      final customer = CustomerModel(
-                        customerName: _customerNameController.text,
-                        customerPhone: _customerPhoneController.text,
-                        saleId: salesIdList,
-                        saleDateTime: selectedDate,
-                      );
+          //           final customer = CustomerModel(
+          //             customerName: _customerNameController.text,
+          //             customerPhone: _customerPhoneController.text,
+          //             saleId: salesIdList,
+          //             saleDateTime: selectedDate,
+          //           );
 
-                      await addCustomerToDB(customer);
+          //           await addCustomerToDB(customer);
 
-                      await decreaseListOfStockFromDB(salesIdList);
+          //           await decreaseListOfStockFromDB(salesIdList);
 
-                      // getTheNumberOfItemSold(
-                      //     start: DateTime.now().subtract(
-                      //         Duration(days: DateTime.now().weekday - 1)));
+          //           getTheNumberOfItemSold(
+          //               start: DateTime.now().subtract(
+          //                   Duration(days: DateTime.now().weekday - 1)));
 
-                      // getThePriceAmountOfItemSold(
-                      //     start: DateTime.now().subtract(
-                      //         Duration(days: DateTime.now().weekday - 1)));
-                      currentSaleItemNotifier.value.clear();
-                      notifyAnyListeners(currentSaleItemNotifier);
+          //           getThePriceAmountOfItemSold(
+          //               start: DateTime.now().subtract(
+          //                   Duration(days: DateTime.now().weekday - 1)));
 
-                      if (mounted) {
-                        CustomSnackBarMessage(
-                          context: context,
-                          message: 'Sale is added successfully',
-                          color: MyColors.green,
-                          duration: 2,
-                        );
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (ctx) => const SaleAddNew()));
-                      }
-                    } else if (currentSaleItemNotifier.value.isEmpty) {
-                      CustomSnackBarMessage(
-                        context: context,
-                        message: 'Add an item to save',
-                        color: Colors.red,
-                      );
-                    }
-                  }),
-            ),
-
-            //Save
-            Expanded(
-              child: buttonAddSale(
-                text: 'Save',
-                onTap: () async {
-                  if (_formKey.currentState!.validate() &&
-                      currentSaleItemNotifier.value.isNotEmpty) {
-                    final sales = currentSaleItemNotifier.value;
-
-                    final salesIdList = await addSalesToDB(sales);
-
-                    final customer = CustomerModel(
-                      customerName: _customerNameController.text,
-                      customerPhone: _customerPhoneController.text,
-                      saleId: salesIdList,
-                      saleDateTime: selectedDate,
-                    );
-
-                    await addCustomerToDB(customer);
-
-                    await decreaseListOfStockFromDB(salesIdList);
-
-                    getTheNumberOfItemSold(
-                        start: DateTime.now().subtract(
-                            Duration(days: DateTime.now().weekday - 1)));
-
-                    getThePriceAmountOfItemSold(
-                        start: DateTime.now().subtract(
-                            Duration(days: DateTime.now().weekday - 1)));
-
-                    if (mounted) {
-                      Navigator.of(context).pop();
-                      CustomSnackBarMessage(
-                        context: context,
-                        message: 'Sale is added successfully',
-                        color: MyColors.green,
-                        duration: 2,
-                      );
-                    }
-                  } else if (currentSaleItemNotifier.value.isEmpty) {
-                    CustomSnackBarMessage(
-                      context: context,
-                      message: 'Add an item to save',
-                      color: Colors.red,
-                    );
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+          //           if (mounted) {
+          //             Navigator.of(context).pop();
+          //             CustomSnackBarMessage(
+          //               context: context,
+          //               message: 'Sale is added successfully',
+          //               color: MyColors.green,
+          //               duration: 2,
+          //             );
+          //           }
+          //         } else if (currentSaleItemNotifier.value.isEmpty) {
+          //           CustomSnackBarMessage(
+          //             context: context,
+          //             message: 'Add an item to save',
+          //             color: Colors.red,
+          //           );
+          //         }
+          //       },
+          //     ),
+          //   ),
+          ),
     );
   }
 }

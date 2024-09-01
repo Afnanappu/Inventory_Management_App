@@ -100,7 +100,7 @@ class ItemListTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${itemModel.stock} in stock',
+                (itemModel.stock>=1)?'${itemModel.stock} in stock':'Out of stock',
                 style:  TextStyle(
                     color: (itemModel.stock>10)?MyColors.green:MyColors.red,
                     fontSize: 13,
