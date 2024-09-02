@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 
+// ignore: must_be_immutable
 class CustomContainer extends StatelessWidget {
   final bool haveBgColor;
   final String title;

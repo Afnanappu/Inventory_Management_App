@@ -10,6 +10,7 @@ import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'business profile/business_profile.dart';
 
+// ignore: must_be_immutable
 class AccountScreen extends StatelessWidget {
   AccountScreen({super.key});
 
@@ -126,7 +127,7 @@ class AccountScreen extends StatelessWidget {
                             );
                           } 
                           else if(snapshot.hasError){
-                            return Text(
+                            return const Text(
                               // 'Error: ${snapshot.error}',
                               '1.0.0',
                               style: TextStyle(

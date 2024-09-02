@@ -233,9 +233,9 @@ class _SaleAddNewState extends State<SaleAddNew> {
                                             showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
-                                                title: Text(
+                                                title: const Text(
                                                     'Remove selected item'),
-                                                content: Text('Are you sure?'),
+                                                content: const Text('Are you sure?'),
                                                 actions: [
                                                   TextButton(
                                                       onPressed: () {
@@ -248,13 +248,13 @@ class _SaleAddNewState extends State<SaleAddNew> {
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
-                                                      child: Text('Yes')),
+                                                      child: const Text('Yes')),
                                                   TextButton(
                                                       onPressed: () {
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
-                                                      child: Text('No'))
+                                                      child: const Text('No'))
                                                 ],
                                               ),
                                             );
