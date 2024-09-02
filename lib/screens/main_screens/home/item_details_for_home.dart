@@ -65,62 +65,65 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                             child: const Text('No item found'),
                           ),
                         )
-                      : SliverGrid.builder(
-                          itemCount: itemModelList.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 0,
-                            mainAxisSpacing: 15,
-                          ),
-                          itemBuilder: (BuildContext context, int index) {
-                            final itemModel = itemModelList[index];
-                            return Center(
-                              child: GridTile(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) => ItemFullDetails(
-                                          itemModel: itemModel,
-                                          brandId: itemModel.brandId,
+                      : SliverPadding(
+                        padding: EdgeInsets.only(bottom: MyScreenSize.screenHeight * 0.1),
+                        sliver: SliverGrid.builder(
+                            itemCount: itemModelList.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 0,
+                              mainAxisSpacing: 15,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              final itemModel = itemModelList[index];
+                              return Center(
+                                child: GridTile(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => ItemFullDetails(
+                                            itemModel: itemModel,
+                                            brandId: itemModel.brandId,
+                                          ),
+                                        ));
+                                      },
+                                      child: Container(
+                                        height: 125,
+                                        width: MyScreenSize.screenWidth * 0.37,
+                                        decoration: BoxDecoration(
+                                          color: MyColors.lightGrey,
+                                          borderRadius: BorderRadius.circular(14),
                                         ),
-                                      ));
-                                    },
-                                    child: Container(
-                                      height: 125,
-                                      width: MyScreenSize.screenWidth * 0.37,
-                                      decoration: BoxDecoration(
-                                        color: MyColors.lightGrey,
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(13),
-                                        child: Image.file(
-                                          File(itemModel.itemImage),
-                                          fit: BoxFit.contain,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(13),
+                                          child: Image.file(
+                                            File(itemModel.itemImage),
+                                            fit: BoxFit.contain,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                      child: Text(
-                                    itemModel.itemName,
-                                    style: MyFontStyle.itemNameInMain,
-                                    overflow: TextOverflow.ellipsis,
-                                  )),
-                                  Text(
-                                    formatMoney(number: itemModel.itemPrice),
-                                    style: MyFontStyle.itemPriceInMain,
-                                  ),
-                                ],
-                              )),
-                            );
-                          },
-                        ),
+                                    Expanded(
+                                        child: Text(
+                                      itemModel.itemName,
+                                      style: MyFontStyle.itemNameInMain,
+                                      overflow: TextOverflow.ellipsis,
+                                    )),
+                                    Text(
+                                      formatMoney(number: itemModel.itemPrice),
+                                      style: MyFontStyle.itemPriceInMain,
+                                    ),
+                                  ],
+                                )),
+                              );
+                            },
+                          ),
+                      ),
             );
           }
         });

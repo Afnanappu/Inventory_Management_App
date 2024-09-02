@@ -13,29 +13,32 @@ bool isVisible = false;
 class _PriceFilterState extends State<PriceFilter> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _textFieldForPrice(context, hintText: 'From'),
-        _textFieldForPrice(context, hintText: 'To'),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              (isVisible == false) ? isVisible = true : isVisible = false;
-            });
-          },
-          icon: const Tooltip(
-            message: 'Price filter',
-            preferBelow: false,
-            child:  Icon(
-              Icons.filter_alt_outlined,
-              size: 28,
-              semanticLabel: 'Price filter',
+    return Padding(
+      padding:  EdgeInsets.only(bottom: MyScreenSize.screenHeight18),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _textFieldForPrice(context, hintText: 'From'),
+          _textFieldForPrice(context, hintText: 'To'),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                (isVisible == false) ? isVisible = true : isVisible = false;
+              });
+            },
+            icon: const Tooltip(
+              message: 'Price filter',
+              preferBelow: false,
+              child:  Icon(
+                Icons.filter_alt_outlined,
+                size: 28,
+                semanticLabel: 'Price filter',
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

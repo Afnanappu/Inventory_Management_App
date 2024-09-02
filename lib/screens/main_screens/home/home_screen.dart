@@ -59,47 +59,18 @@ class _HomeScreenState extends State<HomeScreen> {
       //body
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: MyScreenSize.screenHeight18),
-        child: CustomScrollView(
+        child: const CustomScrollView(
           slivers: [
             //Search bar
-            const SliverToBoxAdapter(child: SearchBarForMain()),
-
-            //space
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MyScreenSize.screenHeight18,
-              ),
-            ),
-
+             SliverToBoxAdapter(child: SearchBarForMain()),
             //Brand items
-            const SliverToBoxAdapter(child: BrandItems()),
-
-            //space
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MyScreenSize.screenHeight10,
-              ),
-            ),
+             SliverToBoxAdapter(child: BrandItems()),
 
             //Price filter
-            const SliverToBoxAdapter(child: PriceFilter()),
-
-            //space
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MyScreenSize.screenHeight18,
-              ),
-            ),
+            SliverToBoxAdapter(child: PriceFilter()),
 
             //Item Details
-            const ItemDetailsForHome(),
-
-            //space
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MyScreenSize.screenHeight * 0.1,
-              ),
-            ),
+            ItemDetailsForHome(),
           ],
         ),
       ),

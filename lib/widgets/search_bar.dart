@@ -19,7 +19,7 @@ class _SearchBarForMainState extends State<SearchBarForMain> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.only(top: MyScreenSize.screenHeight10),
+      padding:  EdgeInsets.only(top: MyScreenSize.screenHeight10, bottom: MyScreenSize.screenHeight18),
       child: TextField(
         controller: _searchEditingController,
         cursorOpacityAnimates: true,

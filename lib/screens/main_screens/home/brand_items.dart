@@ -318,6 +318,9 @@ class _BrandItemsState extends State<BrandItems> {
                     ),
             ),
           ),
+          SizedBox(
+            height: MyScreenSize.screenHeight10,
+          ),
         ],
       ),
     );
