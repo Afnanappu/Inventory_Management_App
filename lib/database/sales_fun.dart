@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/generate_unique_id.dart';
@@ -91,7 +92,7 @@ void getTheNumberOfItemSold({required DateTime start, DateTime? end}) {
   notifyAnyListeners(numberOfItemSoldListNotifier);
 }
 
-void getThePriceAmountOfItemSold({required DateTime start, DateTime? end}) {
+double getThePriceAmountOfItemSold({required DateTime start, DateTime? end}) {
   List<int> salesId = [];
 
   if (saleItemsListNotifier.value.isNotEmpty) {
@@ -109,6 +110,7 @@ void getThePriceAmountOfItemSold({required DateTime start, DateTime? end}) {
   }
   print('amount filter worked');
   notifyAnyListeners(priceAmountOfItemSoldListNotifier);
+  return priceAmountOfItemSoldListNotifier.value;
 }
 
 void getSalesBasedOnDateTime({required DateTime startDate, DateTime? endDate}) {
@@ -127,25 +129,34 @@ void getSalesBasedOnDateTime({required DateTime startDate, DateTime? endDate}) {
   }
 }
 
-void getGraphBasedOnSales() {
-//  final start =  getTheCurrentDateStartOrEnd(currentDate: CurrentDate.week);
-//  final end =  getTheCurrentDateStartOrEnd(currentDate: CurrentDate.week, start: false);
-  dateTimeFilterNotifier.value.map((e) {});
-  // getSalesBasedOnDateTime(startDate: )
-  // getThePriceAmountOfItemSold(start: start)
+void getGraphBasedOnSales({required CurrentDate currentDate, DateTime? time}) {
+ 
+  var start = getTheCurrentDateStartOrEnd(currentDate: currentDate, time: time);
+  final end = getTheCurrentDateStartOrEnd(
+      currentDate: currentDate, start: false, time: time);
 
-//   graphPointListNotifier.value = dateTimeFilterNotifier.value.map((e) {
-//     // final sum = getSumOfAllSaleOfOneCustomer(e.saleId);
-//     getSalesBasedOnDateTime(startDate: e.saleDateTime, endDate: e.saleDateTime);
-//     // if(e.saleDateTime)
-// getSumOfAllSaleOfOneCustomer(e.)
-//     return FlSpot(e.saleDateTime.weekday.toDouble(), e.saleId.length.toDouble());
-//   }).toList();
+  print('Start: $start\nEnd: $end');
+
+  graphPointListNotifier.value.clear();
+  print(start.isBefore(end));
+  for (int i = start.day; start.isBefore(end); i++) {
+    final sum = getTheSumOfOneDayAllCustomerSale(start);
+    graphPointListNotifier.value.add(FlSpot(start.weekday.toDouble(), sum));
+    start = start.add(const Duration(days: 1));
+    print('${start.day}');
+  }
+  print(
+      'The getGraphBasedOnSales() is worded with length of item in graph = ${graphPointListNotifier.value.length}');
 
   notifyAnyListeners(graphPointListNotifier);
 }
 
-// double findTheSumOfOneDay(DateTime today) {
-//   getThePriceAmountOfItemSold(start: today.subtract(const Duration(days: 1)), end: today.add(const Duration(days: 1)));
-
-// }
+double getTheSumOfOneDayAllCustomerSale(DateTime date) {
+  final customers = getOneDayFullCustomer(date);
+  print('getOneDayFullCustomer($date): ${customers.length}');
+  double sum = 0;
+  for (var element in customers) {
+    sum += getSumOfAllSaleOfOneCustomer(element.saleId);
+  }
+  return sum;
+}

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
@@ -40,15 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (profile != null) {
       HomeScreen.profileName = profile!.name!;
     }
-    
   }
 
   @override
   Widget build(BuildContext context) {
     MyScreenSize.initialize(context);
-    // if (filteredItemModelList.value.isEmpty) {
-    //   setState(() {});
-    // }
 
     return Scaffold(
       //App bar
@@ -66,13 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.symmetric(horizontal: MyScreenSize.screenHeight18),
         child: CustomScrollView(
           slivers: [
-            //space
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MyScreenSize.screenHeight10,
-              ),
-            ),
-
             //Search bar
             const SliverToBoxAdapter(child: SearchBarForMain()),
 
@@ -83,39 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            //brand and see all
-            SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //Brands
-                  const Text(
-                    'Brands',
-                    style: MyFontStyle.main,
-                  ),
-
-                  //See all
-                  //todo: Add the see all button functions
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'See all',
-                      style: TextStyle(color: MyColors.green),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            //space
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: MyScreenSize.screenHeight5,
-              ),
-            ),
-
             //Brand items
-            //todo: no scrolling and when see all button pressed the full list want to show.
             const SliverToBoxAdapter(child: BrandItems()),
 
             //space

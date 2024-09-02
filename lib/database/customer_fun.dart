@@ -43,4 +43,10 @@ Future<void> deleteCustomerFromDB(int customerId) async {
       'The customer in the id = $customerId is deleted and the length of all customers is ${customerBox.values.length}');
 }
 
+List<CustomerModel> getOneDayFullCustomer(DateTime date) {
+  return dateTimeFilterNotifier.value.where(
+    (element) => DateTime(element.saleDateTime.year, element.saleDateTime.month, element.saleDateTime.day) == DateTime(date.year, date.month, date.day),
+  ).toList();
+}
+
 

@@ -27,29 +27,22 @@ class DashboardScreen extends StatelessWidget {
 
   final ValueNotifier<String?> _selectedValue = ValueNotifier(list[0]);
 
-  // String profileName = 'Shop Name';
   final today = DateTime.now();
 
   Future<void> _fetchSaleData() async {
-    getTheNumberOfItemSold(
-        start: getTheCurrentDateStartOrEnd(
-      currentDate: CurrentDate.week,
-      start: true,
-    ));
-    getThePriceAmountOfItemSold(
-        start: getTheCurrentDateStartOrEnd(
-      currentDate: CurrentDate.week,
-      start: true,
-    ));
-    getGraphBasedOnSales();
     await getAllCustomersFormDB();
     await getAllSalesFromDB();
+    fun();
+  }
+
+  void fun() {
+    getTheCurrentDate(CurrentDate.week);
+    getGraphBasedOnSales(currentDate: CurrentDate.week);
   }
 
   // Future<void>
   @override
   Widget build(BuildContext context) {
-    getTheCurrentDate(CurrentDate.week);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -81,13 +74,13 @@ class DashboardScreen extends StatelessWidget {
                   _selectedValue.value = value;
                   if (_selectedValue.value == list[0]) {
                     getTheCurrentDate(CurrentDate.week);
-                    getGraphBasedOnSales();
+                    getGraphBasedOnSales(currentDate: CurrentDate.week);
                   } else if (_selectedValue.value == list[1]) {
                     getTheCurrentDate(CurrentDate.month);
-                    getGraphBasedOnSales();
+                    // getGraphBasedOnSales(currentDate: CurrentDate.month);
                   } else {
                     getTheCurrentDate(CurrentDate.year);
-                    getGraphBasedOnSales();
+                    // getGraphBasedOnSales(currentDate: CurrentDate.year);
                   }
                 },
               ),
@@ -117,7 +110,7 @@ class DashboardScreen extends StatelessWidget {
                   valueListenable: priceAmountOfItemSoldListNotifier,
                   builder: (context, value, child) => CustomContainer(
                     title: 'Total sale',
-                    subtitle: formatMoney(number: value),
+                    subtitle: formatMoney(number: value, haveEndSymbol: true),
                   ),
                 ),
               ],
@@ -139,41 +132,52 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 child: ValueListenableBuilder(
                   valueListenable: graphPointListNotifier,
-                  builder: (context, pointList, child) =>  LineChart(
+                  builder: (context, pointList, child) => LineChart(
                     LineChartData(
+                        maxX: 7,
                         gridData: const FlGridData(
                           show: true,
                           drawVerticalLine: false,
                         ),
-                        titlesData: const FlTitlesData(
-                          rightTitles: AxisTitles(
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                DateTime date = getTheCurrentDateStartOrEnd(
+                                        currentDate: CurrentDate.week)
+                                    .add(Duration(days: value.toInt() - 1));
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  child: Text(
+                                    '${date.day}/${date.month}',
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          rightTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
                           ),
-                          topTitles: AxisTitles(
+                          topTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false),
                           ),
                         ),
                         borderData: FlBorderData(
                           show: true,
-                          border: Border.all(color: MyColors.lightGrey, width: 1),
+                          border:
+                              Border.all(color: MyColors.lightGrey, width: 1),
                         ),
-                        betweenBarsData: [],
                         lineBarsData: [
                           LineChartBarData(
                             spots: pointList,
-                            //  const [
-                            //   FlSpot(0, 0),
-                            //   FlSpot(1, 1),
-                            //   FlSpot(2, 0.5),
-                            //   FlSpot(3, 0.5),
-                            //   FlSpot(4, 1),
-                            //   FlSpot(5, 1),
-                            //   FlSpot(6, 2),
-                            // ],
                             color: Colors.blue,
                             barWidth: 3,
-                            // isCurved: true,
-                            dotData: const FlDotData(show: true),
+                            isCurved: true,
+                            dotData: const FlDotData(
+                              show: true,
+                            ),
                             belowBarData: BarAreaData(
                               show: true,
                               color: const Color.fromARGB(42, 40, 137, 217),

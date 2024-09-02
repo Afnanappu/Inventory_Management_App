@@ -29,10 +29,6 @@ class AllSaleDataScreen extends StatelessWidget {
     await getAllCustomersFormDB();
     await getAllSalesFromDB();
     getTheCurrentDate(CurrentDate.week);
-    // getTheNumberOfItemSold(start: pickedStartDateNotifier.value);
-    // getThePriceAmountOfItemSold(start: pickedStartDateNotifier.value);
-
-    // notifyAnyListeners(dateTimeFilterNotifier);
   }
 
   @override
@@ -224,6 +220,7 @@ class AllSaleDataScreen extends StatelessWidget {
                     height: MyScreenSize.screenWidth * 0.3,
                     subtitle: formatMoney(
                       number: value,
+                      haveEndSymbol: true,
                     ),
                   ),
                 ),
