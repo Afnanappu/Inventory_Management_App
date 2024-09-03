@@ -47,7 +47,8 @@ Future<void> editItemFromDB(int itemId, ItemModel item) async {
   itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
   await itemBox.put(itemId, item);
 
-  getAllItemFormDB();
+  await getAllItemFormDB();
+
   // print('The item in the index $itemId is edited');
 }
 
@@ -89,6 +90,26 @@ void getTheFilterItem({int? limit, bool? isLess = true}) {
   } else {
     itemFilterListNotifiers.value = itemModelListNotifiers.value;
     print('filter is worked');
+  }
+  notifyAnyListeners(itemFilterListNotifiers);
+}
+
+void getTheItemFilteredByRange(double? start, double? end) {
+  if (start != null && end != null) {
+    itemFilterListNotifiers.value = itemModelListNotifiers.value
+        .where(
+            (element) => element.itemPrice < start && element.itemPrice > end)
+        .toList();
+  print(' filter by range is worked');
+
+  } else if (start != null) {
+    itemFilterListNotifiers.value = itemModelListNotifiers.value
+        .where((element) => element.itemPrice < start)
+        .toList();
+  } else if (end != null) {
+    itemFilterListNotifiers.value = itemModelListNotifiers.value
+        .where((element) => element.itemPrice > end)
+        .toList();
   }
   notifyAnyListeners(itemFilterListNotifiers);
 }

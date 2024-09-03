@@ -44,7 +44,7 @@ class AccountScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (ctx) => LoginScreen()),
                       (route) => false,
                     );
-                  });
+                  },);
             },
           ),
         ),

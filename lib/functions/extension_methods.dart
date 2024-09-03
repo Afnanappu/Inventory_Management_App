@@ -7,3 +7,4 @@ extension NumberParsing on String {
     return double.parse(this);
   }
 }
+

@@ -24,11 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _loadDB().then(
-      (value) => setState(() {
-        print('item is loaded after waiting');
-      }),
-    );
+    _loadDB();
 
     super.initState();
   }
@@ -62,9 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const CustomScrollView(
           slivers: [
             //Search bar
-             SliverToBoxAdapter(child: SearchBarForMain()),
+            SliverToBoxAdapter(child: SearchBarForMain()),
+            
             //Brand items
-             SliverToBoxAdapter(child: BrandItems()),
+            SliverToBoxAdapter(child: BrandItems()),
 
             //Price filter
             SliverToBoxAdapter(child: PriceFilter()),

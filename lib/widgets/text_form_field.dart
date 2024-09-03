@@ -24,7 +24,6 @@ Widget customFormField({
       cursorColor: MyColors.blackShade,
       enableInteractiveSelection: true,
       keyboardType: keyboardType,
-      onTap: () {},
       cursorHeight: 18,
       onTapOutside: (event) {
         //To remove the focus.

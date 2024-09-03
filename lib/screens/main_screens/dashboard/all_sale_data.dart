@@ -9,10 +9,10 @@ import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/screens/main_screens/dashboard/dashboard_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/custom_container.dart';
+import 'package:inventory_management_app/widgets/dropdown_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/sale_list_tile.dart';
 
 class AllSaleDataScreen extends StatelessWidget {

@@ -291,6 +291,10 @@ class _ItemAddNewState extends State<ItemAddNew> {
                                 Navigator.of(context)
                                     .removeRouteBelow(ModalRoute.of(context)!);
                               }
+                              CustomSnackBarMessage(
+                                  context: context,
+                                  message: 'Item edited successfully',
+                                  color: MyColors.green);
                             }
                             Navigator.of(context).pop();
                           }
