@@ -89,52 +89,52 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                   }
                 },
               ),
-              SizedBox(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: customFormField(
-                        context: context,
-                        labelText: 'Price',
-                        controller: _itemPriceController,
-                        formFillColor: MyColors.white,
-                        haveBorder: true,
-                        isFormEnabled: false,
-                      ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: customFormField(
+                      context: context,
+                      labelText: 'Price',
+                      controller: _itemPriceController,
+                      formFillColor: MyColors.white,
+                      haveBorder: true,
+                      isFormEnabled: false,
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: customFormField(
-                        context: context,
-                        labelText: 'Quantity',
-                        controller: _itemStockController,
-                        keyboardType: TextInputType.number,
-                        formFillColor: MyColors.white,
-                        haveBorder: true,
-                        validator: (value) {
-                          int quantity = 1;
-                          int stock = item!.stock - selectedItemQuantity;
-                          if (value == null ||
-                              value.isEmpty ||
-                              0 == int.parse(value)) {
-                            return "add quantity";
-                          } else if (value.isNotEmpty) {
-                            quantity = int.parse(value);
-                            if (item != null && quantity > stock) {
-                              return 'out of stock${stock == 0 ? 'item' : ', try $stock'} ';
-                            } else {
-                              return null;
-                            }
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: customFormField(
+                      context: context,
+                      labelText: 'Quantity',
+                      controller: _itemStockController,
+                      keyboardType: TextInputType.number,
+                      formFillColor: MyColors.white,
+                      haveBorder: true,
+                      validator: (value) {
+                        int quantity = 1;
+                        int stock = item!.stock - selectedItemQuantity;
+                        if (value == null ||
+                            value.isEmpty ||
+                            0 == int.parse(value)) {
+                          return "add quantity";
+                        } else if (value.isNotEmpty) {
+                          quantity = int.parse(value);
+                          if (item != null && quantity > stock) {
+                            return 'out of stock${stock == 0 ? 'item' : ', try $stock'} ';
                           } else {
                             return null;
                           }
-                        },
-                      ),
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                 
+                ],
               )
             ],
           ),

@@ -32,6 +32,7 @@ Widget customFormField({
       },
       minLines: 1,
       maxLines: null,
+      
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

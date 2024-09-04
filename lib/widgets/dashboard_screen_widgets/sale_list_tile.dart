@@ -37,6 +37,7 @@ class SaleListTile extends StatelessWidget {
         child: ListTile(
           onTap: onTap,
           leading: Image.file(
+            
             File(image),
             fit: BoxFit.contain,
           ),
