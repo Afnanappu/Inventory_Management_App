@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/widgets/custom_container.dart';
+import 'package:inventory_management_app/widgets/common/custom_container.dart';
 
 class SalesAndPriceContainerForAllSale extends StatelessWidget {
   const SalesAndPriceContainerForAllSale({

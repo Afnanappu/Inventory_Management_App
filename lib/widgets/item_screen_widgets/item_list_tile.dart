@@ -5,8 +5,8 @@ import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/screens/main_screens/item/add_or_edit_new_item.dart';
-import 'package:inventory_management_app/widgets/popup_icon_button_for_all.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_or_edit_new_item_screen.dart';
+import 'package:inventory_management_app/widgets/common/popup_icon_button_for_all.dart';
 
 // ignore: must_be_immutable
 class ItemListTile extends StatelessWidget {

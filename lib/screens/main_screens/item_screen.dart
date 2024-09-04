@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/screens/main_screens/item/add_or_edit_new_item.dart';
-import 'package:inventory_management_app/widgets/floating_action_button.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_or_edit_new_item_screen.dart';
+import 'package:inventory_management_app/widgets/common/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/item_screen_widgets/app_bar_for_item_screen.dart';
 import 'package:inventory_management_app/widgets/item_screen_widgets/item_list_for_item_screen.dart';
 

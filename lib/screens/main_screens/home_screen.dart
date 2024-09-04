@@ -6,7 +6,7 @@ import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/brand_items.dart';
-import 'package:inventory_management_app/widgets/floating_action_button.dart';
+import 'package:inventory_management_app/widgets/common/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/item_details_for_home.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/price_filter.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/search_bar.dart';

@@ -1,15 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/constants/screen_size.dart';
-import 'package:inventory_management_app/database/item_fun.dart';
-import 'package:inventory_management_app/functions/pick_image.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
-import 'package:inventory_management_app/widgets/buttons.dart';
-import 'package:inventory_management_app/widgets/drop_down_for_all.dart';
-import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
+import 'package:inventory_management_app/widgets/common/drop_down_for_all.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';
+import 'package:inventory_management_app/widgets/item_screen_widgets/add_or_edit_item_screen_widgets/add_item_image_for_add_or_edit_item_screen.dart';
+import 'package:inventory_management_app/widgets/item_screen_widgets/add_or_edit_item_screen_widgets/button_for_add_or_edit_item_screen.dart';
 
 class ItemAddNew extends StatefulWidget {
   const ItemAddNew({
@@ -83,36 +78,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
               key: _formKey,
               child: Column(
                 children: [
-                  InkWell(
-                    onTap: () async {
-                      await pickImageFromFile().then(
-                        (value) {
-                          imageNotifier.value = value;
-                        },
-                      );
-                    },
-
-                    //image
-                    child: ValueListenableBuilder(
-                      valueListenable: imageNotifier,
-                      builder: (context, value, child) => Container(
-                        height: MyScreenSize.screenHeight * 0.4,
-                        width: MyScreenSize.screenWidth * 0.8,
-                        decoration: BoxDecoration(
-                            image: (value != null)
-                                ? DecorationImage(
-                                    image: FileImage(File(value)),
-                                    fit: BoxFit.contain)
-                                : null,
-                            color: MyColors.lightGrey,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Center(
-                          child:
-                              (value == null) ? const Text('add image') : null,
-                        ),
-                      ),
-                    ),
-                  ),
+                  AddItemImageForAddOrEditItemScreen(
+                      imageNotifier: imageNotifier),
 
                   //Item name
                   customFormField(
@@ -251,66 +218,18 @@ class _ItemAddNewState extends State<ItemAddNew> {
                   ),
 
                   //---------- Save button ----------//
-                  MyButton(
-                    vPadding: 5,
-                    color: MyColors.green,
-                    text: (widget.isAddingItem == true)
-                        ? 'Add to items'
-                        : 'Save Changes',
-                    function: () {
-                      try {
-                        if (_formKey.currentState!.validate()) {
-                          if (imageNotifier.value == null) {
-                            CustomSnackBarMessage(
-                                context: context,
-                                message:
-                                    'Image is not added, please add image!',
-                                color: MyColors.red);
-                          } else {
-                            final item = ItemModel(
-                              id: (widget.itemModel != null)
-                                  ? widget.itemModel!.id!
-                                  : null,
-                              brandId: nowBrandId!,
-                              itemName: _itemNameController.text,
-                              itemImage: imageNotifier.value!,
-                              itemPrice:
-                                  double.parse(_itemPriceController.text),
-                              color: [..._itemColorController.text.split(',')],
-                              ram: [..._itemRamController.text.split(',')],
-                              rom: [..._itemStorageController.text.split(',')],
-                              description: _itemDescriptionController.text,
-                              stock: int.parse(
-                                _itemStockController.text,
-                              ),
-                            );
-                            if (widget.isAddingItem == true) {
-                              addItemToDB(item);
-                              CustomSnackBarMessage(
-                                  context: context,
-                                  message: 'Item added successfully',
-                                  color: MyColors.green);
-                            } else {
-                              editItemFromDB(widget.itemModel!.id!, item);
-                              if (widget.removeBelowRoute == true) {
-                                Navigator.of(context)
-                                    .removeRouteBelow(ModalRoute.of(context)!);
-                              }
-                              CustomSnackBarMessage(
-                                  context: context,
-                                  message: 'Item edited successfully',
-                                  color: MyColors.green);
-                            }
-                            Navigator.of(context).pop();
-                          }
-                        }
-                      } catch (e) {
-                        CustomSnackBarMessage(
-                            context: context,
-                            message: 'Error while adding new item',
-                            color: MyColors.red);
-                      }
-                    },
+                  ButtonForAddOrEditItemScreen(
+                    widget: widget,
+                    formKey: _formKey,
+                    imageNotifier: imageNotifier,
+                    nowBrandId: nowBrandId,
+                    itemNameController: _itemNameController,
+                    itemPriceController: _itemPriceController,
+                    itemColorController: _itemColorController,
+                    itemRamController: _itemRamController,
+                    itemStorageController: _itemStorageController,
+                    itemDescriptionController: _itemDescriptionController,
+                    itemStockController: _itemStockController,
                   ),
                   const SizedBox(
                     height: 10,

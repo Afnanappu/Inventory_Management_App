@@ -7,7 +7,7 @@ import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edi
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/filter_section_for_all_sale.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/full_sale_list_for_all_sales.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/sale_and_price_container_for_all_sale.dart';
-import 'package:inventory_management_app/widgets/dropdown_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/dropdown_for_dashboard.dart';
 
 class AllSaleDataScreen extends StatelessWidget {
   AllSaleDataScreen({super.key});

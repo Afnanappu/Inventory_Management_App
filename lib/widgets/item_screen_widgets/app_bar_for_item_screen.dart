@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
-import 'package:inventory_management_app/widgets/popup_icon_button_for_all.dart';
+import 'package:inventory_management_app/widgets/common/popup_icon_button_for_all.dart';
 
 class AppBarForItemScreen extends StatelessWidget {
   const AppBarForItemScreen({

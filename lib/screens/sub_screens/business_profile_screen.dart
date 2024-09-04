@@ -5,7 +5,7 @@ import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/functions/pick_image.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
-import 'package:inventory_management_app/widgets/buttons.dart';
+import 'package:inventory_management_app/widgets/common/buttons.dart';
 import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 
@@ -171,10 +171,7 @@ class _AccountProfileState extends State<AccountProfile> {
                                 image: image,
                               );
                               updateProfile(profile);
-                              // ProfileModel.profile.name =;
-                              // ProfileModel.profile.phone =;
-                              // ProfileModel.profile.email =;
-                              // ProfileModel.profile.address =;
+                             
                               setState(() {
                                 isEditable = false;
                               });

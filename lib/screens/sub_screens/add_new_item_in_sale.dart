@@ -5,8 +5,8 @@ import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
-import 'package:inventory_management_app/widgets/button_add_sale.dart';
-import 'package:inventory_management_app/widgets/drop_down_for_all.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/button_add_sale.dart';
+import 'package:inventory_management_app/widgets/common/drop_down_for_all.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 import 'package:inventory_management_app/functions/extension_methods.dart';
 
@@ -89,50 +89,52 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                   }
                 },
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: customFormField(
-                      context: context,
-                      labelText: 'Price',
-                      controller: _itemPriceController,
-                      formFillColor: MyColors.white,
-                      haveBorder: true,
-                      isFormEnabled: false,
+              SizedBox(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: customFormField(
+                        context: context,
+                        labelText: 'Price',
+                        controller: _itemPriceController,
+                        formFillColor: MyColors.white,
+                        haveBorder: true,
+                        isFormEnabled: false,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: customFormField(
-                      context: context,
-                      labelText: 'Quantity',
-                      controller: _itemStockController,
-                      keyboardType: TextInputType.number,
-                      formFillColor: MyColors.white,
-                      haveBorder: true,
-                      validator: (value) {
-                        int quantity = 1;
-                        int stock = item!.stock - selectedItemQuantity;
-                        if (value == null ||
-                            value.isEmpty ||
-                            0 == int.parse(value)) {
-                          return "add quantity";
-                        } else if (value.isNotEmpty) {
-                          quantity = int.parse(value);
-                          if (item != null && quantity > stock) {
-                            return 'out of stock${stock == 0 ? 'item' : ', try $stock'} ';
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: customFormField(
+                        context: context,
+                        labelText: 'Quantity',
+                        controller: _itemStockController,
+                        keyboardType: TextInputType.number,
+                        formFillColor: MyColors.white,
+                        haveBorder: true,
+                        validator: (value) {
+                          int quantity = 1;
+                          int stock = item!.stock - selectedItemQuantity;
+                          if (value == null ||
+                              value.isEmpty ||
+                              0 == int.parse(value)) {
+                            return "add quantity";
+                          } else if (value.isNotEmpty) {
+                            quantity = int.parse(value);
+                            if (item != null && quantity > stock) {
+                              return 'out of stock${stock == 0 ? 'item' : ', try $stock'} ';
+                            } else {
+                              return null;
+                            }
                           } else {
                             return null;
                           }
-                        } else {
-                          return null;
-                        }
-                      },
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           ),

@@ -5,13 +5,13 @@ import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
-import 'package:inventory_management_app/screens/home_screen.dart';
+import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/customer_list_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/resent_sale_for_dashboard.dart';
-import 'package:inventory_management_app/widgets/dropdown_for_dashboard.dart';
-import 'package:inventory_management_app/widgets/graph_for_dashboard.dart';
-import 'package:inventory_management_app/widgets/sale_and_price_container_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/dropdown_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/graph_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/sale_and_price_container_for_dashboard.dart';
 
 // ignore: must_be_immutable
 class DashboardScreen extends StatelessWidget {

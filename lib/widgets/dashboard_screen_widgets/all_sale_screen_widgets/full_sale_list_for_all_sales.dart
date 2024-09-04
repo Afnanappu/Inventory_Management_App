@@ -5,7 +5,7 @@ import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
-import 'package:inventory_management_app/widgets/sale_list_tile.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/sale_list_tile.dart';
 
 class FullSaleListForAllSales extends StatelessWidget {
   const FullSaleListForAllSales({

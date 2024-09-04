@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/widgets/item_list_tile.dart';
+import 'package:inventory_management_app/widgets/item_screen_widgets/item_list_tile.dart';
 
 class ItemListForItemScreen extends StatelessWidget {
   const ItemListForItemScreen({

@@ -1,9 +1,10 @@
 import 'package:intl/intl.dart';
 
-String formatMoney(
-    {required double number,
-    bool haveSymbol = true,
-    bool haveEndSymbol = false}) {
+String formatMoney({
+  required double number,
+  bool haveSymbol = true,
+  bool haveEndSymbol = false,
+}) {
   String formattedMoney = '';
 
   if (haveEndSymbol == true) {

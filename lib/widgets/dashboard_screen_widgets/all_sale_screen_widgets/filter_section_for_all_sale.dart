@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
-import 'package:inventory_management_app/widgets/dropdown_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/dropdown_for_dashboard.dart';
 
 class FilterSectionForAllSale extends StatelessWidget {
   const FilterSectionForAllSale({

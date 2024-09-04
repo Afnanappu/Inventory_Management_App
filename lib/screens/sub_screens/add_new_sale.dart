@@ -11,8 +11,8 @@ import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
-import 'package:inventory_management_app/widgets/button_add_sale.dart';
-import 'package:inventory_management_app/widgets/sale_add_item.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/button_add_sale.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item.dart';
 import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 

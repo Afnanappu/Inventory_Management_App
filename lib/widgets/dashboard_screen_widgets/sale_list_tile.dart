@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
-import 'package:inventory_management_app/widgets/buttons.dart';
+import 'package:inventory_management_app/widgets/common/buttons.dart';
 
 class SaleListTile extends StatelessWidget {
   final String image;

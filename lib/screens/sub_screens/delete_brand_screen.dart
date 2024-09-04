@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/screens/main_screens/account/brands/add_brand.dart';
+import 'package:inventory_management_app/widgets/account_screen_widgets/brand_crud_dialog_box_for_brand_screen.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
-import 'package:inventory_management_app/widgets/list_tile.dart';
+import 'package:inventory_management_app/widgets/account_screen_widgets/list_tile.dart';
 
 class BrandDelete extends StatelessWidget {
   const BrandDelete({super.key});
