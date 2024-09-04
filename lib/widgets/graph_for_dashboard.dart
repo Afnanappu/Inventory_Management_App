@@ -17,7 +17,7 @@ class GraphForDashboard extends StatelessWidget {
         width: double.maxFinite,
         child: Padding(
           padding: const EdgeInsets.only(
-            right: 15,
+            right: 18,
             top: 15,
           ),
           child: ValueListenableBuilder(

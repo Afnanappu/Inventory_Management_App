@@ -7,7 +7,6 @@ import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/main_screens/item/add_or_edit_new_item.dart';
 import 'package:inventory_management_app/widgets/popup_icon_button_for_all.dart';
-import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
 
 // ignore: must_be_immutable
 class ItemListTile extends StatelessWidget {
@@ -70,13 +69,8 @@ class ItemListTile extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                deleteItemFromDB(index);
+                                deleteItemFromDB(itemModel.id!, context);
                                 Navigator.of(context).pop();
-                                CustomSnackBarMessage(
-                                  context: context,
-                                  message: 'Item deleted successfully',
-                                  color: MyColors.green,
-                                );
                               },
                               child: const Text('Yes'),
                             ),
@@ -100,9 +94,12 @@ class ItemListTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                (itemModel.stock>=1)?'${itemModel.stock} in stock':'Out of stock',
-                style:  TextStyle(
-                    color: (itemModel.stock>10)?MyColors.green:MyColors.red,
+                (itemModel.stock >= 1)
+                    ? '${itemModel.stock} in stock'
+                    : 'Out of stock',
+                style: TextStyle(
+                    color:
+                        (itemModel.stock > 10) ? MyColors.green : MyColors.red,
                     fontSize: 13,
                     fontWeight: FontWeight.w600),
               ),

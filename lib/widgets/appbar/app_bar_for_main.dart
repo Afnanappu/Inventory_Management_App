@@ -9,7 +9,7 @@ class AppBarForMain extends StatelessWidget {
     super.key,
     required this.title,
     this.icon = Icons.notifications_none,
-    required this.onPressed,
+     this.onPressed,
     this.haveBorder = true,
     this.isPopupMenuButton = false,
     this.popupMenuButton,

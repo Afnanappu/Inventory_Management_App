@@ -8,8 +8,8 @@ import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/buttons.dart';
 import 'package:inventory_management_app/widgets/drop_down_for_all.dart';
-import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
-import 'package:inventory_management_app/widgets/text_form_field.dart';
+import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
+import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 
 class ItemAddNew extends StatefulWidget {
   const ItemAddNew({
@@ -43,7 +43,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
 
   final _formKey = GlobalKey<FormState>();
 
-  String? image;
+  ValueNotifier<String?> imageNotifier = ValueNotifier(null);
 
   int? nowBrandId;
 
@@ -52,7 +52,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
     if (widget.itemModel != null) {
       nowBrandId = widget.itemModel!.brandId;
 
-      image = widget.itemModel!.itemImage;
+      imageNotifier.value = widget.itemModel!.itemImage;
 
       _itemNameController.text = widget.itemModel!.itemName;
       _itemPriceController.text = widget.itemModel!.itemPrice.toString();
@@ -87,27 +87,30 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     onTap: () async {
                       await pickImageFromFile().then(
                         (value) {
-                          image = value;
+                          imageNotifier.value = value;
                         },
                       );
-                      setState(() {});
                     },
 
                     //image
-                    child: Container(
-                      height: MyScreenSize.screenHeight * 0.4,
-                      width: MyScreenSize.screenWidth * 0.8,
-                      decoration: BoxDecoration(
-                          image: (image != null)
-                              ? DecorationImage(
-                                  image: FileImage(File(image!)),
-                                  fit: BoxFit.contain)
-                              : null,
-                          color: MyColors.lightGrey,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
+                    child: ValueListenableBuilder(
+                      valueListenable: imageNotifier,
+                      builder: (context, value, child) => Container(
+                        height: MyScreenSize.screenHeight * 0.4,
+                        width: MyScreenSize.screenWidth * 0.8,
+                        decoration: BoxDecoration(
+                            image: (value != null)
+                                ? DecorationImage(
+                                    image: FileImage(File(value)),
+                                    fit: BoxFit.contain)
+                                : null,
+                            color: MyColors.lightGrey,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
                           child:
-                              (image == null) ? const Text('add image') : null),
+                              (value == null) ? const Text('add image') : null,
+                        ),
+                      ),
                     ),
                   ),
 
@@ -257,7 +260,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     function: () {
                       try {
                         if (_formKey.currentState!.validate()) {
-                          if (image == null) {
+                          if (imageNotifier.value == null) {
                             CustomSnackBarMessage(
                                 context: context,
                                 message:
@@ -265,10 +268,12 @@ class _ItemAddNewState extends State<ItemAddNew> {
                                 color: MyColors.red);
                           } else {
                             final item = ItemModel(
-                              id: (widget.itemModel!=null)?widget.itemModel!.id!:null,
+                              id: (widget.itemModel != null)
+                                  ? widget.itemModel!.id!
+                                  : null,
                               brandId: nowBrandId!,
                               itemName: _itemNameController.text,
-                              itemImage: image!,
+                              itemImage: imageNotifier.value!,
                               itemPrice:
                                   double.parse(_itemPriceController.text),
                               color: [..._itemColorController.text.split(',')],

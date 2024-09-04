@@ -5,11 +5,11 @@ import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
-import 'package:inventory_management_app/screens/main_screens/home/brand_items.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/brand_items.dart';
 import 'package:inventory_management_app/widgets/floating_action_button.dart';
-import 'package:inventory_management_app/screens/main_screens/home/item_details_for_home.dart';
-import 'package:inventory_management_app/widgets/price_filter.dart';
-import 'package:inventory_management_app/widgets/search_bar.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/item_details_for_home.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/price_filter.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(child: SearchBarForMain()),
             
             //Brand items
-            SliverToBoxAdapter(child: BrandItems()),
+            SliverToBoxAdapter(child: BrandItemsForHome()),
 
             //Price filter
             SliverToBoxAdapter(child: PriceFilter()),

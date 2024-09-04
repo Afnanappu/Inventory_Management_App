@@ -153,7 +153,7 @@ void getGraphBasedOnSales({required CurrentDate currentDate, DateTime? time}) {
 
 double getTheSumOfOneDayAllCustomerSale(DateTime date) {
   final customers = getOneDayFullCustomer(date);
-  print('getOneDayFullCustomer($date): ${customers.length}');
+  // print('getOneDayFullCustomer($date): ${customers.length}');
   double sum = 0;
   for (var element in customers) {
     sum += getSumOfAllSaleOfOneCustomer(element.saleId);

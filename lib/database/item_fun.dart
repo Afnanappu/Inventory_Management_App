@@ -1,7 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/functions/generate_unique_id.dart';
+import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
+import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
 
 // ignore: constant_identifier_names
 const ITEM_BOX = 'ItemBox';
@@ -12,10 +20,10 @@ late Box<ItemModel> itemBox;
 //Function to get all item from database and added to itemModelListNotifiers.
 Future<void> getAllItemFormDB() async {
   itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  itemModelListNotifiers.value.clear();
   itemModelListNotifiers.value = itemBox.values.cast<ItemModel>().toList();
   // itemBox.clear();
   notifyAnyListeners(itemModelListNotifiers);
+
   // print(
   //     'fetching all items from database\nThe number of item in the DB is ${itemBox.values.length}');
 }
@@ -33,13 +41,36 @@ Future<void> addItemToDB(ItemModel item) async {
 }
 
 //Function to delete from database.
-Future<void> deleteItemFromDB(int itemId) async {
+Future<void> deleteItemFromDB(int itemId, BuildContext context) async {
   itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  await itemBox.delete(itemId);
 
-  getAllItemFormDB();
-  // print(
-  //     'The item in the index $itemId is deleted and the length of all item is ${itemBox.values.length}');
+  final isNotDeletable = saleItemsListNotifier.value.any(
+    (element) => element.itemId == itemId,
+  );
+  if (isNotDeletable == false) {
+    await itemBox.delete(itemId);
+
+    getAllItemFormDB();
+
+    CustomSnackBarMessage(
+      context: context,
+      message: 'Item deleted successfully',
+      color: MyColors.green,
+    );
+    print(
+        'The item in the index $itemId is deleted and the length of all item is ${itemBox.values.length}');
+  } else {
+    CustomSnackBarMessage(
+      context: context,
+      message: 'The item is already used in the sales, can not delete item',
+      color: MyColors.blackShade,
+    );
+    log(
+      'Can not delete item from the db, because the item is already used in sales.',
+    );
+  }
+
+  // await deleteSaleFromCustomerByItemId(itemId);
 }
 
 //Function to delete from database.
@@ -89,7 +120,7 @@ void getTheFilterItem({int? limit, bool? isLess = true}) {
         .toList();
   } else {
     itemFilterListNotifiers.value = itemModelListNotifiers.value;
-    print('filter is worked');
+    // print('filter is worked');
   }
   notifyAnyListeners(itemFilterListNotifiers);
 }
@@ -100,8 +131,7 @@ void getTheItemFilteredByRange(double? start, double? end) {
         .where(
             (element) => element.itemPrice < start && element.itemPrice > end)
         .toList();
-  print(' filter by range is worked');
-
+    print(' filter by range is worked');
   } else if (start != null) {
     itemFilterListNotifiers.value = itemModelListNotifiers.value
         .where((element) => element.itemPrice < start)

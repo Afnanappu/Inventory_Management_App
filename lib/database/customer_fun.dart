@@ -22,7 +22,6 @@ Future<void> getAllCustomersFormDB() async {
 
 Future<void> addCustomerToDB(CustomerModel customer) async {
   customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
-  //todo:put unique id
 
   int id = generateUniqueId();
   customer.customerId = id;
@@ -44,9 +43,28 @@ Future<void> deleteCustomerFromDB(int customerId) async {
 }
 
 List<CustomerModel> getOneDayFullCustomer(DateTime date) {
-  return dateTimeFilterNotifier.value.where(
-    (element) => DateTime(element.saleDateTime.year, element.saleDateTime.month, element.saleDateTime.day) == DateTime(date.year, date.month, date.day),
-  ).toList();
+  return dateTimeFilterNotifier.value
+      .where(
+        (element) =>
+            DateTime(element.saleDateTime.year, element.saleDateTime.month,
+                element.saleDateTime.day) ==
+            DateTime(date.year, date.month, date.day),
+      )
+      .toList();
 }
 
-
+// Future<void> deleteSaleFromCustomerByItemId(int itemId) async {
+//   customerBox = await Hive.openBox(CUSTOMER_BOX);
+//   for (var element in customerBox.values) {
+//     for (var saleId in element.saleId) {
+//       final sale = getSaleFromFromDB(saleId);
+//       if (sale.itemId == itemId) {
+//         deleteItemFromDB(itemId);
+//         print(
+//             'Item $itemId is deleted from the sales because the item is deleted from the db');
+//       }
+//     }
+//   }
+//   notifyAnyListeners(saleItemsListNotifier);
+//   notifyAnyListeners(customerListNotifier);
+// }

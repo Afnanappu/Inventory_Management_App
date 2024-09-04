@@ -7,7 +7,7 @@ import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/screens/main_screens/home/brand_items.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/brand_items.dart';
 import 'package:inventory_management_app/screens/sub_screens/item_full_details_screen.dart';
 
 class ItemDetailsForHome extends StatefulWidget {

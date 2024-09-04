@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/buttons.dart';
-import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
-import 'package:inventory_management_app/widgets/text_form_field.dart';
+import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
+import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 
 class BrandCRUD {
   BrandCRUD({

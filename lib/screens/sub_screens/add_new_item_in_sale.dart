@@ -7,7 +7,7 @@ import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/button_add_sale.dart';
 import 'package:inventory_management_app/widgets/drop_down_for_all.dart';
-import 'package:inventory_management_app/widgets/text_form_field.dart';
+import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 import 'package:inventory_management_app/functions/extension_methods.dart';
 
 class AddNewItemInSale extends StatefulWidget {

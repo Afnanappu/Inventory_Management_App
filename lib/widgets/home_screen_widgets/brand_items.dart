@@ -7,16 +7,16 @@ import 'package:inventory_management_app/models/item_model.dart';
 
 ValueNotifier<bool> isSeeAllButtonPressedNotifier = ValueNotifier(false);
 
-class BrandItems extends StatefulWidget {
-  const BrandItems({super.key});
+class BrandItemsForHome extends StatefulWidget {
+  const BrandItemsForHome({super.key});
 
   @override
-  State<BrandItems> createState() => _BrandItemsState();
+  State<BrandItemsForHome> createState() => _BrandItemsForHomeState();
 }
 
 int selectedButtonIndex = -1;
 
-class _BrandItemsState extends State<BrandItems> {
+class _BrandItemsForHomeState extends State<BrandItemsForHome> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(

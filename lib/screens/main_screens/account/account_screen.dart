@@ -6,7 +6,7 @@ import 'package:inventory_management_app/widgets/alert_dialog.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/bottom_sheet.dart';
 import 'package:inventory_management_app/widgets/list_tile.dart';
-import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
+import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'business profile/business_profile.dart';
 

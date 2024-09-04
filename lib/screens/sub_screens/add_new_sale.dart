@@ -13,8 +13,8 @@ import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sal
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/button_add_sale.dart';
 import 'package:inventory_management_app/widgets/sale_add_item.dart';
-import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
-import 'package:inventory_management_app/widgets/text_form_field.dart';
+import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
+import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 
 // ignore: must_be_immutable
 class SaleAddNew extends StatefulWidget {

@@ -6,8 +6,8 @@ import 'package:inventory_management_app/functions/pick_image.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/buttons.dart';
-import 'package:inventory_management_app/widgets/snack_bar_messenger.dart';
-import 'package:inventory_management_app/widgets/text_form_field.dart';
+import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
+import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 
 class AccountProfile extends StatefulWidget {
   const AccountProfile({super.key});

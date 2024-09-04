@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
-import 'package:inventory_management_app/screens/main_screens/dashboard/all_sale_data.dart';
-import 'package:inventory_management_app/screens/main_screens/home/home_screen.dart';
+import 'package:inventory_management_app/screens/home_screen.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
-import 'package:inventory_management_app/widgets/customer_list_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/customer_list_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/resent_sale_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/dropdown_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/graph_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/sale_and_price_container_for_dashboard.dart';
@@ -50,37 +48,19 @@ class DashboardScreen extends StatelessWidget {
       ),
       body: CustomScrollView(
         slivers: [
+          //Dropdown menu
           DropDownForDashboard(selectedValue: _selectedValue),
-          const SaleAndPriceContainerForDashboard(),
-          const GraphForDashboard(),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //Brands
-                  const Text(
-                    'Resent',
-                    style: MyFontStyle.listTileFont,
-                  ),
 
-                  //See all
-                  //todo: Add the see all button functions
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => AllSaleDataScreen()));
-                    },
-                    child: const Text(
-                      'See all',
-                      style: TextStyle(color: MyColors.green),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          //Sale and price container that show based on the dropdown menu
+          const SaleAndPriceContainerForDashboard(),
+
+          //Graph
+          const GraphForDashboard(),
+
+          //Resent sales button
+          const ResentSalesButtonForDashboard(),
+
+          //resent
           FutureBuilder(
               future: _fetchSaleData(),
               builder: (context, snapshot) {
@@ -103,6 +83,8 @@ class DashboardScreen extends StatelessWidget {
                             child: const Text('No sale is added'),
                           ),
                         )
+
+                      //sales list
                       : const CustomerListForDashboard();
                 }
               }),
