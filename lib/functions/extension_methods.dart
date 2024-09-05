@@ -3,8 +3,8 @@ extension NumberParsing on String {
     return int.parse(this);
   }
 
-  double parseDouble() {
-    return double.parse(this);
+  double? parseDouble() {
+    return double.tryParse(this);
   }
 }
 

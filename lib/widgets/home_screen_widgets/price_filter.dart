@@ -14,7 +14,7 @@ bool isVisible = false;
 
 class _PriceFilterState extends State<PriceFilter> {
   final ValueNotifier<double> _fromValue = ValueNotifier(0);
-  final ValueNotifier<double> _toValue = ValueNotifier(0);
+  final ValueNotifier<double> _toValue = ValueNotifier(100000000);
 
   @override
   Widget build(BuildContext context) {

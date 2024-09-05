@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/common/drop_down_for_all.dart';
@@ -88,7 +89,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     controller: _itemNameController,
                     vPadding: 20,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          CustomRegExp.checkEmptySpaces(value)) {
                         return 'item name is empty, provide a name';
                       } else {
                         return null;
@@ -133,7 +135,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     controller: _itemPriceController,
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          CustomRegExp.checkEmptySpaces(value)) {
                         return 'item price is empty, provide a price';
                       } else {
                         return null;
@@ -149,7 +152,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     controller: _itemStockController,
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          CustomRegExp.checkEmptySpaces(value)) {
                         return 'item stock count is empty, provide a stock count';
                       } else {
                         return null;
@@ -163,7 +167,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     labelText: 'Color',
                     controller: _itemColorController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          CustomRegExp.checkEmptySpaces(value)) {
                         return 'item have no color!, try to provide';
                       } else {
                         return null;
@@ -179,7 +184,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     controller: _itemRamController,
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          CustomRegExp.checkEmptySpaces(value)) {
                         return 'item have no ram!, try to provide';
                       } else {
                         return null;
@@ -194,7 +200,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     controller: _itemStorageController,
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          CustomRegExp.checkEmptySpaces(value)) {
                         return 'item have no storage!, try to provide';
                       } else {
                         return null;
@@ -209,7 +216,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     labelText: 'Description',
                     controller: _itemDescriptionController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          CustomRegExp.checkEmptySpaces(value)) {
                         return 'item description is empty, provide description';
                       } else {
                         return null;

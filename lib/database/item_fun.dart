@@ -127,19 +127,27 @@ void getTheFilterItem({int? limit, bool? isLess = true}) {
 
 void getTheItemFilteredByRange(double? start, double? end) {
   if (start != null && end != null) {
-    itemFilterListNotifiers.value = itemModelListNotifiers.value
+    log('item model list length             is : ${itemModelListNotifiers.value.length}');
+    filteredItemModelList.value = itemModelListNotifiers.value
         .where(
-            (element) => element.itemPrice < start && element.itemPrice > end)
+            (element) => start <= element.itemPrice && end >= element.itemPrice)
         .toList();
-    print(' filter by range is worked');
-  } else if (start != null) {
-    itemFilterListNotifiers.value = itemModelListNotifiers.value
-        .where((element) => element.itemPrice < start)
-        .toList();
-  } else if (end != null) {
-    itemFilterListNotifiers.value = itemModelListNotifiers.value
-        .where((element) => element.itemPrice > end)
-        .toList();
+    log('start and end filter by range is worked total filtered item is ${filteredItemModelList.value.length}');
   }
-  notifyAnyListeners(itemFilterListNotifiers);
+  //  else if (start != null) {
+  //   itemFilterListNotifiers.value = itemModelListNotifiers.value
+  //       .where((element) => element.itemPrice < start)
+  //       .toList();
+
+  //   log('start filter by range is worked total filtered item is ${filteredItemModelList.value.length}');
+
+  // } 
+  // else if (end != null) {
+  //   itemFilterListNotifiers.value = itemModelListNotifiers.value
+  //       .where((element) => element.itemPrice > end)
+  //       .toList();
+  //   log('end filter by range is worked total filtered item is ${filteredItemModelList.value.length}');
+
+  // }
+  notifyAnyListeners(filteredItemModelList);
 }

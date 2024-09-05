@@ -59,15 +59,15 @@ class ButtonForAddOrEditItemScreen extends StatelessWidget {
               final item = ItemModel(
                 id: (widget.itemModel != null) ? widget.itemModel!.id! : null,
                 brandId: nowBrandId!,
-                itemName: _itemNameController.text,
+                itemName: _itemNameController.text.trim(),
                 itemImage: imageNotifier.value!,
-                itemPrice: double.parse(_itemPriceController.text),
-                color: [..._itemColorController.text.split(',')],
-                ram: [..._itemRamController.text.split(',')],
-                rom: [..._itemStorageController.text.split(',')],
-                description: _itemDescriptionController.text,
+                itemPrice: double.parse(_itemPriceController.text.trim()),
+                color: [..._itemColorController.text.trim().split(',')],
+                ram: [..._itemRamController.text.trim().split(',')],
+                rom: [..._itemStorageController.text.trim().split(',')],
+                description: _itemDescriptionController.text.trim(),
                 stock: int.parse(
-                  _itemStockController.text,
+                  _itemStockController.text.trim(),
                 ),
               );
               if (widget.isAddingItem == true) {

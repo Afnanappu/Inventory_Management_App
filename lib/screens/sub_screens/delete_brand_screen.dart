@@ -37,7 +37,7 @@ class BrandDelete extends StatelessWidget {
                   title: 'Delete brand',
                   brandId: brand[index].id,
                   buttonText: 'Delete',
-                  buttonColor: MyColors.red,
+                  buttonColor: MyColors.blackShade,
                   message: 'Brand deleted successfully',
                   errorMessage: "Brand can't delete because there are item under it",
                   haveTextField: false,

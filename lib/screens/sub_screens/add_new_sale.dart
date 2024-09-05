@@ -8,6 +8,7 @@ import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
+import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
@@ -142,10 +143,10 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 formFillColor: MyColors.white,
                 isFormEnabled: !widget.isViewer,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || CustomRegExp.checkEmptySpaces(value)) {
                     return 'Customer name is empty';
-                  } else if (value.length < 3) {
-                    return 'Enter a valid name';
+                  } else if (!CustomRegExp.checkName(value)) {
+                    return 'Enter a valid name (use letter and space only)';
                   } else {
                     return null;
                   }
@@ -160,8 +161,10 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 keyboardType: TextInputType.phone,
                 formFillColor: MyColors.white,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || CustomRegExp.checkEmptySpaces(value)) {
                     return 'phone no is empty';
+                  } else if (!CustomRegExp.checkPhoneNumber(value)) {
+                    return 'Enter a valid phone number';
                   } else if (value.length < 10) {
                     return 'Enter 10 digit number';
                   } else if (value.length > 10) {
@@ -235,7 +238,8 @@ class _SaleAddNewState extends State<SaleAddNew> {
                                               builder: (context) => AlertDialog(
                                                 title: const Text(
                                                     'Remove selected item'),
-                                                content: const Text('Are you sure?'),
+                                                content:
+                                                    const Text('Are you sure?'),
                                                 actions: [
                                                   TextButton(
                                                       onPressed: () {
@@ -279,11 +283,10 @@ class _SaleAddNewState extends State<SaleAddNew> {
                             builder: (ctx) => const AddNewItemInSale()),
                       );
                     })
-                  : const SizedBox(
-                    ),
-                  const SizedBox(
-                      height: 15,
-                    ),
+                  : const SizedBox(),
+              const SizedBox(
+                height: 15,
+              ),
               //total Amount
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
@@ -116,10 +117,10 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                       validator: (value) {
                         int quantity = 1;
                         int stock = item!.stock - selectedItemQuantity;
-                        if (value == null ||
-                            value.isEmpty ||
-                            0 == int.parse(value)) {
+                        if (CustomRegExp.checkEmptySpaces(value!)) {
                           return "add quantity";
+                        } else if (!CustomRegExp.checkNumberOnly(value)) {
+                          return 'Enter a valid quantity';
                         } else if (value.isNotEmpty) {
                           quantity = int.parse(value);
                           if (item != null && quantity > stock) {
@@ -133,7 +134,6 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                       },
                     ),
                   ),
-                 
                 ],
               )
             ],
@@ -159,7 +159,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                           SaleModel(itemId: item!.id!, itemCount: itemCount);
                       currentSaleItemNotifier.value.add(sale);
                       notifyAnyListeners(currentSaleItemNotifier);
-                      final sum = itemCount.toDouble() * itemPrice;
+                      final double sum = itemCount.toDouble() * itemPrice!;
                       totalAmountNotifier.value += sum;
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
@@ -182,7 +182,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                           SaleModel(itemId: item!.id!, itemCount: itemCount);
                       currentSaleItemNotifier.value.add(sale);
                       notifyAnyListeners(currentSaleItemNotifier);
-                      final sum = itemCount.toDouble() * itemPrice;
+                      final sum = itemCount.toDouble() * itemPrice!;
                       totalAmountNotifier.value += sum;
                       Navigator.of(context).pop();
                     }

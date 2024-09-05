@@ -22,6 +22,7 @@ class BrandCRUD {
     void Function()? buttonFunction,
     void Function(int)? buttonFunctionWithArg,
     void Function(int, ItemBrandModel)? buttonFunctionWithArgAndBrand,
+    String? Function(String? value)? validator,
   }) {
     if (controllerValue != null) {
       controller!.text = controllerValue;
@@ -35,6 +36,7 @@ class BrandCRUD {
                 context: context,
                 labelText: text!,
                 controller: controller!,
+                validator: validator,
               )
             : null,
         actions: [
@@ -53,12 +55,12 @@ class BrandCRUD {
 
                     if (!isPossibleToDelete) {
                       buttonFunctionWithArg(brandId);
-                    }else{
+                    } else {
                       CustomSnackBarMessage(
-                      context: context,
-                      message: errorMessage,
-                      color: MyColors.red);
-                  Navigator.of(context).pop();
+                          context: context,
+                          message: errorMessage,
+                          color: MyColors.red);
+                      Navigator.of(context).pop();
                     }
                   }
                   if (buttonFunctionWithArgAndBrand != null &&
@@ -76,7 +78,7 @@ class BrandCRUD {
                 } catch (e) {
                   CustomSnackBarMessage(
                       context: context,
-                      message: errorMessage,
+                      message: '$errorMessage: $e',
                       color: MyColors.red);
                   Navigator.of(context).pop();
                 }
