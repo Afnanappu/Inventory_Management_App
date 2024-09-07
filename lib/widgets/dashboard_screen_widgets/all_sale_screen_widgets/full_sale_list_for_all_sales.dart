@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_management_app/database/brand_fun.dart';
-import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
@@ -24,15 +22,14 @@ class FullSaleListForAllSales extends StatelessWidget {
           itemCount: customers.length,
           itemBuilder: (context, index) {
             final customer = customers[index];
-            final sale = getSaleFromFromDB(customer.saleId.first);
-            final item = getItemFromDB(sale.itemId);
-            final brand = getItemBrandFromDB(item.brandId);
+            // final sale = getSaleFromDB(customer.saleId.first);
+            // final item = getItemFromDB(sale.itemId);
+            // final brand = getItemBrandFromDB(item.brandId);
             final sumOfSales = getSumOfAllSaleOfOneCustomer(customer.saleId);
-            return SaleListTile(
-              image: item.itemImage,
+            return CustomerListTile(
               customerName: customer.customerName,
               invoiceNo: '${customers.length - index}',
-              brandName: brand.itemBrandName,
+              totalProduct:customer.saleId.length,
               itemPrice: formatMoney(number: sumOfSales),
               saleAddDate: customer.saleDateTime,
               onTap: () {

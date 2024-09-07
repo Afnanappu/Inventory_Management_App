@@ -1,0 +1,171 @@
+import 'package:flutter/material.dart';
+import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/database/item_fun.dart';
+import 'package:inventory_management_app/database/return_fun.dart';
+import 'package:inventory_management_app/functions/format_money.dart';
+import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
+import 'package:inventory_management_app/widgets/common/alert_dialog.dart';
+import 'package:inventory_management_app/widgets/common/buttons.dart';
+
+class CurrentSaleItemListForSaleScreen extends StatelessWidget {
+  const CurrentSaleItemListForSaleScreen({
+    super.key,
+    required this.widget,
+  });
+
+  final SaleAddNew widget;
+
+  @override
+  Widget build(BuildContext context) {
+     currentSaleItemNotifier.value.removeWhere(
+      (saleItem) {
+        return returnItemsListNotifier.value.any(
+          (returnItem) => returnItem.saleId == saleItem.saleId,
+        );
+      },
+    );
+   
+    return ValueListenableBuilder(
+      valueListenable: currentSaleItemNotifier,
+      builder: (context, saleItem, child) {
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: saleItem.length,
+          itemBuilder: (context, index) {
+            final item = getItemFromDB(saleItem[index].itemId);
+            final sale = saleItem[index];
+
+            // final brand = getItemBrandFromDB(item.brandId);
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Stack(
+                children: [
+                  ListTile(
+                    tileColor: const Color.fromARGB(255, 243, 255, 227),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item.itemName,
+                            softWrap: true,
+                            overflow: TextOverflow.clip,
+                            style: const TextStyle(
+                                color: MyColors.blackShade,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Text(
+                          formatMoney(number: item.itemPrice * sale.itemCount),
+                          style: const TextStyle(
+                              color: MyColors.blackShade,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                    subtitle: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Subtotal'),
+                            Text(
+                                '${sale.itemCount} x ${formatMoney(number: item.itemPrice, haveSymbol: false)} = ${formatMoney(number: item.itemPrice * sale.itemCount)}'),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        (widget.isViewer == true)
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  MyCustomButton(
+                                    color: MyColors.red,
+                                    haveBgColor: false,
+                                    text: 'RETURN',
+                                    isSale: false,
+                                    onTap: () => customAlertBox(
+                                      content: 'Are you sure?',
+
+                                      context: context,
+                                      title: 'Return item',
+
+                                      //todo: add return function
+                                      onPressedYes: () async {
+                                        final ReturnSaleModel returnItem =
+                                            ReturnSaleModel(
+                                          customerId:
+                                              widget.customer!.customerId!,
+                                          saleId: sale.saleId!,
+                                          dateTime: DateTime.now(),
+                                        );
+
+                                        await addReturnItemToDB(returnItem);
+
+                                        await getAllReturnedItemFromDb();
+
+                                        // await deleteSaleFromDB(sale.saleId!);
+                                        
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.of(context).pop();
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
+                  ),
+                  (!widget.isViewer)
+                      ? FractionalTranslation(
+                          translation: const Offset(0.06, -0.45),
+                          child: Align(
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Remove selected item'),
+                                      content: const Text('Are you sure?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              currentSaleItemNotifier.value
+                                                  .removeAt(index);
+                                              notifyAnyListeners(
+                                                currentSaleItemNotifier,
+                                              );
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('Yes')),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('No'))
+                                      ],
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.close),
+                              )),
+                        )
+                      : const SizedBox(),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}

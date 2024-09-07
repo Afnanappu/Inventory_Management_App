@@ -110,6 +110,27 @@ Future<void> decreaseOneItemStockFromDB(int itemId, int quantity) async {
   // print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
 }
 
+Future<void> increaseOneItemStockFromDB(int itemId, int quantity) async {
+  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
+  final item = itemBox.values.firstWhere((item) => item.id == itemId);
+  final newStock = item.stock + quantity;
+  final newItem = ItemModel(
+    id: item.id,
+    brandId: item.brandId,
+    itemName: item.itemName,
+    itemImage: item.itemImage,
+    itemPrice: item.itemPrice,
+    color: item.color,
+    ram: item.ram,
+    rom: item.rom,
+    description: item.description,
+    stock: newStock,
+  );
+  await itemBox.put(item.id, newItem);
+  log('one item stock increased');
+  // print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
+}
+
 void getTheFilterItem({int? limit, bool? isLess = true}) {
   if (limit != null) {
     itemFilterListNotifiers.value = itemModelListNotifiers.value
@@ -134,20 +155,6 @@ void getTheItemFilteredByRange(double? start, double? end) {
         .toList();
     log('start and end filter by range is worked total filtered item is ${filteredItemModelList.value.length}');
   }
-  //  else if (start != null) {
-  //   itemFilterListNotifiers.value = itemModelListNotifiers.value
-  //       .where((element) => element.itemPrice < start)
-  //       .toList();
 
-  //   log('start filter by range is worked total filtered item is ${filteredItemModelList.value.length}');
-
-  // } 
-  // else if (end != null) {
-  //   itemFilterListNotifiers.value = itemModelListNotifiers.value
-  //       .where((element) => element.itemPrice > end)
-  //       .toList();
-  //   log('end filter by range is worked total filtered item is ${filteredItemModelList.value.length}');
-
-  // }
   notifyAnyListeners(filteredItemModelList);
 }

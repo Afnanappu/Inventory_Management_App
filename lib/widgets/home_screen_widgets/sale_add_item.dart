@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 
-Widget saleAddItem({required onTap}) {
+Widget saleAddItem({required void Function()? onTap}) {
   return InkWell(
     onTap: onTap,
     child: Container(

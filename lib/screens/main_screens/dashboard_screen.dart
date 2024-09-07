@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
+import 'package:inventory_management_app/database/return_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
@@ -11,6 +12,8 @@ import 'package:inventory_management_app/widgets/dashboard_screen_widgets/custom
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/resent_sale_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/dropdown_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/graph_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/return_sale_button_for_dashboard.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/return_sale_list_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/sale_and_price_container_for_dashboard.dart';
 
 // ignore: must_be_immutable
@@ -26,7 +29,13 @@ class DashboardScreen extends StatelessWidget {
   Future<void> _fetchSaleData() async {
     await getAllCustomersFormDB();
     await getAllSalesFromDB();
+
     fun();
+  }
+
+  Future<void> _fetchReturnData() async {
+    await getAllReturnedItemFromDb();
+    await getAllSalesFromDB();
   }
 
   void fun() {
@@ -62,32 +71,54 @@ class DashboardScreen extends StatelessWidget {
 
           //resent
           FutureBuilder(
-              future: _fetchSaleData(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SliverToBoxAdapter(
-                      child: Center(child: CircularProgressIndicator()));
-                } else if (snapshot.hasError) {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    ),
-                  );
-                } else {
-                  return (customerListNotifier.value.isEmpty)
-                      ? SliverToBoxAdapter(
-                          child: Container(
-                            width: double.infinity,
-                            height: MyScreenSize.screenHeight * .2,
-                            alignment: AlignmentDirectional.center,
-                            child: const Text('No sale is added'),
-                          ),
-                        )
+            future: _fetchSaleData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()));
+              } else if (snapshot.hasError) {
+                return SliverToBoxAdapter(
+                  child: Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  ),
+                );
+              } else {
+                return (customerListNotifier.value.isEmpty)
+                    ? SliverToBoxAdapter(
+                        child: Container(
+                          width: double.infinity,
+                          height: MyScreenSize.screenHeight * .2,
+                          alignment: AlignmentDirectional.center,
+                          child: const Text('No sale is added'),
+                        ),
+                      )
 
-                      //sales list
-                      : const CustomerListForDashboard();
-                }
-              }),
+                    //sales list
+                    : const CustomerListForDashboard();
+              }
+            },
+          ),
+
+          // returns
+          const ReturnSaleButtonForDashboard(),
+
+          FutureBuilder(
+            future: _fetchReturnData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()));
+              } else if (snapshot.hasError) {
+                return SliverToBoxAdapter(
+                  child: Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  ),
+                );
+              } else {
+                return const ReturnSaleListForDashboard();
+              }
+            },
+          ),
         ],
       ),
     );

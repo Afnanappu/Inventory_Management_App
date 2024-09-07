@@ -6,8 +6,9 @@ import 'package:inventory_management_app/screens/main_screens/item_screen.dart';
 import 'package:inventory_management_app/widgets/common/bottom_navigation_bar.dart';
 
 class MainHomeScreen extends StatefulWidget {
-  const MainHomeScreen({super.key});
+  MainHomeScreen({super.key, this.newIndex});
 
+  int? newIndex;
   @override
   State<MainHomeScreen> createState() => _MainHomeScreenState();
 }
@@ -19,26 +20,27 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageView(
-          onPageChanged: (value) {
-            setState(() {
-              currentIndex = value;
-            });
-            _pageViewController.jumpToPage(currentIndex);
-          },
-          controller: _pageViewController,
-          physics: const NeverScrollableScrollPhysics(),
-          children:  [
-            const HomeScreen(),
-            DashboardScreen(),
-            const ItemScreen(),
-             AccountScreen()
-          ],
-        ),
-        //todo: Change the icon
-        bottomNavigationBar: MyBottomNavigationBar(
-          currentIndex: currentIndex,
-          pageController: _pageViewController,
-        ),);
+      body: PageView(
+        onPageChanged: (value) {
+          setState(() {
+            currentIndex = value;
+          });
+          _pageViewController.jumpToPage(currentIndex);
+        },
+        controller: _pageViewController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          const HomeScreen(),
+          DashboardScreen(),
+          const ItemScreen(),
+          AccountScreen()
+        ],
+      ),
+      //todo: Change the icon
+      bottomNavigationBar: MyBottomNavigationBar(
+        currentIndex: currentIndex,
+        pageController: _pageViewController,
+      ),
+    );
   }
 }

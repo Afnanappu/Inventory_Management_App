@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
@@ -40,17 +42,24 @@ Future<List<int>> addSalesToDB(List<SaleModel> sales) async {
   return salesIdList;
 }
 
-SaleModel getSaleFromFromDB(int saleId) {
+SaleModel getSaleFromDB(int saleId) {
   final sale = saleItemsListNotifier.value.firstWhere((sale) {
     return sale.saleId == saleId;
   });
   return sale;
 }
 
+Future<void> deleteSaleFromDB(int saleId) async {
+  salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
+  await salesBox.delete(saleId);
+  getAllSalesFromDB();
+  log('Sale of id ' '$saleId' ' is deleted from the DB');
+}
+
 double getSumOfAllSaleOfOneCustomer(List<int> salesId) {
   double sum = 0;
   for (var id in salesId) {
-    final sale = getSaleFromFromDB(id);
+    final sale = getSaleFromDB(id);
     final item = getItemFromDB(sale.itemId);
     sum += (item.itemPrice * sale.itemCount);
   }
@@ -61,12 +70,24 @@ Future<void> decreaseListOfStockFromDB(List<int> salesId) async {
   salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
 
   for (var id in salesId) {
-    final sale = getSaleFromFromDB(id);
+    final sale = getSaleFromDB(id);
     await decreaseOneItemStockFromDB(sale.itemId, sale.itemCount);
   }
   getAllItemFormDB();
   getAllSalesFromDB();
   print('Updating finished');
+}
+
+Future<void> increaseListOfStockFromDB(List<int> salesId) async {
+  salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
+
+  for (var id in salesId) {
+    final sale = getSaleFromDB(id);
+    await increaseOneItemStockFromDB(sale.itemId, sale.itemCount);
+  }
+  getAllItemFormDB();
+  getAllSalesFromDB();
+  log('Stock increase finished');
 }
 
 void getTheNumberOfItemSold({required DateTime start, DateTime? end}) {
@@ -108,7 +129,7 @@ double getThePriceAmountOfItemSold({required DateTime start, DateTime? end}) {
     priceAmountOfItemSoldListNotifier.value =
         getSumOfAllSaleOfOneCustomer(salesId);
   }
-  print('amount filter worked');
+  // print('amount filter worked');
   notifyAnyListeners(priceAmountOfItemSoldListNotifier);
   return priceAmountOfItemSoldListNotifier.value;
 }
@@ -124,13 +145,12 @@ void getSalesBasedOnDateTime({required DateTime startDate, DateTime? endDate}) {
         )
         .toList();
 
-    print('date time filter is worked');
+    // print('date time filter is worked');
     notifyAnyListeners(dateTimeFilterNotifier);
   }
 }
 
 void getGraphBasedOnSales({required CurrentDate currentDate, DateTime? time}) {
- 
   var start = getTheCurrentDateStartOrEnd(currentDate: currentDate, time: time);
   final end = getTheCurrentDateStartOrEnd(
       currentDate: currentDate, start: false, time: time);
@@ -138,22 +158,22 @@ void getGraphBasedOnSales({required CurrentDate currentDate, DateTime? time}) {
   print('Start: $start\nEnd: $end');
 
   graphPointListNotifier.value.clear();
-  print(start.isBefore(end));
+  // print(start.isBefore(end));
   for (int i = start.day; start.isBefore(end); i++) {
     final sum = getTheSumOfOneDayAllCustomerSale(start);
     graphPointListNotifier.value.add(FlSpot(start.weekday.toDouble(), sum));
     start = start.add(const Duration(days: 1));
-    print('${start.day}');
+    // print('${start.day}');
   }
-  print(
-      'The getGraphBasedOnSales() is worded with length of item in graph = ${graphPointListNotifier.value.length}');
+  // print(
+  //     'The getGraphBasedOnSales() is worded with length of item in graph = ${graphPointListNotifier.value.length}');
 
   notifyAnyListeners(graphPointListNotifier);
 }
 
 double getTheSumOfOneDayAllCustomerSale(DateTime date) {
   final customers = getOneDayFullCustomer(date);
-  // print('getOneDayFullCustomer($date): ${customers.length}');
+
   double sum = 0;
   for (var element in customers) {
     sum += getSumOfAllSaleOfOneCustomer(element.saleId);

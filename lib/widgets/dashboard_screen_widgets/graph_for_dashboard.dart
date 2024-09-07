@@ -56,15 +56,15 @@ class GraphForDashboard extends StatelessWidget {
                   ),
                   borderData: FlBorderData(
                     show: true,
-                    border:
-                        Border.all(color: MyColors.lightGrey, width: 1),
+                    border: Border.all(color: MyColors.lightGrey, width: 1),
                   ),
                   lineBarsData: [
                     LineChartBarData(
-                      spots: pointList,
+                      spots: (pointList.isNotEmpty)
+                          ? pointList
+                          : const [FlSpot(0, 0)],
                       color: Colors.blue,
                       barWidth: 3,
-                      isCurved: true,
                       dotData: const FlDotData(
                         show: true,
                       ),

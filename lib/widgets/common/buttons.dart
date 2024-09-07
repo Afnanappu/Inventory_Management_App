@@ -40,12 +40,18 @@ class MyCustomButton extends StatelessWidget {
   void Function()? onTap;
   final Color color;
   final String text;
+  final Color? textColor;
   final bool haveBgColor;
-  MyCustomButton(
-      {super.key,
-      required this.color,
-      required this.text,
-      this.haveBgColor = true});
+  final bool isSale;
+  MyCustomButton({
+    super.key,
+    this.isSale = true,
+    required this.color,
+    required this.text,
+    this.textColor,
+    this.haveBgColor = true,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +66,13 @@ class MyCustomButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: const TextStyle(
-              color: MyColors.green, fontSize: 11, fontWeight: FontWeight.w500),
+          style: TextStyle(
+            color: textColor ?? (isSale == true
+                    ? MyColors.green
+                    : MyColors.red),
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );

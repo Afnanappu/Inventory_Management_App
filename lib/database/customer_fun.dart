@@ -1,7 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/generate_unique_id.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 
 // ignore: constant_identifier_names
 const CUSTOMER_BOX = 'CustomerBox';
@@ -38,8 +40,16 @@ Future<void> deleteCustomerFromDB(int customerId) async {
   customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
   customerBox.delete(customerId);
   getAllCustomersFormDB();
+  getTheCurrentDate(CurrentDate.week);
+  notifyAnyListeners(priceAmountOfItemSoldListNotifier);
   print(
       'The customer in the id = $customerId is deleted and the length of all customers is ${customerBox.values.length}');
+}
+
+CustomerModel getCustomerFromDB(int customerId) {
+  return customerListNotifier.value.firstWhere(
+    (element) => element.customerId == customerId,
+  );
 }
 
 List<CustomerModel> getOneDayFullCustomer(DateTime date) {

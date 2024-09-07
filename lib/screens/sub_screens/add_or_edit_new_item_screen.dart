@@ -80,7 +80,8 @@ class _ItemAddNewState extends State<ItemAddNew> {
               child: Column(
                 children: [
                   AddItemImageForAddOrEditItemScreen(
-                      imageNotifier: imageNotifier),
+                    imageNotifier: imageNotifier,
+                  ),
 
                   //Item name
                   customFormField(

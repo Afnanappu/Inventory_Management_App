@@ -26,6 +26,10 @@ void main() async {
   if (!Hive.isAdapterRegistered(SaleModelAdapter().typeId)) {
     Hive.registerAdapter(SaleModelAdapter());
   }
+  if (!Hive.isAdapterRegistered(ReturnSaleModelAdapter().typeId)) {
+    Hive.registerAdapter(ReturnSaleModelAdapter());
+  }
+  //todo:add return sale model hive registration
 
   runApp(const InventoryManagementApp());
 }
@@ -37,9 +41,9 @@ class InventoryManagementApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MainHomeScreen(),
+      home:  MainHomeScreen(),
       routes: {
-        "/MainHomeScreen": (ctx) => const MainHomeScreen(),
+        "/MainHomeScreen": (ctx) =>  MainHomeScreen(),
         "/NotificationScreen": (ctx) => const NotificationScreen(),
       },
       theme: ThemeData(
