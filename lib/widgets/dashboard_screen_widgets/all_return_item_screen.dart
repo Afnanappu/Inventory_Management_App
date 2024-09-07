@@ -42,11 +42,9 @@ class AllReturnItemScreen extends StatelessWidget {
                     );
                   },
                 )
-              : const SliverToBoxAdapter(
-                  child: Center(
-                    child: Text('No Return item'),
-                  ),
-                );
+              : const Center(
+                child: Text('No Return item'),
+              );
         },
       ),
     );

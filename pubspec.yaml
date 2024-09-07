@@ -71,6 +71,7 @@ flutter:
     - assets/mobiles/Apple iPhone 14 Plus.png
     - assets/animations/Flow.json
     - assets/animations/anim.json
+    - lib/animations/success.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

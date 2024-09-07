@@ -201,7 +201,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
           customerNameController: _customerNameController,
           customerPhoneController: _customerPhoneController,
           selectedDate: selectedDate,
-          mounted: mounted),
+          mounted: mounted,),
     );
   }
 }

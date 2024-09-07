@@ -5,6 +5,7 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
+import 'package:inventory_management_app/screens/first_screens/password_screen.dart';
 import 'package:inventory_management_app/screens/main_home_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
 
@@ -41,7 +42,7 @@ class InventoryManagementApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  MainHomeScreen(),
+      home:  PasswordScreen(),
       routes: {
         "/MainHomeScreen": (ctx) =>  MainHomeScreen(),
         "/NotificationScreen": (ctx) => const NotificationScreen(),

@@ -46,14 +46,14 @@ class SaleModel {
   @HiveField(2)
   int itemCount;
 
-  @HiveField(3)
-  bool isReturned = false;
+  // @HiveField(3)
+  // bool isReturned = false;
 
   SaleModel({
     required this.itemId,
     required this.itemCount,
     this.saleId,
-    this.isReturned = false,
+    // this.isReturned = false,
   });
 }
 

@@ -6,14 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
-import 'package:inventory_management_app/database/return_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
-import 'package:inventory_management_app/screens/main_home_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/common/alert_dialog.dart';
 import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/button_add_sale.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item_screen_widgets/success_animation_screen.dart';
 
 class ButtonsForAddNewSaleScreen extends StatelessWidget {
   const ButtonsForAddNewSaleScreen({
@@ -128,15 +127,19 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
                               start: DateTime.now().subtract(
                                   Duration(days: DateTime.now().weekday - 1)));
 
-                          if (mounted) {
-                            Navigator.of(context).pop();
-                            CustomSnackBarMessage(
-                              context: context,
-                              message: 'Sale is added successfully',
-                              color: MyColors.green,
-                              duration: 2,
-                            );
-                          }
+                          // if (mounted) {
+                          //   Navigator.of(context).pop();
+                          //   CustomSnackBarMessage(
+                          //     context: context,
+                          //     message: 'Sale is added successfully',
+                          //     color: MyColors.green,
+                          //     duration: 2,
+                          //   );
+                          // }
+
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) =>
+                                  const SuccessAnimationScreen()));
                         } else if (currentSaleItemNotifier.value.isEmpty) {
                           CustomSnackBarMessage(
                             context: context,
@@ -163,7 +166,7 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
                           title: 'Delete sale',
                           content: 'Are you sure?',
                           onPressedYes: () async {
-                            final saleLength = widget.customer!.saleId.length;
+                            // final saleLength = widget.customer!.saleId.length;
                             // final returnedSales =
                             //     currentSaleItemNotifier.value.where(
                             //   (saleItem) {
