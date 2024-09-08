@@ -66,13 +66,6 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
 
                             await decreaseListOfStockFromDB(salesIdList);
 
-                            // getTheNumberOfItemSold(
-                            //     start: DateTime.now().subtract(
-                            //         Duration(days: DateTime.now().weekday - 1)));
-
-                            // getThePriceAmountOfItemSold(
-                            //     start: DateTime.now().subtract(
-                            //         Duration(days: DateTime.now().weekday - 1)));
                             currentSaleItemNotifier.value.clear();
                             notifyAnyListeners(currentSaleItemNotifier);
 
@@ -127,15 +120,6 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
                               start: DateTime.now().subtract(
                                   Duration(days: DateTime.now().weekday - 1)));
 
-                          // if (mounted) {
-                          //   Navigator.of(context).pop();
-                          //   CustomSnackBarMessage(
-                          //     context: context,
-                          //     message: 'Sale is added successfully',
-                          //     color: MyColors.green,
-                          //     duration: 2,
-                          //   );
-                          // }
 
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx) =>
@@ -143,7 +127,8 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
                         } else if (currentSaleItemNotifier.value.isEmpty) {
                           CustomSnackBarMessage(
                             context: context,
-                            message: 'Add an item to save',
+                            message:
+                                'No item is selected, please select an item',
                             color: Colors.red,
                           );
                         }
@@ -166,32 +151,13 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
                           title: 'Delete sale',
                           content: 'Are you sure?',
                           onPressedYes: () async {
-                            // final saleLength = widget.customer!.saleId.length;
-                            // final returnedSales =
-                            //     currentSaleItemNotifier.value.where(
-                            //   (saleItem) {
-                            //     return returnItemsListNotifier.value.any(
-                            //       (returnItem) =>
-                            //           returnItem.saleId == saleItem.saleId,
-                            //     );
-                            //   },
-                            // ).toList();
-
-                            // for (var sale in returnItemsListNotifier.value) {
-                            //   // await deleteReturnSaleFromDB(sale.saleId);
-                            //   sale.saleId == returnedSales.
-
-                            // }
-
-                            // for (int i = 0; i < saleLength; i++) {
-                            //   // if(currentSaleItemNotifier.value.)
-                            //   await deleteSaleFromDB(
-                            //       widget.customer!.saleId[i]);
-                            // }
-
-                            // await deleteCustomerFromDB(
-                            //     widget.customer!.customerId!);
-                            // log('Delete is finished');
+                            if (currentSaleItemNotifier.value.isEmpty) {
+                              log('${widget.customer!.customerId}');
+                              await deleteCustomerFromDB(
+                                  widget.customer!.customerId!);
+                            } else {
+                              log("Can't delete customer because there is sales in in the customer sales");
+                            }
 
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/return_fun.dart';
+import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
@@ -19,14 +21,6 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     currentSaleItemNotifier.value.removeWhere(
-      (saleItem) {
-        return returnItemsListNotifier.value.any(
-          (returnItem) => returnItem.saleId == saleItem.saleId,
-        );
-      },
-    );
-   
     return ValueListenableBuilder(
       valueListenable: currentSaleItemNotifier,
       builder: (context, saleItem, child) {
@@ -37,7 +31,6 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final item = getItemFromDB(saleItem[index].itemId);
             final sale = saleItem[index];
-
             // final brand = getItemBrandFromDB(item.brandId);
 
             return Padding(
@@ -99,20 +92,24 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
                                       onPressedYes: () async {
                                         final ReturnSaleModel returnItem =
                                             ReturnSaleModel(
-                                          customerId:
-                                              widget.customer!.customerId!,
-                                          saleId: sale.saleId!,
+                                          customerName:
+                                              widget.customer!.customerName,
+                                          itemId: item.id!,
+                                          quantity: sale.itemCount,
                                           dateTime: DateTime.now(),
                                         );
 
                                         await addReturnItemToDB(returnItem);
 
+                                        //delete sale from details screen and from db
+                                        await deleteSaleFromDB(sale.saleId!,
+                                            widget.customer!.customerId!);
+
+                                        currentSaleItemNotifier.value
+                                            .remove(sale);
+
                                         await getAllReturnedItemFromDb();
 
-                                        // await deleteSaleFromDB(sale.saleId!);
-                                        
-                                        // ignore: use_build_context_synchronously
-                                        Navigator.of(context).pop();
                                         // ignore: use_build_context_synchronously
                                         Navigator.of(context).pop();
                                       },

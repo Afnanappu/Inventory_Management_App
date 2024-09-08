@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_or_edit_new_item_screen.dart';
@@ -47,7 +50,7 @@ class ButtonForAddOrEditItemScreen extends StatelessWidget {
       vPadding: 5,
       color: MyColors.green,
       text: (widget.isAddingItem == true) ? 'Add to items' : 'Save Changes',
-      function: () {
+      function: () async{
         try {
           if (_formKey.currentState!.validate()) {
             if (imageNotifier.value == null) {
@@ -71,13 +74,13 @@ class ButtonForAddOrEditItemScreen extends StatelessWidget {
                 ),
               );
               if (widget.isAddingItem == true) {
-                addItemToDB(item);
+                await addItemToDB(item);
                 CustomSnackBarMessage(
                     context: context,
                     message: 'Item added successfully',
                     color: MyColors.green);
               } else {
-                editItemFromDB(widget.itemModel!.id!, item);
+                await editItemFromDB(widget.itemModel!.id!, item);
                 if (widget.removeBelowRoute == true) {
                   Navigator.of(context)
                       .removeRouteBelow(ModalRoute.of(context)!);
@@ -96,6 +99,7 @@ class ButtonForAddOrEditItemScreen extends StatelessWidget {
               message: 'Error while adding new item',
               color: MyColors.red);
         }
+        notifyAnyListeners(itemFilterListNotifiers);
       },
     );
   }

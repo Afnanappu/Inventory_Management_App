@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_management_app/database/brand_fun.dart';
-import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
@@ -22,10 +20,6 @@ class CustomerListForDashboard extends StatelessWidget {
           itemBuilder: (context, index) {
             final customerRev = customers.reversed.toList();
             final customer = customerRev[index];
-            // final sale =
-            //     getSaleFromDB(customer.saleId.first);
-            // final item = getItemFromDB(sale.itemId);
-            // final brand = getItemBrandFromDB(item.brandId);
             final sumOfSales = getSumOfAllSaleOfOneCustomer(customer.saleId);
             return CustomerListTile(
               customerName: customer.customerName,

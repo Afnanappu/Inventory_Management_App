@@ -4,6 +4,7 @@ import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/widgets/common/buttons.dart';
 
+// ignore: must_be_immutable
 class CustomerListTile extends StatelessWidget {
   final String customerName;
   final String invoiceNo;

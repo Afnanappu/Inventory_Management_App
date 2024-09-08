@@ -1,9 +1,8 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/screens/main_home_screen.dart';
-import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key});
@@ -49,7 +48,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
     if (enteredPassword == password) {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (ctx) =>  MainHomeScreen()));
+          MaterialPageRoute(builder: (ctx) => MainHomeScreen()));
 
       log('Password is correct, Login to the app');
     } else {
@@ -70,11 +69,15 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MyScreenSize.initialize(context);
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: MyScreenSize.screenHeight * 0.15,
+            ),
+            Image.asset('assets/splash logo black.png'),
             const Text('Enter password'),
             const SizedBox(
               height: 15,
@@ -83,11 +86,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 4,
-                (index) => _passwordBox(
-                  _controllers[index],
-                  _focusNodes[index],
-                  index,
-                ),
+                (index) => _passwordBox(_controllers[index], _focusNodes[index],
+                    index, _focusNodes),
               ),
             )
           ],
@@ -95,9 +95,20 @@ class _PasswordScreenState extends State<PasswordScreen> {
       ),
     );
   }
+}
 
-  Widget _passwordBox(
-      TextEditingController controller, FocusNode focusNode, int index) {
+// ignore: camel_case_types
+class _passwordBox extends StatelessWidget {
+  const _passwordBox(
+      this.controller, this.focusNode, this.index, List<FocusNode> focusNodes)
+      : _focusNodes = focusNodes;
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final int index;
+  final List<FocusNode> _focusNodes;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -148,3 +159,53 @@ class _PasswordScreenState extends State<PasswordScreen> {
     );
   }
 }
+
+// TextEditingController controller, FocusNode focusNode, int index
+// Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: SizedBox(
+//         height: 50,
+//         width: 50,
+//         child: TextFormField(
+//           controller: controller,
+//           focusNode: focusNode,
+//           autofocus: true,
+//           canRequestFocus: true,
+//           cursorHeight: 30,
+//           cursorColor: MyColors.blackShade,
+//           cursorRadius: const Radius.circular(30),
+//           keyboardType: TextInputType.number,
+//           textAlign: TextAlign.center,
+//           textAlignVertical: TextAlignVertical.center,
+
+//           // if the user press the backspace and if the field is empty and not fist it will got to one step back
+//           onChanged: (value) {
+//             if (value.isEmpty && index > 0) {
+//               _focusNodes[index - 1].requestFocus();
+//             }
+//           },
+//           maxLength: 1,
+//           decoration: const InputDecoration(
+//             counterText: '',
+//             focusedErrorBorder: OutlineInputBorder(
+//               borderSide: BorderSide(
+//                 color: MyColors.red,
+//               ),
+//               borderRadius: BorderRadius.all(Radius.circular(10)),
+//             ),
+//             focusedBorder: OutlineInputBorder(
+//               borderSide: BorderSide(
+//                 color: Color.fromARGB(255, 39, 170, 61),
+//               ),
+//               borderRadius: BorderRadius.all(Radius.circular(10)),
+//             ),
+//             enabledBorder: OutlineInputBorder(
+//               borderRadius: BorderRadius.all(Radius.circular(10)),
+//             ),
+//             border: OutlineInputBorder(
+//               borderRadius: BorderRadius.all(Radius.circular(10)),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );

@@ -36,6 +36,7 @@ Future<void> addItemToDB(ItemModel item) async {
   await itemBox.put(item.id, item);
 
   await getAllItemFormDB();
+  notifyAnyListeners(itemFilterListNotifiers);
   // print(
   //     'A new item is added to database and the item id = ${item.id} and the brand id is = ${item.brandId} and the length of all item is ${itemBox.values.length}');
 }
@@ -79,6 +80,7 @@ Future<void> editItemFromDB(int itemId, ItemModel item) async {
   await itemBox.put(itemId, item);
 
   await getAllItemFormDB();
+  notifyAnyListeners(itemFilterListNotifiers);
 
   // print('The item in the index $itemId is edited');
 }
@@ -107,6 +109,8 @@ Future<void> decreaseOneItemStockFromDB(int itemId, int quantity) async {
     stock: newStock,
   );
   await itemBox.put(item.id, newItem);
+
+  notifyAnyListeners(itemFilterListNotifiers);
   // print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
 }
 
@@ -128,6 +132,8 @@ Future<void> increaseOneItemStockFromDB(int itemId, int quantity) async {
   );
   await itemBox.put(item.id, newItem);
   log('one item stock increased');
+  getAllItemFormDB();
+  notifyAnyListeners(itemFilterListNotifiers);
   // print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
 }
 

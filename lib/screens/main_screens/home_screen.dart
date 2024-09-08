@@ -39,8 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    MyScreenSize.initialize(context);
-
     return Scaffold(
       //App bar
       appBar: PreferredSize(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
@@ -36,10 +38,28 @@ Future<void> addCustomerToDB(CustomerModel customer) async {
   getAllCustomersFormDB();
 }
 
+Future<void> editCustomerSaleIdFromDB(int customerId, List<int> salesId) async {
+  customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
+  final customer = customerBox.values.firstWhere(
+    (element) => element.customerId == customerId,
+  );
+  final newCustomer = CustomerModel(
+    customerId: customerId,
+    customerName: customer.customerName,
+    customerPhone: customer.customerPhone,
+    saleDateTime: customer.saleDateTime,
+    saleId: salesId,
+  );
+
+  await customerBox.put(customerId, newCustomer);
+  await getAllCustomersFormDB();
+  log('Customer sale list is edited');
+}
+
 Future<void> deleteCustomerFromDB(int customerId) async {
   customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
-  customerBox.delete(customerId);
-  getAllCustomersFormDB();
+  await customerBox.delete(customerId);
+  await getAllCustomersFormDB();
   getTheCurrentDate(CurrentDate.week);
   notifyAnyListeners(priceAmountOfItemSoldListNotifier);
   print(

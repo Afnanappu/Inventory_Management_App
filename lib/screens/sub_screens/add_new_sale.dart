@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/reg_exp_functions.dart';
@@ -15,11 +16,12 @@ import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_it
 
 // ignore: must_be_immutable
 class SaleAddNew extends StatefulWidget {
-  const SaleAddNew(
-      {super.key,
-      this.customer,
-      this.isEditable = false,
-      this.isViewer = false});
+  const SaleAddNew({
+    super.key,
+    this.customer,
+    this.isEditable = false,
+    this.isViewer = false,
+  });
   final CustomerModel? customer;
   final bool isEditable;
   final bool isViewer;
@@ -56,8 +58,15 @@ class _SaleAddNewState extends State<SaleAddNew> {
     super.initState();
   }
 
+  void _deleteCustomerIfSaleIsEmpty() async {
+    if (currentSaleItemNotifier.value.isEmpty) {
+      await deleteCustomerFromDB(widget.customer!.customerId!);
+    }
+  }
+
   @override
   void dispose() {
+    _deleteCustomerIfSaleIsEmpty();
     currentSaleItemNotifier.value.clear();
     totalAmountNotifier.value = 0;
     super.dispose();
@@ -69,7 +78,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
         child: AppBarForSubWithEdit(
-          title: widget.isViewer == false? 'Add Sale' : 'Sale details',
+          title: widget.isViewer == false ? 'Add Sale' : 'Sale details',
           isAddIcon: false,
         ),
       ),
@@ -195,13 +204,13 @@ class _SaleAddNewState extends State<SaleAddNew> {
         ),
       ),
       bottomNavigationBar: ButtonsForAddNewSaleScreen(
-          widget: widget,
-          formKey: _formKey,
-         
-          customerNameController: _customerNameController,
-          customerPhoneController: _customerPhoneController,
-          selectedDate: selectedDate,
-          mounted: mounted,),
+        widget: widget,
+        formKey: _formKey,
+        customerNameController: _customerNameController,
+        customerPhoneController: _customerPhoneController,
+        selectedDate: selectedDate,
+        mounted: mounted,
+      ),
     );
   }
 }

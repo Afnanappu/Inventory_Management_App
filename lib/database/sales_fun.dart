@@ -49,9 +49,12 @@ SaleModel getSaleFromDB(int saleId) {
   return sale;
 }
 
-Future<void> deleteSaleFromDB(int saleId) async {
+Future<void> deleteSaleFromDB(int saleId, int customerId) async {
   salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
   await salesBox.delete(saleId);
+  final customer = getCustomerFromDB(customerId);
+  customer.saleId.remove(saleId);
+  await editCustomerSaleIdFromDB(customerId, customer.saleId);
   getAllSalesFromDB();
   log('Sale of id ' '$saleId' ' is deleted from the DB');
 }

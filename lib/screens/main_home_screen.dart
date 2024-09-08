@@ -5,6 +5,7 @@ import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
 import 'package:inventory_management_app/screens/main_screens/item_screen.dart';
 import 'package:inventory_management_app/widgets/common/bottom_navigation_bar.dart';
 
+// ignore: must_be_immutable
 class MainHomeScreen extends StatefulWidget {
   MainHomeScreen({super.key, this.newIndex});
 

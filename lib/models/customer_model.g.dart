@@ -104,23 +104,26 @@ class ReturnSaleModelAdapter extends TypeAdapter<ReturnSaleModel> {
     };
     return ReturnSaleModel(
       id: fields[0] as int?,
-      customerId: fields[1] as int,
-      saleId: fields[2] as int,
-      dateTime: fields[3] as DateTime,
+      customerName: fields[1] as String,
+      itemId: fields[2] as int,
+      quantity: fields[3] as int,
+      dateTime: fields[4] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, ReturnSaleModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.customerId)
+      ..write(obj.customerName)
       ..writeByte(2)
-      ..write(obj.saleId)
+      ..write(obj.itemId)
       ..writeByte(3)
+      ..write(obj.quantity)
+      ..writeByte(4)
       ..write(obj.dateTime);
   }
 

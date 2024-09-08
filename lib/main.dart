@@ -42,7 +42,7 @@ class InventoryManagementApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  PasswordScreen(),
+      home: const PasswordScreen(),
       routes: {
         "/MainHomeScreen": (ctx) =>  MainHomeScreen(),
         "/NotificationScreen": (ctx) => const NotificationScreen(),

@@ -63,18 +63,22 @@ class ReturnSaleModel {
   int? id;
 
   @HiveField(1)
-  int customerId;
+  String customerName;
 
   @HiveField(2)
-  int saleId;
+  int itemId;
 
   @HiveField(3)
+  int quantity;
+
+  @HiveField(4)
   DateTime dateTime;
 
   ReturnSaleModel({
     this.id,
-    required this.customerId,
-    required this.saleId,
+    required this.customerName,
+    required this.itemId,
+    required this.quantity,
     required this.dateTime,
   });
 }
