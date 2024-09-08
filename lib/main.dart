@@ -43,10 +43,6 @@ class InventoryManagementApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const PasswordScreen(),
-      routes: {
-        "/MainHomeScreen": (ctx) =>  MainHomeScreen(),
-        "/NotificationScreen": (ctx) => const NotificationScreen(),
-      },
       theme: ThemeData(
         iconTheme: const IconThemeData(color: MyColors.blackShade),
         scaffoldBackgroundColor: MyColors.white,

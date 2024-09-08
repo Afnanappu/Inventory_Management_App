@@ -7,6 +7,7 @@ import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
+import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/customer_list_for_dashboard.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/resent_sale_for_dashboard.dart';
@@ -52,7 +53,11 @@ class DashboardScreen extends StatelessWidget {
         child: AppBarForMain(
             title: HomeScreen.profileName,
             onPressed: () {
-              Navigator.of(context).pushNamed("/NotificationScreen");
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const NotificationScreen(),
+                ),
+              );
             }),
       ),
       body: CustomScrollView(

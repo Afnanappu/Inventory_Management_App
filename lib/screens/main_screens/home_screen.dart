@@ -4,6 +4,7 @@ import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
+import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/brand_items.dart';
 import 'package:inventory_management_app/widgets/common/floating_action_button.dart';
@@ -46,7 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: AppBarForMain(
             title: HomeScreen.profileName,
             onPressed: () {
-              Navigator.of(context).pushNamed("/NotificationScreen");
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const NotificationScreen(),
+                ),
+              );
             }),
       ),
 
@@ -57,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
           slivers: [
             //Search bar
             SliverToBoxAdapter(child: SearchBarForMain()),
-            
+
             //Brand items
             SliverToBoxAdapter(child: BrandItemsForHome()),
 

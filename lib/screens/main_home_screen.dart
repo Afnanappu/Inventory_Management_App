@@ -7,9 +7,9 @@ import 'package:inventory_management_app/widgets/common/bottom_navigation_bar.da
 
 // ignore: must_be_immutable
 class MainHomeScreen extends StatefulWidget {
-  MainHomeScreen({super.key, this.newIndex});
+  const MainHomeScreen({super.key});
 
-  int? newIndex;
+
   @override
   State<MainHomeScreen> createState() => _MainHomeScreenState();
 }
