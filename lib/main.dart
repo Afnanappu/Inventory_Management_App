@@ -1,15 +1,46 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/first_screens/password_screen.dart';
-import 'package:inventory_management_app/screens/main_home_screen.dart';
-import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 void main() async {
+  Future<void> onDidReceiveNotificationResponse(
+      int id, String? title, String? body, String? payload) async {
+    // id = 0;
+    // title = 'Notification for IOS';
+    // body = 'This is a sample notification for IOS devices';
+    // payload = "I don't know what is this payload";
+    log('iOS Notification: $title, $body, $payload');
+  }
+
+  Future<void> onSelectNotification(NotificationResponse response) async {
+    // Handle notification tap
+    print('Notification clicked with payload: ${response.payload}');
+  }
+
+  var initializationSettingsAndroid =
+      const AndroidInitializationSettings('assets/app/appstore.png');
+  var initializationSettingsIOS = DarwinInitializationSettings(
+      onDidReceiveLocalNotification: onDidReceiveNotificationResponse);
+  var initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: onSelectNotification,
+  );
+
+  
+
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(ProfileModelAdapter().typeId)) {
