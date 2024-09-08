@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
-import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/database/return_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
