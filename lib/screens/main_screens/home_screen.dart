@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (ctx) => const NotificationScreen(),
+                  builder: (ctx) =>  NotificationScreen(),
                 ),
               );
             }),

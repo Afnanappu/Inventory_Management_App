@@ -145,11 +145,29 @@ void getTheFilterItem({int? limit, bool? isLess = true}) {
               isLess == true ? element.stock < limit : element.stock > limit,
         )
         .toList();
+    if (limit == 0 && isLess == false) {
+      outOfStockListNotifiers.value = itemFilterListNotifiers.value
+          .map(
+            (e) => e,
+          )
+          .toList();
+    }
   } else {
     itemFilterListNotifiers.value = itemModelListNotifiers.value;
     // print('filter is worked');
   }
   notifyAnyListeners(itemFilterListNotifiers);
+}
+
+Future<List<ItemModel>> getTheOutOfStockItems([int? outOfStockLimit]) async {
+  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
+  return itemBox.values.where(
+    (element) => outOfStockLimit == null
+        ? element.stock == 0
+        : element.stock <= outOfStockLimit,
+  ).toList();
+
+  
 }
 
 void getTheItemFilteredByRange(double? start, double? end) {

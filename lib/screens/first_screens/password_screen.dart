@@ -48,7 +48,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
     if (enteredPassword == password) {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (ctx) => MainHomeScreen()));
+          MaterialPageRoute(builder: (ctx) => const MainHomeScreen()));
 
       log('Password is correct, Login to the app');
     } else {

@@ -12,12 +12,13 @@ import 'package:inventory_management_app/widgets/common/popup_icon_button_for_al
 class ItemListTile extends StatelessWidget {
   final int index;
   final ItemModel itemModel;
-  // ignore: avoid_annotating_with_dynamic
+  final void Function()? onTap;
 
   const ItemListTile({
     super.key,
     required this.index,
     required this.itemModel,
+    this.onTap,
   });
 
   @override
@@ -30,6 +31,7 @@ class ItemListTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: ListTile(
+          onTap: onTap,
           leading: Image.file(
             File(itemModel.itemImage),
           ),

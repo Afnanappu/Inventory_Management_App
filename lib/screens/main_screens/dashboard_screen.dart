@@ -54,8 +54,8 @@ class DashboardScreen extends StatelessWidget {
             title: HomeScreen.profileName,
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const NotificationScreen(),
+                MaterialPageRoute( 
+                  builder: (ctx) =>  NotificationScreen(),
                 ),
               );
             }),

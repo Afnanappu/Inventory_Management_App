@@ -1,5 +1,6 @@
 import 'dart:developer';
-
+import 'package:inventory_management_app/functions/notification_functions.dart';
+import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,6 +14,8 @@ import 'package:inventory_management_app/screens/first_screens/password_screen.d
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   Future<void> onDidReceiveNotificationResponse(
       int id, String? title, String? body, String? payload) async {
     // id = 0;
@@ -27,21 +30,27 @@ void main() async {
     print('Notification clicked with payload: ${response.payload}');
   }
 
+  await requestExactAlarmPermission();
+
   var initializationSettingsAndroid =
-      const AndroidInitializationSettings('assets/app/appstore.png');
+      const AndroidInitializationSettings("@mipmap/app_icon");
   var initializationSettingsIOS = DarwinInitializationSettings(
       onDidReceiveLocalNotification: onDidReceiveNotificationResponse);
   var initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+  tz_data.initializeTimeZones();
+
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
 
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onDidReceiveNotificationResponse: onSelectNotification,
   );
 
-  
-
-  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(ProfileModelAdapter().typeId)) {
     Hive.registerAdapter(ProfileModelAdapter());
@@ -61,9 +70,10 @@ void main() async {
   if (!Hive.isAdapterRegistered(ReturnSaleModelAdapter().typeId)) {
     Hive.registerAdapter(ReturnSaleModelAdapter());
   }
-  //todo:add return sale model hive registration
 
   runApp(const InventoryManagementApp());
+
+  checkOutOfStockItem();
 }
 
 class InventoryManagementApp extends StatelessWidget {
