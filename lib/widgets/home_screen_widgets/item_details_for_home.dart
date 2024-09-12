@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
@@ -66,8 +68,9 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                           ),
                         )
                       : SliverPadding(
-                        padding: EdgeInsets.only(bottom: MyScreenSize.screenHeight * 0.1),
-                        sliver: SliverGrid.builder(
+                          padding: EdgeInsets.only(
+                              bottom: MyScreenSize.screenHeight * 0.1),
+                          sliver: SliverGrid.builder(
                             itemCount: itemModelList.length,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
@@ -97,14 +100,17 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                                         width: MyScreenSize.screenWidth * 0.37,
                                         decoration: BoxDecoration(
                                           color: MyColors.lightGrey,
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(13),
-                                          child: Image.file(
-                                            File(itemModel.itemImage),
-                                            fit: BoxFit.contain,
-                                          ),
+                                          child: !kIsWeb
+                                              ? Image.file(
+                                                  File(itemModel.itemImage),fit: BoxFit.contain,
+                                                )
+                                              : Image.memory(base64Decode(
+                                                  itemModel.itemImage)),
                                         ),
                                       ),
                                     ),
@@ -123,7 +129,7 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                               );
                             },
                           ),
-                      ),
+                        ),
             );
           }
         });

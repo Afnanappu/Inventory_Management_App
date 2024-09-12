@@ -1,5 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
@@ -15,6 +18,7 @@ class ButtonForAddOrEditItemScreen extends StatelessWidget {
     required this.widget,
     required GlobalKey<FormState> formKey,
     required this.imageNotifier,
+    required this.webImageNotifier,
     required this.nowBrandId,
     required TextEditingController itemNameController,
     required TextEditingController itemPriceController,
@@ -35,6 +39,7 @@ class ButtonForAddOrEditItemScreen extends StatelessWidget {
   final ItemAddNew widget;
   final GlobalKey<FormState> _formKey;
   final ValueNotifier<String?> imageNotifier;
+  final ValueNotifier<Uint8List?> webImageNotifier;
   final int? nowBrandId;
   final TextEditingController _itemNameController;
   final TextEditingController _itemPriceController;
@@ -50,20 +55,27 @@ class ButtonForAddOrEditItemScreen extends StatelessWidget {
       vPadding: 5,
       color: MyColors.green,
       text: (widget.isAddingItem == true) ? 'Add to items' : 'Save Changes',
-      function: () async{
+      function: () async {
         try {
           if (_formKey.currentState!.validate()) {
-            if (imageNotifier.value == null) {
+            if ((kIsWeb && webImageNotifier.value == null) ||
+                (!kIsWeb && imageNotifier.value == null)) {
               CustomSnackBarMessage(
                   context: context,
                   message: 'Image is not added, please add image!',
                   color: MyColors.red);
             } else {
+              final String image;
+              if (kIsWeb) {
+                image = base64Encode(webImageNotifier.value!);
+              } else {
+                image = imageNotifier.value!;
+              }
               final item = ItemModel(
                 id: (widget.itemModel != null) ? widget.itemModel!.id! : null,
                 brandId: nowBrandId!,
                 itemName: _itemNameController.text.trim(),
-                itemImage: imageNotifier.value!,
+                itemImage: image,
                 itemPrice: double.parse(_itemPriceController.text.trim()),
                 color: [..._itemColorController.text.trim().split(',')],
                 ram: [..._itemRamController.text.trim().split(',')],

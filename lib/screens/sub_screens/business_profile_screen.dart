@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
@@ -17,7 +19,6 @@ class AccountProfile extends StatefulWidget {
 }
 
 class _AccountProfileState extends State<AccountProfile> {
-
   final _formKey = GlobalKey<FormState>();
 
   final _businessName = TextEditingController();
@@ -28,6 +29,7 @@ class _AccountProfileState extends State<AccountProfile> {
 
   bool isEditable = false;
   String? image;
+  Uint8List? webImage;
   ProfileModel? profile;
 
   @override
@@ -43,7 +45,11 @@ class _AccountProfileState extends State<AccountProfile> {
       _phoneNo.text = profile!.phone ?? 'not found';
       _email.text = profile!.email ?? 'not found';
       _address.text = profile!.address ?? 'not found';
-      image = profile!.image;
+      if (!kIsWeb) {
+        image = profile!.image;
+      } else {
+        webImage = base64Decode(profile!.image!);
+      }
     }
 
     setState(() {});
@@ -51,7 +57,6 @@ class _AccountProfileState extends State<AccountProfile> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -76,18 +81,21 @@ class _AccountProfileState extends State<AccountProfile> {
                   GestureDetector(
                     onTap: () async {
                       if (isEditable == true) {
-                        await pickImageFromFile().then(
-                          (value) {
-                            image = value;
-                          },
-                        );
+                        if (!kIsWeb) {
+                          image = await pickImageFromFile();
+                        } else {
+                          webImage = await pickImageFromWeb();
+                        }
                         setState(() {});
                       }
                     },
                     child: CircleAvatar(
                       backgroundColor: MyColors.lightGrey,
-                      backgroundImage:
-                          (image != null) ? FileImage(File(image!)) : null,
+                      backgroundImage: (image != null)
+                          ? FileImage(File(image!))
+                          : (webImage != null)
+                              ? MemoryImage(webImage!)
+                              : null,
                       radius: 76,
                       child: (image == null)
                           ? const Text(
@@ -171,7 +179,7 @@ class _AccountProfileState extends State<AccountProfile> {
                                 image: image,
                               );
                               updateProfile(profile);
-                             
+
                               setState(() {
                                 isEditable = false;
                               });

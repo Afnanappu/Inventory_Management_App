@@ -13,7 +13,6 @@ late Box<ItemBrandModel> brandBox;
 //Function to get all item brand from database and added to itemBrandListNotifiers.
 Future<void> getAllItemBrandFromDB() async {
   brandBox = await Hive.openBox<ItemBrandModel>(BRAND_BOX);
-  itemBrandListNotifiers.value.clear();
   itemBrandListNotifiers.value =
       brandBox.values.cast<ItemBrandModel>().toList();
   // brandBox.clear();

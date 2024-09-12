@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
@@ -38,10 +40,12 @@ class SaleListTile extends StatelessWidget {
         ),
         child: ListTile(
           onTap: onTap,
-          leading: Image.file(
-            File(image),
-            fit: BoxFit.contain,
-          ),
+          leading: !kIsWeb
+              ? Image.file(
+                  File(image),
+                  fit: BoxFit.contain,
+                )
+              : Image.memory(base64Decode(image)),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -89,26 +93,26 @@ class SaleListTile extends StatelessWidget {
                   ValueListenableBuilder(
                     valueListenable: isSaleNotifier,
                     builder: (context, value, child) => MyCustomButton(
-                      color: value == true
-                          ? const Color.fromARGB(146, 154, 255, 170)
-                          : const Color.fromARGB(146, 255, 154, 154),
-                      text: value == true ? 'SALE' : 'RETURNED',
-                      isSale: isSaleNotifier.value,
-                      onTap: () {} 
-                      // customAlertBox(
-                      //   content: 'Are you sure?',
-                      //   context: context,
-                      //   title: value == true ? 'Return item' : 'Change to sale',
-                      //   //todo: add return function
-                      //   onPressedYes: () {
-                      //     isSaleNotifier.value == true
-                      //         ? isSaleNotifier.value = false
-                      //         : isSaleNotifier.value = true;
-                      //     print('Item is ${isSaleNotifier.value}');
-                      //     Navigator.of(context).pop();
-                      //   },
-                      // ),
-                    ),
+                        color: value == true
+                            ? const Color.fromARGB(146, 154, 255, 170)
+                            : const Color.fromARGB(146, 255, 154, 154),
+                        text: value == true ? 'SALE' : 'RETURNED',
+                        isSale: isSaleNotifier.value,
+                        onTap: () {}
+                        // customAlertBox(
+                        //   content: 'Are you sure?',
+                        //   context: context,
+                        //   title: value == true ? 'Return item' : 'Change to sale',
+                        //   //todo: add return function
+                        //   onPressedYes: () {
+                        //     isSaleNotifier.value == true
+                        //         ? isSaleNotifier.value = false
+                        //         : isSaleNotifier.value = true;
+                        //     print('Item is ${isSaleNotifier.value}');
+                        //     Navigator.of(context).pop();
+                        //   },
+                        // ),
+                        ),
                   )
                 ],
               ),

@@ -24,7 +24,7 @@ void getTheCurrentDate(CurrentDate currentDate) {
       print('This month');
 
     case CurrentDate.year:
-      startDate =getTheCurrentDateStartOrEnd(currentDate: CurrentDate.year);
+      startDate = getTheCurrentDateStartOrEnd(currentDate: CurrentDate.year);
       print('This year');
     default:
       print('Nothing worked in getTheCurrentDate()');
@@ -40,7 +40,7 @@ Future<DateTime?> pickDateFromUser(
     context: context,
     initialDate: initialDate ??= DateTime.now(),
     firstDate: DateTime(2000),
-    lastDate: DateTime(2050),
+    lastDate: DateTime.now(),
   );
 
   return pickedDate;

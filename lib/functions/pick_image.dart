@@ -1,9 +1,12 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<String> pickImageFromFile() async {
+  log('Image is picked from mobile');
   // ignore: invalid_use_of_visible_for_testing_member
   final path = await ImagePicker().pickImage(source: ImageSource.gallery);
 
@@ -30,4 +33,18 @@ Future<File> _saveToAppDir(XFile imgPath) async {
   }
 
   return File(imgPath.path).copy(newImage.path);
+}
+
+Future<Uint8List?> pickImageFromWeb() async {
+  log('Image is picked form Web');
+  // ignore: invalid_use_of_visible_for_testing_member
+  final path = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+  if (path != null) {
+    final imageByte = await path.readAsBytes();
+    log('Image is converted to Bytes and returning');
+    return imageByte;
+  } else {
+    log('Image is null');
+  }
 }

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
@@ -32,9 +34,11 @@ class ItemListTile extends StatelessWidget {
         ),
         child: ListTile(
           onTap: onTap,
-          leading: Image.file(
-            File(itemModel.itemImage),
-          ),
+          leading: !kIsWeb
+              ? Image.file(
+                  File(itemModel.itemImage),
+                )
+              : Image.memory(base64Decode(itemModel.itemImage)),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

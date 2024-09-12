@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/screens/sub_screens/brands_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/business_profile_screen.dart';
-import 'package:inventory_management_app/screens/sub_screens/purchse_screen.dart';
+import 'package:inventory_management_app/screens/sub_screens/purchase_screen.dart';
 import 'package:inventory_management_app/widgets/common/alert_dialog.dart';
 import 'package:inventory_management_app/widgets/account_screen_widgets/bottom_sheet_for_help_and_support.dart';
 import 'package:inventory_management_app/widgets/account_screen_widgets/list_tile.dart';
@@ -34,16 +34,16 @@ class AllListTileForAccountScreen extends StatelessWidget {
             );
           },
         ),
-        // myListTile(
-        //   context: context,
-        //   title: 'Purchases',
-        //   icon: Icons.shopping_cart_outlined,
-        //   onTap: () {
-        //     Navigator.of(context).push(
-        //       MaterialPageRoute(builder: (ctx) => const PurchseScreen()),
-        //     );
-        //   },
-        // ),
+        myListTile(
+          context: context,
+          title: 'Purchases',
+          icon: Icons.shopping_cart_outlined,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (ctx) => const PurchaseScreen()),
+            );
+          },
+        ),
         myListTile(
           context: context,
           title: 'Help & Support',

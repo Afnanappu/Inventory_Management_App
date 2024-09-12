@@ -72,90 +72,98 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        (widget.isViewer == true)
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  MyCustomButton(
-                                    color: MyColors.red,
-                                    haveBgColor: false,
-                                    text: 'RETURN',
-                                    isSale: false,
-                                    onTap: () => customAlertBox(
-                                      content: 'Are you sure?',
+                        if (widget.isViewer == true)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              MyCustomButton(
+                                color: MyColors.red,
+                                haveBgColor: false,
+                                text: 'RETURN',
+                                isSale: false,
+                                onTap: () => customAlertBox(
+                                  content: 'Are you sure?',
 
-                                      context: context,
-                                      title: 'Return item',
+                                  context: context,
+                                  title: 'Return item',
 
-                                      //todo: add return function
-                                      onPressedYes: () async {
-                                        final ReturnSaleModel returnItem =
-                                            ReturnSaleModel(
-                                          customerName:
-                                              widget.customer!.customerName,
-                                          itemId: item.id!,
-                                          quantity: sale.itemCount,
-                                          dateTime: DateTime.now(),
-                                        );
+                                  //todo: add return function
+                                  onPressedYes: () async {
+                                    final ReturnSaleModel returnItem =
+                                        ReturnSaleModel(
+                                      customerName:
+                                          widget.customer!.customerName,
+                                      itemId: item.id!,
+                                      quantity: sale.itemCount,
+                                      dateTime: DateTime.now(),
+                                    );
 
-                                        await addReturnItemToDB(returnItem);
+                                    await addReturnItemToDB(returnItem);
 
-                                        //delete sale from details screen and from db
-                                        await deleteSaleFromDB(sale.saleId!,
-                                            widget.customer!.customerId!);
+                                    //delete sale from details screen and from db
+                                    await deleteSaleFromDB(sale.saleId!,
+                                        widget.customer!.customerId!);
 
-                                        currentSaleItemNotifier.value
-                                            .remove(sale);
+                                    currentSaleItemNotifier.value.remove(sale);
 
-                                        await getAllReturnedItemFromDb();
+                                    await getAllReturnedItemFromDb();
 
-                                        // ignore: use_build_context_synchronously
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : const SizedBox(),
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.of(context).pop();
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
-                  (!widget.isViewer)
-                      ? FractionalTranslation(
-                          translation: const Offset(0.06, -0.45),
-                          child: Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('Remove selected item'),
-                                      content: const Text('Are you sure?'),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              currentSaleItemNotifier.value
-                                                  .removeAt(index);
-                                              notifyAnyListeners(
-                                                currentSaleItemNotifier,
-                                              );
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('Yes')),
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('No'))
-                                      ],
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.close),
-                              )),
-                        )
-                      : const SizedBox(),
+                  if (!widget.isViewer)
+                    FractionalTranslation(
+                      translation: const Offset(0.06, -0.45),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Remove selected item'),
+                                content: const Text('Are you sure?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      final sale = currentSaleItemNotifier.value
+                                          .removeAt(index);
+
+                                      final item = getItemFromDB(sale.itemId);
+
+                                      totalAmountNotifier.value -
+                                          (item.itemPrice * sale.itemCount);
+
+                                      notifyAnyListeners(
+                                        currentSaleItemNotifier,
+                                      );
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Yes'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('No'),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.close),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             );

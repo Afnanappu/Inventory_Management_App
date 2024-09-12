@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:inventory_management_app/constants/colors.dart';
@@ -81,33 +82,38 @@ tz.TZDateTime _nextMondayScheduledDateTime() {
 }
 
 void checkOutOfStockItem() async {
-  await requestExactAlarmPermission();
-  outOfStockListNotifiers.value = await getTheOutOfStockItems();
+  if (!kIsWeb) {
+    await requestExactAlarmPermission();
+    outOfStockListNotifiers.value = await getTheOutOfStockItems();
 
-  if (outOfStockListNotifiers.value.isNotEmpty) {
-    // scheduleWeeklyNotification(outOfStockListNotifiers.value.length);
-    showNotification(outOfStockItemCount: outOfStockListNotifiers.value.length);
-    log('out of stock item is there in the inventory');
+    if (outOfStockListNotifiers.value.isNotEmpty) {
+      // scheduleWeeklyNotification(outOfStockListNotifiers.value.length);
+      showNotification(
+          outOfStockItemCount: outOfStockListNotifiers.value.length);
+      log('out of stock item is there in the inventory');
+    }
   }
 }
 
 Future<void> requestExactAlarmPermission() async {
-  if (await Permission.scheduleExactAlarm.isDenied) {
-    // Request the permission
-    PermissionStatus status = await Permission.scheduleExactAlarm.request();
+  if (!kIsWeb) {
+    if (await Permission.scheduleExactAlarm.isDenied) {
+      // Request the permission
+      PermissionStatus status = await Permission.scheduleExactAlarm.request();
 
-    if (status.isGranted) {
-      log('Exact alarm permission granted');
+      if (status.isGranted) {
+        log('Exact alarm permission granted');
+      } else {
+        log('Exact alarm permission denied');
+        // You might want to guide the user to settings
+        // await openAppSettings(); // Optional: Open settings to allow user to manually enable
+      }
+      if (status.isDenied) {
+        await openAppSettings();
+      }
     } else {
-      log('Exact alarm permission denied');
-      // You might want to guide the user to settings
-      // await openAppSettings(); // Optional: Open settings to allow user to manually enable
+      log('Exact alarm permission already granted');
     }
-    if (status.isDenied) {
-      await openAppSettings();
-    }
-  } else {
-    log('Exact alarm permission already granted');
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/item_model.dart';
@@ -40,6 +41,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
   final _formKey = GlobalKey<FormState>();
 
   ValueNotifier<String?> imageNotifier = ValueNotifier(null);
+  ValueNotifier<Uint8List?> webImageNotifier = ValueNotifier(null);
 
   int? nowBrandId;
 
@@ -81,6 +83,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                 children: [
                   AddItemImageForAddOrEditItemScreen(
                     imageNotifier: imageNotifier,
+                    webImageNotifier: webImageNotifier,
                   ),
 
                   //Item name
@@ -231,6 +234,7 @@ class _ItemAddNewState extends State<ItemAddNew> {
                     widget: widget,
                     formKey: _formKey,
                     imageNotifier: imageNotifier,
+                    webImageNotifier: webImageNotifier,
                     nowBrandId: nowBrandId,
                     itemNameController: _itemNameController,
                     itemPriceController: _itemPriceController,

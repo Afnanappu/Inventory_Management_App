@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
-import 'package:inventory_management_app/functions/notification_functions.dart';
 import 'package:inventory_management_app/models/item_model.dart';
-import 'package:inventory_management_app/widgets/item_screen_widgets/item_list_tile.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -52,7 +50,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 243, 243, 243),
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 color: Colors.black12,
                                 spreadRadius: 1,
@@ -60,7 +58,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               )
                             ]),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'Alert: Out of stock!',
                             style: MyFontStyle.mediumBlackShade,
                           ),

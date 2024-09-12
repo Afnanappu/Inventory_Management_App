@@ -72,7 +72,7 @@ void main() async {
   }
 
   runApp(const InventoryManagementApp());
-
+  
   checkOutOfStockItem();
 }
 

@@ -55,7 +55,7 @@ class DashboardScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute( 
-                  builder: (ctx) =>  NotificationScreen(),
+                  builder: (ctx) =>  const NotificationScreen(),
                 ),
               );
             }),

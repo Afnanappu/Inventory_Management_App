@@ -21,11 +21,14 @@ class AppBarForAccountScreen extends StatelessWidget {
           content: 'Are you sure?',
           onPressedYes: () {
             CustomSnackBarMessage(
-                context: context,
-                message: 'Log out completed successfully',
-                color: Colors.blue);
+              context: context,
+              message: 'Log out completed successfully',
+              color: Colors.blue,
+            );
             Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (ctx) => const PasswordScreen()),
+              MaterialPageRoute(
+                builder: (ctx) => const PasswordScreen(),
+              ),
               (route) => false,
             );
           },

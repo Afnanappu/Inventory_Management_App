@@ -4,6 +4,8 @@ import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
+import 'package:inventory_management_app/models/purchase_model.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_purchase.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/button_add_sale.dart';
@@ -13,7 +15,8 @@ import 'package:inventory_management_app/functions/extension_methods.dart';
 
 class AddNewItemInSale extends StatefulWidget {
   final ItemModel? itemModel;
-  const AddNewItemInSale({super.key, this.itemModel});
+  final bool isPurchase;
+  const AddNewItemInSale({super.key, this.itemModel, this.isPurchase = false});
 
   @override
   State<AddNewItemInSale> createState() => _AddNewItemInSaleState();
@@ -49,7 +52,8 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
         child: AppBarForSubWithEdit(
-          title: 'Add item to Sale',
+          title:
+              'Add item to ${widget.isPurchase == false ? 'Sale' : 'Purchase'}',
           isAddIcon: false,
         ),
       ),
@@ -178,10 +182,19 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                     if (_formKey.currentState!.validate()) {
                       final itemCount = _itemStockController.text.parseInt();
                       final itemPrice = _itemPriceController.text.parseDouble();
-                      final sale =
-                          SaleModel(itemId: item!.id!, itemCount: itemCount);
-                      currentSaleItemNotifier.value.add(sale);
-                      notifyAnyListeners(currentSaleItemNotifier);
+
+                      if (widget.isPurchase == false) {
+                        final sale =
+                            SaleModel(itemId: item!.id!, itemCount: itemCount);
+                        currentSaleItemNotifier.value.add(sale);
+                        notifyAnyListeners(currentSaleItemNotifier);
+                      } else {
+                        final purchase = PurchaseItemModel(
+                            itemId: item!.id!, quantity: itemCount);
+                        currentPurchaseListNotifier.value.add(purchase);
+                        notifyAnyListeners(currentPurchaseListNotifier);
+
+                      }
                       final sum = itemCount.toDouble() * itemPrice!;
                       totalAmountNotifier.value += sum;
                       Navigator.of(context).pop();

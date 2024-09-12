@@ -1,77 +1,40 @@
-// ignore_for_file: use_build_context_synchronously
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/database/customer_fun.dart';
-import 'package:inventory_management_app/database/sales_fun.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
+import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/functions/reg_exp_functions.dart';
-import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/models/item_model.dart';
+import 'package:inventory_management_app/models/purchase_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
-import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';
-import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item_screen_widgets/buttons_for_add_new_sale_screen.dart';
-import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item_screen_widgets/current_sale_item_list_for_sale_screen.dart';
+import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/return_list_tile.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item_screen_widgets/total_amount_section_for_sale_add_item_screen.dart';
 
-// ignore: must_be_immutable
-class SaleAddNew extends StatefulWidget {
-  const SaleAddNew({
-    super.key,
-    this.customer,
-    this.isEditable = false,
-    this.isViewer = false,
-  });
-  final CustomerModel? customer;
-  final bool isEditable;
-  final bool isViewer;
-
+class AddNewPurchaseScreen extends StatefulWidget {
+  const AddNewPurchaseScreen({super.key});
 
   @override
-  State<SaleAddNew> createState() => _SaleAddNewState();
+  State<AddNewPurchaseScreen> createState() => _AddNewPurchaseScreenState();
 }
 
-ValueNotifier<double> totalAmountNotifier = ValueNotifier(0);
+final ValueNotifier<List<PurchaseItemModel>> currentPurchaseListNotifier =
+    ValueNotifier([]);
 
-class _SaleAddNewState extends State<SaleAddNew> {
-  final _customerNameController = TextEditingController();
-
-  final _customerPhoneController = TextEditingController();
-
+class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  final TextEditingController _purchaserNameController =
+      TextEditingController();
+  final TextEditingController _purchaserPhoneController =
+      TextEditingController();
+
   DateTime selectedDate = DateTime.now();
-
-  @override
-  void initState() {
-    if (widget.customer != null) {
-      _customerNameController.text = widget.customer!.customerName;
-      _customerPhoneController.text = widget.customer!.customerPhone;
-      selectedDate = widget.customer!.saleDateTime;
-      currentSaleItemNotifier.value = widget.customer!.saleId
-          .map(
-            (e) => getSaleFromDB(e),
-          )
-          .toList();
-      totalAmountNotifier.value =
-          getSumOfAllSaleOfOneCustomer(widget.customer!.saleId);
-    }
-    super.initState();
-  }
-
-  void _deleteCustomerIfSaleIsEmpty() async {
-    if (currentSaleItemNotifier.value.isEmpty) {
-      await deleteCustomerFromDB(widget.customer!.customerId!);
-    }
-  }
-
-  @override
-  void dispose() {
-    _deleteCustomerIfSaleIsEmpty();
-    currentSaleItemNotifier.value.clear();
-    totalAmountNotifier.value = 0;
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +42,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
         child: AppBarForSubWithEdit(
-          title: widget.isViewer == false ? 'Add Sale' : 'Sale details',
+          title: 'Add Purchase',
           isAddIcon: false,
         ),
       ),
@@ -100,7 +63,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text('Invoice No.'),
-                          Text('${customerListNotifier.value.length}'),
+                          Text('${purchasedItemListNotifier.value.length + 1}'),
                         ],
                       ),
                     ),
@@ -108,21 +71,21 @@ class _SaleAddNewState extends State<SaleAddNew> {
 
                   //DatePick
                   Expanded(
-                    child: SizedBox(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: SizedBox(
                         child: InkWell(
                           onTap: () async {
-                            if (!widget.isViewer) {
-                              DateTime? pickedDate =
-                                  await pickDateFromUser(context: context);
+                            DateTime? pickedDate =
+                                await pickDateFromUser(context: context);
 
-                              setState(() {
+                            setState(
+                              () {
                                 if (pickedDate != null) {
                                   selectedDate = pickedDate;
                                 }
-                              });
-                            }
+                              },
+                            );
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,11 +107,10 @@ class _SaleAddNewState extends State<SaleAddNew> {
               ),
               customFormField(
                 context: context,
-                labelText: 'Customer name',
+                labelText: 'Party name',
                 haveBorder: true,
-                controller: _customerNameController,
+                controller: _purchaserNameController,
                 formFillColor: MyColors.white,
-                isFormEnabled: !widget.isViewer,
                 validator: (value) {
                   if (value == null || CustomRegExp.checkEmptySpaces(value)) {
                     return 'Customer name is empty';
@@ -163,8 +125,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 context: context,
                 labelText: 'Phone no',
                 haveBorder: true,
-                isFormEnabled: !widget.isViewer,
-                controller: _customerPhoneController,
+                controller: _purchaserPhoneController,
                 keyboardType: TextInputType.phone,
                 formFillColor: MyColors.white,
                 validator: (value) {
@@ -182,18 +143,43 @@ class _SaleAddNewState extends State<SaleAddNew> {
                 },
               ),
 
-              //sale added list
-              CurrentSaleItemListForSaleScreen(widget: widget),
+              //purchase added list
+
+              ValueListenableBuilder(
+                valueListenable: currentPurchaseListNotifier,
+                builder: (BuildContext context, List<PurchaseItemModel> value,
+                    Widget? child) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: value.length,
+                    itemBuilder: (context, index) {
+                      final purchase = getItemFromDB(value[index].itemId);
+                      final brand = getItemBrandFromDB(purchase.brandId);
+                      return SaleListTile(
+                        image: purchase.itemImage,
+                        customerName: purchase.itemName,
+                        invoiceNo: '${index + 1}',
+                        brandName: brand.itemBrandName,
+                        itemPrice: formatMoney(number: purchase.itemPrice),
+                        saleAddDate: DateTime.now(),
+                        onTap: () {},
+                      );
+                    },
+                  );
+                },
+              ),
 
               //add new item to sale
-              (!widget.isViewer)
-                  ? saleAddItem(onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (ctx) => const AddNewItemInSale()),
-                      );
-                    })
-                  : const SizedBox(),
+
+              saleAddItem(onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (ctx) => const AddNewItemInSale(
+                            isPurchase: true,
+                          )),
+                );
+              }),
+
               const SizedBox(
                 height: 15,
               ),
@@ -203,14 +189,6 @@ class _SaleAddNewState extends State<SaleAddNew> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: ButtonsForAddNewSaleScreen(
-        widget: widget,
-        formKey: _formKey,
-        customerNameController: _customerNameController,
-        customerPhoneController: _customerPhoneController,
-        selectedDate: selectedDate,
-        mounted: mounted,
       ),
     );
   }

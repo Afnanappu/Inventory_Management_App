@@ -137,52 +137,11 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
                   ),
                 ],
               )
-            : Row(
-                children: [
-                  Expanded(
-                    child: buttonAddSale(
-                      btnColor: MyColors.white,
-                      haveBorder: true,
-                      text: 'delete',
-                      onTap: () {
-                        log('Delete button is pressed');
-                        customAlertBox(
-                          context: context,
-                          title: 'Delete sale',
-                          content: 'Are you sure?',
-                          onPressedYes: () async {
-                            if (currentSaleItemNotifier.value.isEmpty) {
-                              log('${widget.customer!.customerId}');
-                              await deleteCustomerFromDB(
-                                  widget.customer!.customerId!);
-                            } else {
-                              log("Can't delete customer because there is sales in in the customer sales");
-                            }
-
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: buttonAddSale(
-                      text: 'Ok',
-                      onTap: () async {
-                        // Navigator.of(context).pushReplacement(
-                        //   MaterialPageRoute(
-                        //     builder: (context) => SaleAddNew(
-                        //       customer: widget.customer,
-                        //       isEditable: true,
-                        //     ),
-                        //   ),
-                        // );
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                ],
-              ));
+            : buttonAddSale(
+              text: 'Ok',
+              onTap: () async {
+                Navigator.of(context).pop();
+              },
+            ));
   }
 }
