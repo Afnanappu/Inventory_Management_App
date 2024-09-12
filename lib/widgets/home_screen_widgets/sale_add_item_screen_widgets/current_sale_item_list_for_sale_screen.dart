@@ -140,7 +140,7 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
 
                                       final item = getItemFromDB(sale.itemId);
 
-                                      totalAmountNotifier.value -
+                                      totalAmountNotifier.value = totalAmountNotifier.value -
                                           (item.itemPrice * sale.itemCount);
 
                                       notifyAnyListeners(

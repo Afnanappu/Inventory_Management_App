@@ -125,7 +125,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                           return "add quantity";
                         } else if (!CustomRegExp.checkNumberOnly(value)) {
                           return 'Enter a valid quantity';
-                        } else if (value.isNotEmpty) {
+                        } else if (widget.isPurchase == false) {
                           quantity = int.parse(value);
                           if (item != null && quantity > stock) {
                             return 'out of stock${stock == 0 ? 'item' : ', try $stock'} ';
@@ -193,7 +193,6 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                             itemId: item!.id!, quantity: itemCount);
                         currentPurchaseListNotifier.value.add(purchase);
                         notifyAnyListeners(currentPurchaseListNotifier);
-
                       }
                       final sum = itemCount.toDouble() * itemPrice!;
                       totalAmountNotifier.value += sum;

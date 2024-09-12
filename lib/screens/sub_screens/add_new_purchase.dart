@@ -10,6 +10,8 @@ import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/models/purchase_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
+import 'package:inventory_management_app/widgets/account_screen_widgets/purchase_list_tile.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/return_list_tile.dart';
@@ -35,6 +37,13 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
       TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+
+  @override
+  void dispose() {
+    totalAmountNotifier.value = 0;
+    currentPurchaseListNotifier.value.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,29 +154,7 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
 
               //purchase added list
 
-              ValueListenableBuilder(
-                valueListenable: currentPurchaseListNotifier,
-                builder: (BuildContext context, List<PurchaseItemModel> value,
-                    Widget? child) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: value.length,
-                    itemBuilder: (context, index) {
-                      final purchase = getItemFromDB(value[index].itemId);
-                      final brand = getItemBrandFromDB(purchase.brandId);
-                      return SaleListTile(
-                        image: purchase.itemImage,
-                        customerName: purchase.itemName,
-                        invoiceNo: '${index + 1}',
-                        brandName: brand.itemBrandName,
-                        itemPrice: formatMoney(number: purchase.itemPrice),
-                        saleAddDate: DateTime.now(),
-                        onTap: () {},
-                      );
-                    },
-                  );
-                },
-              ),
+              const CurretenPurchaseListForPurchaseAddScreen(),
 
               //add new item to sale
 

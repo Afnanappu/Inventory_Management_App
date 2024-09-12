@@ -100,7 +100,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text('Invoice No.'),
-                          Text('${customerListNotifier.value.length}'),
+                          Text('${customerListNotifier.value.length + 1}'),
                         ],
                       ),
                     ),
