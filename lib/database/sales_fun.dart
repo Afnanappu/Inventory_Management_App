@@ -11,28 +11,28 @@ import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 
 // ignore: constant_identifier_names
-const SALES_BOX = 'SalesBox';
+const _SALES_BOX = 'SalesBox';
 
 //Opened a box for item so we can use it any time
-late Box<SaleModel> salesBox;
+late Box<SaleModel> _salesBox;
 
 Future<void> getAllSalesFromDB() async {
-  salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
-  saleItemsListNotifier.value.clear();
-  saleItemsListNotifier.value = salesBox.values.toList();
+  _salesBox = await Hive.openBox<SaleModel>(_SALES_BOX);
+  // saleItemsListNotifier.value.clear();
+  saleItemsListNotifier.value = _salesBox.values.toList();
 
-  // salesBox.clear();
+  // _salesBox.clear();
   notifyAnyListeners(saleItemsListNotifier);
-  print('The number of sales in the DB is ${salesBox.values.length}');
+  print('The number of sales in the DB is ${_salesBox.values.length}');
 }
 
 Future<List<int>> addSalesToDB(List<SaleModel> sales) async {
-  salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
+  _salesBox = await Hive.openBox<SaleModel>(_SALES_BOX);
   List<int> salesIdList = [];
   for (var i = 0; i < sales.length; i++) {
     int id = generateUniqueId();
     sales[i].saleId = id;
-    await salesBox.put(id, sales[i]);
+    await _salesBox.put(id, sales[i]);
     salesIdList.add(id);
     print('The sale at id = $id is added to database');
   }
@@ -50,8 +50,8 @@ SaleModel getSaleFromDB(int saleId) {
 }
 
 Future<void> deleteSaleFromDB(int saleId, int customerId) async {
-  salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
-  await salesBox.delete(saleId);
+  _salesBox = await Hive.openBox<SaleModel>(_SALES_BOX);
+  await _salesBox.delete(saleId);
   final customer = getCustomerFromDB(customerId);
   customer.saleId.remove(saleId);
   await editCustomerSaleIdFromDB(customerId, customer.saleId);
@@ -70,7 +70,7 @@ double getSumOfAllSaleOfOneCustomer(List<int> salesId) {
 }
 
 Future<void> decreaseListOfStockFromDB(List<int> salesId) async {
-  salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
+  _salesBox = await Hive.openBox<SaleModel>(_SALES_BOX);
 
   for (var id in salesId) {
     final sale = getSaleFromDB(id);
@@ -82,7 +82,7 @@ Future<void> decreaseListOfStockFromDB(List<int> salesId) async {
 }
 
 Future<void> increaseListOfStockFromDB(List<int> salesId) async {
-  salesBox = await Hive.openBox<SaleModel>(SALES_BOX);
+  _salesBox = await Hive.openBox<SaleModel>(_SALES_BOX);
 
   for (var id in salesId) {
     final sale = getSaleFromDB(id);

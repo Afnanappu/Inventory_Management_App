@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
@@ -66,9 +68,11 @@ class _ItemFullDetailsState extends State<ItemFullDetails> {
                 child: Center(
                     child: SizedBox(
                   height: MyScreenSize.screenHeight * 0.3,
-                  child: Image.file(
-                    File(widget.itemModel.itemImage),
-                  ),
+                  child: !kIsWeb
+                      ? Image.file(
+                          File(widget.itemModel.itemImage),
+                        )
+                      : Image.memory(base64Decode(widget.itemModel.itemImage)),
                 )),
               ),
               PreferredSize(
@@ -301,7 +305,9 @@ class _ItemFullDetailsState extends State<ItemFullDetails> {
                       text: 'Add new sale',
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) =>  AddNewItemInSale(itemModel: widget.itemModel,)));
+                            builder: (ctx) => AddNewItemInSale(
+                                  itemModel: widget.itemModel,
+                                )));
                       }),
                 ),
               ],

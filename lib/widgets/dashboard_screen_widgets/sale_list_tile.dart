@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/font_styles.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
@@ -12,6 +14,7 @@ class CustomerListTile extends StatelessWidget {
   final String itemPrice;
   final DateTime saleAddDate;
   final void Function()? onTap;
+  final bool isPurchase;
   CustomerListTile({
     super.key,
     required this.customerName,
@@ -20,6 +23,7 @@ class CustomerListTile extends StatelessWidget {
     required this.itemPrice,
     required this.saleAddDate,
     required this.onTap,
+    this.isPurchase = false,
   });
   ValueNotifier<bool> isSaleNotifier = ValueNotifier(true);
 
@@ -86,30 +90,36 @@ class CustomerListTile extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  ValueListenableBuilder(
-                    valueListenable: isSaleNotifier,
-                    builder: (context, value, child) => MyCustomButton(
-                        color: value == true
-                            ? const Color.fromARGB(146, 154, 255, 170)
-                            : const Color.fromARGB(146, 255, 154, 154),
-                        text: value == true ? 'SALE' : 'RETURNED',
-                        isSale: isSaleNotifier.value,
-                        onTap: () {}
-                        // customAlertBox(
-                        //   content: 'Are you sure?',
-                        //   context: context,
-                        //   title: value == true ? 'Return item' : 'Change to sale',
-                        //   //todo: add return function
-                        //   onPressedYes: () {
-                        //     isSaleNotifier.value == true
-                        //         ? isSaleNotifier.value = false
-                        //         : isSaleNotifier.value = true;
-                        //     print('Item is ${isSaleNotifier.value}');
-                        //     Navigator.of(context).pop();
-                        //   },
-                        // ),
+                  (isPurchase == false)
+                      ? ValueListenableBuilder(
+                          valueListenable: isSaleNotifier,
+                          builder: (context, value, child) => MyCustomButton(
+                              color: value == true
+                                  ? const Color.fromARGB(146, 154, 255, 170)
+                                  : const Color.fromARGB(146, 255, 154, 154),
+                              text: value == true ? 'SALE' : 'RETURNED',
+                              isSale: isSaleNotifier.value,
+                              onTap: () {}
+                              // customAlertBox(
+                              //   content: 'Are you sure?',
+                              //   context: context,
+                              //   title: value == true ? 'Return item' : 'Change to sale',
+                              //   //todo: add return function
+                              //   onPressedYes: () {
+                              //     isSaleNotifier.value == true
+                              //         ? isSaleNotifier.value = false
+                              //         : isSaleNotifier.value = true;
+                              //     print('Item is ${isSaleNotifier.value}');
+                              //     Navigator.of(context).pop();
+                              //   },
+                              // ),
+                              ),
+                        )
+                      : MyCustomButton(
+                          color: Colors.blue[100]!,
+                          text: 'PURCHASED',
+                          textColor: Colors.blue,
                         ),
-                  )
                 ],
               ),
             ],

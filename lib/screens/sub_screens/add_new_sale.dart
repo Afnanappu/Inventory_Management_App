@@ -26,7 +26,6 @@ class SaleAddNew extends StatefulWidget {
   final bool isEditable;
   final bool isViewer;
 
-
   @override
   State<SaleAddNew> createState() => _SaleAddNewState();
 }
@@ -60,7 +59,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
   }
 
   void _deleteCustomerIfSaleIsEmpty() async {
-    if (currentSaleItemNotifier.value.isEmpty) {
+    if (widget.customer != null && currentSaleItemNotifier.value.isEmpty) {
       await deleteCustomerFromDB(widget.customer!.customerId!);
     }
   }
@@ -205,7 +204,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
         ),
       ),
       bottomNavigationBar: ButtonsForAddNewSaleScreen(
-        widget: widget,
+        saleWidget: widget,
         formKey: _formKey,
         customerNameController: _customerNameController,
         customerPhoneController: _customerPhoneController,

@@ -5,6 +5,7 @@ void customAlertBox({
   required String title,
   required String content,
   required void Function()? onPressedYes,
+  void Function()? onPressedNo,
 }) {
   showDialog(
       context: context,
@@ -19,7 +20,11 @@ void customAlertBox({
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                if (onPressedNo == null) {
+                  Navigator.of(context).pop();
+                } else {
+                  onPressedNo();
+                }
               },
               child: const Text('No'),
             ),

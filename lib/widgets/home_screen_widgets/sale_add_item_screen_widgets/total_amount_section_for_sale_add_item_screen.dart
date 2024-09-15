@@ -6,7 +6,9 @@ import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 class TotalAmountSectionForSaleAddItemScreen extends StatelessWidget {
   const TotalAmountSectionForSaleAddItemScreen({
     super.key,
+    this.total,
   });
+  final double? total;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,10 @@ class TotalAmountSectionForSaleAddItemScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      formatMoney(number: value, haveSymbol: false),
+                      formatMoney(
+                        number: total != null ? total! : value,
+                        haveSymbol: false,
+                      ),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: MyColors.blackShade,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
+import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
@@ -8,6 +9,7 @@ import 'package:inventory_management_app/models/purchase_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_purchase.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
+import 'package:inventory_management_app/widgets/common/alert_dialog.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/button_add_sale.dart';
 import 'package:inventory_management_app/widgets/common/drop_down_for_all.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';
@@ -15,8 +17,18 @@ import 'package:inventory_management_app/functions/extension_methods.dart';
 
 class AddNewItemInSale extends StatefulWidget {
   final ItemModel? itemModel;
+  final SaleModel? saleModel;
+  final PurchaseItemModel? purchaseItemModel;
   final bool isPurchase;
-  const AddNewItemInSale({super.key, this.itemModel, this.isPurchase = false});
+  final bool isEditable;
+  const AddNewItemInSale({
+    super.key,
+    this.itemModel,
+    this.isPurchase = false,
+    this.isEditable = false,
+    this.saleModel,
+    this.purchaseItemModel,
+  });
 
   @override
   State<AddNewItemInSale> createState() => _AddNewItemInSaleState();
@@ -147,61 +159,172 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
       bottomNavigationBar: BottomAppBar(
         height: 85,
         color: MyColors.white,
-        child: Row(
-          children: [
-            Expanded(
-              child: buttonAddSale(
-                  text: 'Save&New',
-                  haveBorder: true,
-                  btnColor: MyColors.transparent,
-                  //todo: Add function to save data
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      final itemCount = _itemStockController.text.parseInt();
-                      final itemPrice = _itemPriceController.text.parseDouble();
-                      final sale =
-                          SaleModel(itemId: item!.id!, itemCount: itemCount);
-                      currentSaleItemNotifier.value.add(sale);
+        child: (widget.isEditable == false)
+            ? Row(
+                children: [
+                  Expanded(
+                    child: buttonAddSale(
+                        text: 'Save&New',
+                        haveBorder: true,
+                        btnColor: MyColors.transparent,
+                        //todo: Add function to save data
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            final itemCount =
+                                _itemStockController.text.parseInt();
+                            final itemPrice =
+                                _itemPriceController.text.parseDouble();
+                            final sale = SaleModel(
+                                itemId: item!.id!, itemCount: itemCount);
+                            currentSaleItemNotifier.value.add(sale);
+                            notifyAnyListeners(currentSaleItemNotifier);
+                            final double sum =
+                                itemCount.toDouble() * itemPrice!;
+                            totalAmountNotifier.value += sum;
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (ctx) => const AddNewItemInSale(),
+                              ),
+                            );
+                          }
+                        }),
+                  ),
+                  Expanded(
+                    child: buttonAddSale(
+                        text: 'Save',
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            final itemCount =
+                                _itemStockController.text.parseInt();
+                            final itemPrice =
+                                _itemPriceController.text.parseDouble();
+
+                            //sales function
+                            if (widget.isPurchase == false) {
+                              final int index =
+                                  currentSaleItemNotifier.value.indexWhere(
+                                (element) => element.itemId == item!.id,
+                              );
+                              if (index != -1) {
+                                customAlertBox(
+                                  context: context,
+                                  title: 'Item already exist',
+                                  content:
+                                      'Whould you like to add this item to the existing item.',
+                                  onPressedYes: () {
+                                    final sameItem = currentSaleItemNotifier
+                                        .value
+                                        .elementAt(index);
+                                    sameItem.itemCount += itemCount;
+                                    notifyAnyListeners(currentSaleItemNotifier);
+
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  onPressedNo: () {
+                                    final sale = SaleModel(
+                                        itemId: item!.id!,
+                                        itemCount: itemCount);
+                                    currentSaleItemNotifier.value.add(sale);
+                                    notifyAnyListeners(currentSaleItemNotifier);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                );
+                              } else {
+                                final sale = SaleModel(
+                                    itemId: item!.id!, itemCount: itemCount);
+                                currentSaleItemNotifier.value.add(sale);
+                                notifyAnyListeners(currentSaleItemNotifier);
+                                Navigator.of(context).pop();
+                              }
+                            }
+
+                            //purchase functions
+                            else {
+                              final int index =
+                                  currentPurchaseListNotifier.value.indexWhere(
+                                (element) => element.itemId == item!.id,
+                              );
+
+                              if (index != -1) {
+                                customAlertBox(
+                                  context: context,
+                                  title: 'Item already exist',
+                                  content:
+                                      'Whould you like to add this item to the existing item.',
+                                  onPressedYes: () {
+                                    final sameItem = currentPurchaseListNotifier
+                                        .value
+                                        .elementAt(index);
+                                    sameItem.quantity += itemCount;
+                                    notifyAnyListeners(
+                                        currentPurchaseListNotifier);
+
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  onPressedNo: () {
+                                    final purchase = PurchaseItemModel(
+                                        itemId: item!.id!, quantity: itemCount);
+                                    currentPurchaseListNotifier.value
+                                        .add(purchase);
+                                    notifyAnyListeners(
+                                        currentPurchaseListNotifier);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                );
+                              } else {
+                                final purchase = PurchaseItemModel(
+                                    itemId: item!.id!, quantity: itemCount);
+                                currentPurchaseListNotifier.value.add(purchase);
+                                notifyAnyListeners(currentPurchaseListNotifier);
+                                Navigator.of(context).pop();
+                              }
+                            }
+                            final sum = itemCount.toDouble() * itemPrice!;
+                            totalAmountNotifier.value += sum;
+                          }
+                        }),
+                  ),
+                ],
+              )
+            : buttonAddSale(
+                text: 'Save',
+                onTap: () {
+                  final itemCount = _itemStockController.text.parseInt();
+                  final itemPrice = _itemPriceController.text.parseDouble();
+                  if (widget.isEditable == true) {
+                    if (widget.saleModel != null &&
+                        widget.isPurchase == false) {
+                      widget.saleModel!.itemCount = itemCount;
+                      widget.saleModel!.itemId = item!.id!;
+                      final oldItem = getItemFromDB(widget.saleModel!.itemId);
+
+                      totalAmountNotifier.value -=
+                          ((widget.saleModel!.itemCount) *
+                              oldItem.itemPrice);
                       notifyAnyListeners(currentSaleItemNotifier);
-                      final double sum = itemCount.toDouble() * itemPrice!;
-                      totalAmountNotifier.value += sum;
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (ctx) => const AddNewItemInSale(),
-                        ),
-                      );
-                    }
-                  }),
-            ),
-            Expanded(
-              child: buttonAddSale(
-                  text: 'Save',
+                    } else if (widget.purchaseItemModel != null &&
+                        widget.isPurchase == true) {
+                      widget.purchaseItemModel!.itemId = item!.id!;
+                      widget.purchaseItemModel!.quantity = itemCount;
 
-                  //todo: Add function to save data
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      final itemCount = _itemStockController.text.parseInt();
-                      final itemPrice = _itemPriceController.text.parseDouble();
+                      final oldItem =
+                          getItemFromDB(widget.purchaseItemModel!.itemId);
 
-                      if (widget.isPurchase == false) {
-                        final sale =
-                            SaleModel(itemId: item!.id!, itemCount: itemCount);
-                        currentSaleItemNotifier.value.add(sale);
-                        notifyAnyListeners(currentSaleItemNotifier);
-                      } else {
-                        final purchase = PurchaseItemModel(
-                            itemId: item!.id!, quantity: itemCount);
-                        currentPurchaseListNotifier.value.add(purchase);
-                        notifyAnyListeners(currentPurchaseListNotifier);
-                      }
-                      final sum = itemCount.toDouble() * itemPrice!;
-                      totalAmountNotifier.value += sum;
-                      Navigator.of(context).pop();
+                      totalAmountNotifier.value -=
+                          ((widget.purchaseItemModel!.quantity - 1) *
+                              oldItem.itemPrice);
+                      notifyAnyListeners(currentPurchaseListNotifier);
                     }
-                  }),
-            ),
-          ],
-        ),
+                  }
+                  final sum = itemCount.toDouble() * itemPrice!;
+                  totalAmountNotifier.value += sum;
+                  Navigator.of(context).pop();
+                },
+              ),
       ),
     );
   }

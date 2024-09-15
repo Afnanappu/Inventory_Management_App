@@ -1,25 +1,30 @@
 import 'dart:core';
-
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/database/brand_fun.dart';
-import 'package:inventory_management_app/database/item_fun.dart';
+import 'package:inventory_management_app/database/purchase_sale_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
-import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/functions/reg_exp_functions.dart';
-import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/models/purchase_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
-import 'package:inventory_management_app/widgets/account_screen_widgets/purchase_list_tile.dart';
+import 'package:inventory_management_app/widgets/account_screen_widgets/current_purchase_list_for_purchase_screen.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';
-import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/return_list_tile.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item.dart';
+import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item_screen_widgets/buttons_for_add_new_sale_screen.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item_screen_widgets/total_amount_section_for_sale_add_item_screen.dart';
 
 class AddNewPurchaseScreen extends StatefulWidget {
-  const AddNewPurchaseScreen({super.key});
+  const AddNewPurchaseScreen({
+    super.key,
+    this.purchaseModel,
+    this.isViewer = false,
+    this.total,
+  });
+
+  final PurchaseModel? purchaseModel;
+  final bool isViewer;
+  final double? total;
 
   @override
   State<AddNewPurchaseScreen> createState() => _AddNewPurchaseScreenState();
@@ -37,6 +42,21 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
       TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.purchaseModel != null) {
+      _purchaserNameController.text = widget.purchaseModel!.partyName;
+      if (widget.purchaseModel!.phone != null) {
+        _purchaserPhoneController.text = widget.purchaseModel!.phone!;
+      }
+      currentPurchaseListNotifier.value = getPurchaseSaleOfOnePurchase(
+          widget.purchaseModel!.purchaseItemModleIdList);
+
+      selectedDate = widget.purchaseModel!.dateTime;
+    }
+  }
 
   @override
   void dispose() {
@@ -72,7 +92,7 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text('Invoice No.'),
-                          Text('${purchasedItemListNotifier.value.length + 1}'),
+                          Text('${purchasedListNotifier.value.length + 1}'),
                         ],
                       ),
                     ),
@@ -85,16 +105,18 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
                       child: SizedBox(
                         child: InkWell(
                           onTap: () async {
-                            DateTime? pickedDate =
-                                await pickDateFromUser(context: context);
+                            if (widget.isViewer == false) {
+                              DateTime? pickedDate =
+                                  await pickDateFromUser(context: context);
 
-                            setState(
-                              () {
-                                if (pickedDate != null) {
-                                  selectedDate = pickedDate;
-                                }
-                              },
-                            );
+                              setState(
+                                () {
+                                  if (pickedDate != null) {
+                                    selectedDate = pickedDate;
+                                  }
+                                },
+                              );
+                            }
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,6 +140,7 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
                 context: context,
                 labelText: 'Party name',
                 haveBorder: true,
+                isFormEnabled: !widget.isViewer,
                 controller: _purchaserNameController,
                 formFillColor: MyColors.white,
                 validator: (value) {
@@ -132,14 +155,15 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
               ),
               customFormField(
                 context: context,
-                labelText: 'Phone no',
+                labelText: 'Phone no (Optional)',
+                isFormEnabled: !widget.isViewer,
                 haveBorder: true,
                 controller: _purchaserPhoneController,
                 keyboardType: TextInputType.phone,
                 formFillColor: MyColors.white,
                 validator: (value) {
                   if (value == null || CustomRegExp.checkEmptySpaces(value)) {
-                    return 'phone no is empty';
+                    return null;
                   } else if (!CustomRegExp.checkPhoneNumber(value)) {
                     return 'Enter a valid phone number';
                   } else if (value.length < 10) {
@@ -154,28 +178,40 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
 
               //purchase added list
 
-              const CurretenPurchaseListForPurchaseAddScreen(),
+               CurretenPurchaseListForPurchaseAddScreen(isViewer: widget.isViewer,),
 
               //add new item to sale
-
-              saleAddItem(onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
+              if(widget.isViewer == false)
+              saleAddItem(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
                       builder: (ctx) => const AddNewItemInSale(
-                            isPurchase: true,
-                          )),
-                );
-              }),
+                        isPurchase: true,
+                      ),
+                    ),
+                  );
+                },
+              ),
 
               const SizedBox(
                 height: 15,
               ),
 
               //total Amount
-              const TotalAmountSectionForSaleAddItemScreen()
+              TotalAmountSectionForSaleAddItemScreen(total: widget.total)
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: ButtonsForAddNewSaleScreen(
+        formKey: _formKey,
+        isPurchase: true,
+        purchaseWidget: widget,
+        customerNameController: _purchaserNameController,
+        customerPhoneController: _purchaserPhoneController,
+        selectedDate: selectedDate,
+        mounted: mounted,
       ),
     );
   }

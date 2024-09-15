@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:inventory_management_app/functions/notification_functions.dart';
+import 'package:inventory_management_app/models/purchase_model.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,9 +71,15 @@ void main() async {
   if (!Hive.isAdapterRegistered(ReturnSaleModelAdapter().typeId)) {
     Hive.registerAdapter(ReturnSaleModelAdapter());
   }
+  if (!Hive.isAdapterRegistered(PurchaseModelAdapter().typeId)) {
+    Hive.registerAdapter(PurchaseModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(PurchaseItemModelAdapter().typeId)) {
+    Hive.registerAdapter(PurchaseItemModelAdapter());
+  }
 
   runApp(const InventoryManagementApp());
-  
+
   checkOutOfStockItem();
 }
 

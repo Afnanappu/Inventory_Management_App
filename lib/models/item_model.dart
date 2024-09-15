@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
-part 'item_model.g.dart';
+ part 'item_model.g.dart';
 
 ValueNotifier<List<ItemModel>> filteredItemModelList = ValueNotifier([]);
 ValueNotifier<List<ItemBrandModel>> itemBrandListNotifiers = ValueNotifier([]);

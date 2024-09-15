@@ -66,20 +66,20 @@ void scheduleWeeklyNotification(int outOfStockItemCount) async {
   log('Notification scheduling completed.');
 }
 
-tz.TZDateTime _nextMondayScheduledDateTime() {
-  tz.TZDateTime scheduledDate =
-      tz.TZDateTime.now(tz.local).add(const Duration(days: 1));
-  while (scheduledDate.weekday != DateTime.wednesday) {
-    scheduledDate = scheduledDate.add(const Duration(days: 1));
-  }
-  log('Notification fun is worked');
-  return scheduledDate
-      .add(
-        const Duration(hours: 8, minutes: 6),
-      )
-      .subtract(
-          Duration(hours: DateTime.now().hour, minutes: DateTime.now().minute));
-}
+// tz.TZDateTime _nextMondayScheduledDateTime() {
+//   tz.TZDateTime scheduledDate =
+//       tz.TZDateTime.now(tz.local).add(const Duration(days: 1));
+//   while (scheduledDate.weekday != DateTime.wednesday) {
+//     scheduledDate = scheduledDate.add(const Duration(days: 1));
+//   }
+//   log('Notification fun is worked');
+//   return scheduledDate
+//       .add(
+//         const Duration(hours: 8, minutes: 6),
+//       )
+//       .subtract(
+//           Duration(hours: DateTime.now().hour, minutes: DateTime.now().minute));
+// }
 
 void checkOutOfStockItem() async {
   if (!kIsWeb) {

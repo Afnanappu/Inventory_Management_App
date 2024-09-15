@@ -12,44 +12,44 @@ import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
 
 // ignore: constant_identifier_names
-const ITEM_BOX = 'ItemBox';
+const _ITEM_BOX = 'ItemBox';
 
 //Opened a box for item so we can use it any time
-late Box<ItemModel> itemBox;
+late Box<ItemModel> _itemBox;
 
 //Function to get all item from database and added to itemModelListNotifiers.
 Future<void> getAllItemFormDB() async {
-  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  itemModelListNotifiers.value = itemBox.values.cast<ItemModel>().toList();
-  // itemBox.clear();
+  _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
+  itemModelListNotifiers.value = _itemBox.values.cast<ItemModel>().toList();
+  // _itemBox.clear();
   notifyAnyListeners(itemModelListNotifiers);
 
   // print(
-  //     'fetching all items from database\nThe number of item in the DB is ${itemBox.values.length}');
+  //     'fetching all items from database\nThe number of item in the DB is ${_itemBox.values.length}');
 }
 
 //Function to add item to database
 Future<void> addItemToDB(ItemModel item) async {
-  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
+  _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
 
   item.id = generateUniqueId();
-  await itemBox.put(item.id, item);
+  await _itemBox.put(item.id, item);
 
   await getAllItemFormDB();
   notifyAnyListeners(itemFilterListNotifiers);
   // print(
-  //     'A new item is added to database and the item id = ${item.id} and the brand id is = ${item.brandId} and the length of all item is ${itemBox.values.length}');
+  //     'A new item is added to database and the item id = ${item.id} and the brand id is = ${item.brandId} and the length of all item is ${_itemBox.values.length}');
 }
 
 //Function to delete from database.
 Future<void> deleteItemFromDB(int itemId, BuildContext context) async {
-  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
+  _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
 
   final isNotDeletable = saleItemsListNotifier.value.any(
     (element) => element.itemId == itemId,
   );
   if (isNotDeletable == false) {
-    await itemBox.delete(itemId);
+    await _itemBox.delete(itemId);
 
     getAllItemFormDB();
 
@@ -59,7 +59,7 @@ Future<void> deleteItemFromDB(int itemId, BuildContext context) async {
       color: MyColors.green,
     );
     print(
-        'The item in the index $itemId is deleted and the length of all item is ${itemBox.values.length}');
+        'The item in the index $itemId is deleted and the length of all item is ${_itemBox.values.length}');
   } else {
     CustomSnackBarMessage(
       context: context,
@@ -76,8 +76,8 @@ Future<void> deleteItemFromDB(int itemId, BuildContext context) async {
 
 //Function to delete from database.
 Future<void> editItemFromDB(int itemId, ItemModel item) async {
-  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  await itemBox.put(itemId, item);
+  _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
+  await _itemBox.put(itemId, item);
 
   await getAllItemFormDB();
   notifyAnyListeners(itemFilterListNotifiers);
@@ -93,8 +93,8 @@ ItemModel getItemFromDB(int itemId) {
 }
 
 Future<void> decreaseOneItemStockFromDB(int itemId, int quantity) async {
-  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  final item = itemBox.values.firstWhere((item) => item.id == itemId);
+  _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
+  final item = _itemBox.values.firstWhere((item) => item.id == itemId);
   final newStock = item.stock - quantity;
   final newItem = ItemModel(
     id: item.id,
@@ -108,15 +108,15 @@ Future<void> decreaseOneItemStockFromDB(int itemId, int quantity) async {
     description: item.description,
     stock: newStock,
   );
-  await itemBox.put(item.id, newItem);
+  await _itemBox.put(item.id, newItem);
 
   notifyAnyListeners(itemFilterListNotifiers);
   // print('The stock count of item ${item.itemName} and count ${item.stock} is decreased by $quantity and now have $newStock');
 }
 
 Future<void> increaseOneItemStockFromDB(int itemId, int quantity) async {
-  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  final item = itemBox.values.firstWhere((item) => item.id == itemId);
+  _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
+  final item = _itemBox.values.firstWhere((item) => item.id == itemId);
   final newStock = item.stock + quantity;
   final newItem = ItemModel(
     id: item.id,
@@ -130,7 +130,7 @@ Future<void> increaseOneItemStockFromDB(int itemId, int quantity) async {
     description: item.description,
     stock: newStock,
   );
-  await itemBox.put(item.id, newItem);
+  await _itemBox.put(item.id, newItem);
   log('one item stock increased');
   getAllItemFormDB();
   notifyAnyListeners(itemFilterListNotifiers);
@@ -160,8 +160,8 @@ void getTheFilterItem({int? limit, bool? isLess = true}) {
 }
 
 Future<List<ItemModel>> getTheOutOfStockItems([int? outOfStockLimit]) async {
-  itemBox = await Hive.openBox<ItemModel>(ITEM_BOX);
-  return itemBox.values.where(
+  _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
+  return _itemBox.values.where(
     (element) => outOfStockLimit == null
         ? element.stock == 0
         : element.stock <= outOfStockLimit,
@@ -182,3 +182,5 @@ void getTheItemFilteredByRange(double? start, double? end) {
 
   notifyAnyListeners(filteredItemModelList);
 }
+
+

@@ -1,15 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
+import 'package:inventory_management_app/database/item_fun.dart';
+import 'package:inventory_management_app/database/purchase_sale_fun.dart';
+import 'package:inventory_management_app/database/purchases_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/models/purchase_model.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_purchase.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
-import 'package:inventory_management_app/widgets/common/alert_dialog.dart';
 import 'package:inventory_management_app/widgets/common/snack_bar_messenger.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/button_add_sale.dart';
 import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_item_screen_widgets/success_animation_screen.dart';
@@ -17,21 +18,27 @@ import 'package:inventory_management_app/widgets/home_screen_widgets/sale_add_it
 class ButtonsForAddNewSaleScreen extends StatelessWidget {
   const ButtonsForAddNewSaleScreen({
     super.key,
-    required this.widget,
+    this.isPurchase = false,
     required GlobalKey<FormState> formKey,
     required TextEditingController customerNameController,
     required TextEditingController customerPhoneController,
     required this.selectedDate,
     required this.mounted,
+
+    this.saleWidget,
+    this.purchaseWidget,
   })  : _formKey = formKey,
         _customerNameController = customerNameController,
         _customerPhoneController = customerPhoneController;
 
-  final SaleAddNew widget;
+  final SaleAddNew? saleWidget;
+  final AddNewPurchaseScreen? purchaseWidget;
+  final bool isPurchase;
   final GlobalKey<FormState> _formKey;
   final TextEditingController _customerNameController;
   final TextEditingController _customerPhoneController;
   final DateTime selectedDate;
+
   final bool mounted;
 
   @override
@@ -39,7 +46,7 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
     return BottomAppBar(
         height: 85,
         color: MyColors.white,
-        child: (!widget.isViewer)
+        child: ((saleWidget != null && saleWidget!.isViewer == false) || (purchaseWidget != null && purchaseWidget!.isViewer == false))
             ? Row(
                 children: [
                   Expanded(
@@ -96,35 +103,68 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
                       text: 'Save',
                       onTap: () async {
                         if (_formKey.currentState!.validate() &&
-                            currentSaleItemNotifier.value.isNotEmpty) {
-                          final sales = currentSaleItemNotifier.value;
+                                (isPurchase == false &&
+                                    currentSaleItemNotifier.value.isNotEmpty) ||
+                            (isPurchase == true &&
+                                currentPurchaseListNotifier.value.isNotEmpty)) {
+                          //for purchase
+                          if (isPurchase == true) {
+                            final purchasesList =
+                                currentPurchaseListNotifier.value;
 
-                          final salesIdList = await addSalesToDB(sales);
+                            final listOfPurcaseSaleId =
+                                await addPurchaseSaleToDB(purchasesList);
 
-                          final customer = CustomerModel(
-                            customerName: _customerNameController.text,
-                            customerPhone: _customerPhoneController.text,
-                            saleId: salesIdList,
-                            saleDateTime: selectedDate,
-                          );
+                            final purchase = PurchaseModel(
+                              partyName: _customerNameController.text,
+                              phone: _customerPhoneController.text,
+                              dateTime: DateTime.now(),
+                              purchaseItemModleIdList: listOfPurcaseSaleId,
+                            );
+                            await addPurchaseToDB(purchase);
 
-                          await addCustomerToDB(customer);
+                            for (var id in purchase.purchaseItemModleIdList) {
+                              final purch = getOnePurchaseSaleFromDB(id);
+                              // final item = getItemFromDB(purch.itemId);
+                              await increaseOneItemStockFromDB(
+                                  purch.itemId, purch.quantity);
+                            }
 
-                          await decreaseListOfStockFromDB(salesIdList);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) =>
+                                    const SuccessAnimationScreen()));
+                          }
 
-                          getTheNumberOfItemSold(
-                              start: DateTime.now().subtract(
-                                  Duration(days: DateTime.now().weekday - 1)));
+                          //for sale
+                          else {
+                            final sales = currentSaleItemNotifier.value;
 
-                          getThePriceAmountOfItemSold(
-                              start: DateTime.now().subtract(
-                                  Duration(days: DateTime.now().weekday - 1)));
+                            final salesIdList = await addSalesToDB(sales);
 
+                            final customer = CustomerModel(
+                              customerName: _customerNameController.text,
+                              customerPhone: _customerPhoneController.text,
+                              saleId: salesIdList,
+                              saleDateTime: selectedDate,
+                            );
 
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) =>
-                                  const SuccessAnimationScreen()));
-                        } else if (currentSaleItemNotifier.value.isEmpty) {
+                            await addCustomerToDB(customer);
+
+                            await decreaseListOfStockFromDB(salesIdList);
+
+                            getTheNumberOfItemSold(
+                                start: DateTime.now().subtract(Duration(
+                                    days: DateTime.now().weekday - 1)));
+
+                            getThePriceAmountOfItemSold(
+                                start: DateTime.now().subtract(Duration(
+                                    days: DateTime.now().weekday - 1)));
+
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) =>
+                                    const SuccessAnimationScreen()));
+                          }
+                        } else {
                           CustomSnackBarMessage(
                             context: context,
                             message:
@@ -138,10 +178,10 @@ class ButtonsForAddNewSaleScreen extends StatelessWidget {
                 ],
               )
             : buttonAddSale(
-              text: 'Ok',
-              onTap: () async {
-                Navigator.of(context).pop();
-              },
-            ));
+                text: 'Ok',
+                onTap: () async {
+                  Navigator.of(context).pop();
+                },
+              ));
   }
 }

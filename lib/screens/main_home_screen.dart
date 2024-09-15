@@ -34,7 +34,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           const HomeScreen(),
           DashboardScreen(),
           const ItemScreen(),
-          AccountScreen()
+          const AccountScreen()
         ],
       ),
       //todo: Change the icon

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/purchase_sale_fun.dart';
 import 'package:inventory_management_app/database/purchases_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/purchase_model.dart';
@@ -13,6 +14,7 @@ class PurchaseScreen extends StatelessWidget {
 
   Future<void> _loadPurchaseData() async {
     await getAllPurchasesFromDB();
+    await getAllPurchaseSaleFromDB();
   }
 
   @override
@@ -37,24 +39,38 @@ class PurchaseScreen extends StatelessWidget {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return purchasedItemListNotifier.value.isEmpty
+            return purchasedListNotifier.value.isEmpty
                 ? const Center(
                     child: Text('No purchase is added'),
                   )
                 : ValueListenableBuilder(
-                    valueListenable: purchasedItemListNotifier,
-                    builder: (context, purchaseModel, child) {
+                    valueListenable: purchasedListNotifier,
+                    builder: (context, purchaseModelList, child) {
+                      final purchaseModel = purchaseModelList.reversed.toList();
+                      final length = purchaseModel.length;
                       return ListView.builder(
-                        itemCount: purchaseModel.length,
+                        itemCount: length,
                         itemBuilder: (BuildContext context, int index) {
                           final purchase = purchaseModel[index];
+                          final totalAmount =
+                              findTheTotalAmountOfOnePurchase(purchase);
+
                           return CustomerListTile(
                             customerName: purchase.partyName,
-                            invoiceNo: '${index + 1}',
-                            totalProduct: purchase.itemsId.length,
-                            itemPrice: formatMoney(number: 100000),
+                            invoiceNo: '${length - index}',
+                            totalProduct:
+                                purchase.purchaseItemModleIdList.length,
+                            itemPrice: formatMoney(number: totalAmount),
                             saleAddDate: purchase.dateTime,
-                            onTap: () {},
+                            isPurchase: true,
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (ctx) => AddNewPurchaseScreen(
+                                        purchaseModel: purchase,
+                                        isViewer: true,
+                                        total: totalAmount,
+                                      )),
+                            ),
                           );
                         },
                       );
@@ -65,11 +81,9 @@ class PurchaseScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButtonForAll(
         text: 'Add Purchase',
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (ctx) => const AddNewPurchaseScreen()),
-          );
-        },
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (ctx) => const AddNewPurchaseScreen()),
+        ),
         color: MyColors.red,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -8,39 +8,39 @@ import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
 
 // ignore: constant_identifier_names
-const CUSTOMER_BOX = 'CustomerBox';
+const _CUSTOMER_BOX = 'CustomerBox';
 
 //Opened a box for item so we can use it any time
-late Box<CustomerModel> customerBox;
+late Box<CustomerModel> _customerBox;
 
 Future<void> getAllCustomersFormDB() async {
-  customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
+  _customerBox = await Hive.openBox<CustomerModel>(_CUSTOMER_BOX);
   customerListNotifier.value.clear();
   customerListNotifier.value =
-      customerBox.values.cast<CustomerModel>().toList();
-  // customerBox.clear();
+      _customerBox.values.cast<CustomerModel>().toList();
+  // _customerBox.clear();
   notifyAnyListeners(customerListNotifier);
   print(
-      'fetching all customers from database\nThe number of customer in the DB is ${customerBox.values.length}');
+      'fetching all customers from database\nThe number of customer in the DB is ${_customerBox.values.length}');
 }
 
 Future<void> addCustomerToDB(CustomerModel customer) async {
-  customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
+  _customerBox = await Hive.openBox<CustomerModel>(_CUSTOMER_BOX);
 
   int id = generateUniqueId();
   customer.customerId = id;
-  await customerBox.put(id, customer);
+  await _customerBox.put(id, customer);
   print(
-      'A new customer is added to database and the customer id = $id and the length of all customer is ${customerBox.values.length}');
-  for (var val in customerBox.values) {
+      'A new customer is added to database and the customer id = $id and the length of all customer is ${_customerBox.values.length}');
+  for (var val in _customerBox.values) {
     print(val.customerName);
   }
   getAllCustomersFormDB();
 }
 
 Future<void> editCustomerSaleIdFromDB(int customerId, List<int> salesId) async {
-  customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
-  final customer = customerBox.values.firstWhere(
+  _customerBox = await Hive.openBox<CustomerModel>(_CUSTOMER_BOX);
+  final customer = _customerBox.values.firstWhere(
     (element) => element.customerId == customerId,
   );
   final newCustomer = CustomerModel(
@@ -51,19 +51,19 @@ Future<void> editCustomerSaleIdFromDB(int customerId, List<int> salesId) async {
     saleId: salesId,
   );
 
-  await customerBox.put(customerId, newCustomer);
+  await _customerBox.put(customerId, newCustomer);
   await getAllCustomersFormDB();
   log('Customer sale list is edited');
 }
 
 Future<void> deleteCustomerFromDB(int customerId) async {
-  customerBox = await Hive.openBox<CustomerModel>(CUSTOMER_BOX);
-  await customerBox.delete(customerId);
+  _customerBox = await Hive.openBox<CustomerModel>(_CUSTOMER_BOX);
+  await _customerBox.delete(customerId);
   await getAllCustomersFormDB();
   getTheCurrentDate(CurrentDate.week);
   notifyAnyListeners(priceAmountOfItemSoldListNotifier);
   print(
-      'The customer in the id = $customerId is deleted and the length of all customers is ${customerBox.values.length}');
+      'The customer in the id = $customerId is deleted and the length of all customers is ${_customerBox.values.length}');
 }
 
 CustomerModel getCustomerFromDB(int customerId) {
@@ -84,8 +84,8 @@ List<CustomerModel> getOneDayFullCustomer(DateTime date) {
 }
 
 // Future<void> deleteSaleFromCustomerByItemId(int itemId) async {
-//   customerBox = await Hive.openBox(CUSTOMER_BOX);
-//   for (var element in customerBox.values) {
+//   _customerBox = await Hive.openBox(_CUSTOMER_BOX);
+//   for (var element in _customerBox.values) {
 //     for (var saleId in element.saleId) {
 //       final sale = getSaleFromFromDB(saleId);
 //       if (sale.itemId == itemId) {

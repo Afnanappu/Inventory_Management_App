@@ -6,6 +6,7 @@ import 'package:inventory_management_app/database/return_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/common/alert_dialog.dart';
 import 'package:inventory_management_app/widgets/common/buttons.dart';
@@ -37,6 +38,14 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   ListTile(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AddNewItemInSale(
+                        itemModel: item,
+                        saleModel: sale,
+                        isEditable: true,
+                        
+                      ),
+                    )),
                     tileColor: const Color.fromARGB(255, 243, 255, 227),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,8 +149,9 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
 
                                       final item = getItemFromDB(sale.itemId);
 
-                                      totalAmountNotifier.value = totalAmountNotifier.value -
-                                          (item.itemPrice * sale.itemCount);
+                                      totalAmountNotifier.value =
+                                          totalAmountNotifier.value -
+                                              (item.itemPrice * sale.itemCount);
 
                                       notifyAnyListeners(
                                         currentSaleItemNotifier,
