@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/screens/sub_screens/item_full_details_screen.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/return_list_tile.dart';
 
 class ReturnSaleListForDashboard extends StatelessWidget {
@@ -22,11 +23,18 @@ class ReturnSaleListForDashboard extends StatelessWidget {
                   return SaleListTile(
                     image: item.itemImage,
                     customerName: item.itemName,
-                    invoiceNo: '${len- index}',
+                    invoiceNo: '${len - index}',
                     brandName: returnItem.customerName,
                     itemPrice: '${item.itemPrice}',
                     saleAddDate: returnItem.dateTime,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ItemFullDetails(
+                              itemModel: item, brandId: item.brandId),
+                        ),
+                      );
+                    },
                   );
                 },
               )
