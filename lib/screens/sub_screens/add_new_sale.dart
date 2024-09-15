@@ -198,7 +198,7 @@ class _SaleAddNewState extends State<SaleAddNew> {
               ),
 
               //total Amount
-              const TotalAmountSectionForSaleAddItemScreen()
+              const TotalAmountSectionForSaleAddItemScreen(type: SaleType.sales,)
             ],
           ),
         ),

@@ -47,9 +47,13 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
 
   @override
   void initState() {
-    _itemStockController.text = '1';
     if (widget.itemModel != null) {
       item = widget.itemModel;
+    }
+    if (widget.saleModel != null) {
+      _itemStockController.text = widget.saleModel!.itemCount.toString();
+    } else {
+      _itemStockController.text = '1';
     }
 
     super.initState();
@@ -174,18 +178,66 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                                 _itemStockController.text.parseInt();
                             final itemPrice =
                                 _itemPriceController.text.parseDouble();
-                            final sale = SaleModel(
-                                itemId: item!.id!, itemCount: itemCount);
-                            currentSaleItemNotifier.value.add(sale);
-                            notifyAnyListeners(currentSaleItemNotifier);
-                            final double sum =
-                                itemCount.toDouble() * itemPrice!;
-                            totalAmountNotifier.value += sum;
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (ctx) => const AddNewItemInSale(),
-                              ),
-                            );
+
+                            if (widget.isPurchase == false) {
+                              final int index =
+                                  currentSaleItemNotifier.value.indexWhere(
+                                (element) => element.itemId == item!.id,
+                              );
+
+                              if (index != -1) {
+                                customAlertBox(
+                                  context: context,
+                                  title: 'Item already exist',
+                                  content:
+                                      'Whould you like to add this item to the existing item.',
+                                  onPressedYes: () {
+                                    final sameItem = currentSaleItemNotifier
+                                        .value
+                                        .elementAt(index);
+                                    sameItem.itemCount += itemCount;
+                                    notifyAnyListeners(totalAmountNotifier);
+                                    notifyAnyListeners(currentSaleItemNotifier);
+
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (ctx) =>
+                                            const AddNewItemInSale(),
+                                      ),
+                                    );
+                                  },
+                                  onPressedNo: () {
+                                    final sale = SaleModel(
+                                        itemId: item!.id!,
+                                        itemCount: itemCount);
+                                    currentSaleItemNotifier.value.add(sale);
+                                    notifyAnyListeners(currentSaleItemNotifier);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (ctx) =>
+                                            const AddNewItemInSale(),
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                final sale = SaleModel(
+                                    itemId: item!.id!, itemCount: itemCount);
+                                currentSaleItemNotifier.value.add(sale);
+                                notifyAnyListeners(currentSaleItemNotifier);
+
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => const AddNewItemInSale(),
+                                  ),
+                                );
+                              }
+                              final double sum =
+                                  itemCount.toDouble() * itemPrice!;
+                              totalAmountNotifier.value += sum;
+                            }
                           }
                         }),
                   ),
@@ -216,6 +268,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                                         .value
                                         .elementAt(index);
                                     sameItem.itemCount += itemCount;
+                                    notifyAnyListeners(totalAmountNotifier);
                                     notifyAnyListeners(currentSaleItemNotifier);
 
                                     Navigator.of(context).pop();
@@ -300,23 +353,23 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                         widget.isPurchase == false) {
                       widget.saleModel!.itemCount = itemCount;
                       widget.saleModel!.itemId = item!.id!;
-                      final oldItem = getItemFromDB(widget.saleModel!.itemId);
+                      // final oldItem = getItemFromDB(widget.saleModel!.itemId);
 
-                      totalAmountNotifier.value -=
-                          ((widget.saleModel!.itemCount) *
-                              oldItem.itemPrice);
+                      // totalAmountNotifier.value -=
+                      //     ((widget.saleModel!.itemCount) *
+                      //         oldItem.itemPrice);
                       notifyAnyListeners(currentSaleItemNotifier);
                     } else if (widget.purchaseItemModel != null &&
                         widget.isPurchase == true) {
                       widget.purchaseItemModel!.itemId = item!.id!;
                       widget.purchaseItemModel!.quantity = itemCount;
 
-                      final oldItem =
-                          getItemFromDB(widget.purchaseItemModel!.itemId);
+                      // final oldItem =
+                      //     getItemFromDB(widget.purchaseItemModel!.itemId);
 
-                      totalAmountNotifier.value -=
-                          ((widget.purchaseItemModel!.quantity - 1) *
-                              oldItem.itemPrice);
+                      // totalAmountNotifier.value -=
+                      //     ((widget.purchaseItemModel!.quantity - 1) *
+                      //         oldItem.itemPrice);
                       notifyAnyListeners(currentPurchaseListNotifier);
                     }
                   }

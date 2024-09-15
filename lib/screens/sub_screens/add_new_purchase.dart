@@ -199,7 +199,7 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
               ),
 
               //total Amount
-              TotalAmountSectionForSaleAddItemScreen(total: widget.total)
+              TotalAmountSectionForSaleAddItemScreen(total: widget.total,type: SaleType.purchase,)
             ],
           ),
         ),
