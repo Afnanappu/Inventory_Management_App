@@ -49,9 +49,13 @@ class SaleListTile extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                customerName,
-                style: MyFontStyle.saleTile,
+              Expanded(
+                child: Text(
+                  customerName,
+                  overflow: TextOverflow.ellipsis,
+                  style: MyFontStyle.saleTile,
+                
+                ),
               ),
               Text(
                 '#$invoiceNo',

@@ -68,7 +68,6 @@ class _SaleAddNewState extends State<SaleAddNew> {
   void dispose() {
     _deleteCustomerIfSaleIsEmpty();
     currentSaleItemNotifier.value.clear();
-    totalAmountNotifier.value = 0;
     super.dispose();
   }
 
@@ -116,11 +115,13 @@ class _SaleAddNewState extends State<SaleAddNew> {
                               DateTime? pickedDate =
                                   await pickDateFromUser(context: context);
 
-                              setState(() {
-                                if (pickedDate != null) {
-                                  selectedDate = pickedDate;
-                                }
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  if (pickedDate != null) {
+                                    selectedDate = pickedDate;
+                                  }
+                                });
+                              }
                             }
                           },
                           child: Column(
@@ -198,7 +199,9 @@ class _SaleAddNewState extends State<SaleAddNew> {
               ),
 
               //total Amount
-              const TotalAmountSectionForSaleAddItemScreen(type: SaleType.sales,)
+              const TotalAmountSectionForSaleAddItemScreen(
+                type: SaleType.sales,
+              )
             ],
           ),
         ),
@@ -206,8 +209,8 @@ class _SaleAddNewState extends State<SaleAddNew> {
       bottomNavigationBar: ButtonsForAddNewSaleScreen(
         saleWidget: widget,
         formKey: _formKey,
-        customerNameController: _customerNameController,
-        customerPhoneController: _customerPhoneController,
+        nameController: _customerNameController,
+        phoneController: _customerPhoneController,
         selectedDate: selectedDate,
         mounted: mounted,
       ),

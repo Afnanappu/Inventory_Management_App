@@ -60,7 +60,6 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
 
   @override
   void dispose() {
-    totalAmountNotifier.value = 0;
     currentPurchaseListNotifier.value.clear();
     super.dispose();
   }
@@ -182,7 +181,7 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
 
               //add new item to sale
               if(widget.isViewer == false)
-              saleAddItem(
+              saleAddItem( 
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -208,8 +207,8 @@ class _AddNewPurchaseScreenState extends State<AddNewPurchaseScreen> {
         formKey: _formKey,
         isPurchase: true,
         purchaseWidget: widget,
-        customerNameController: _purchaserNameController,
-        customerPhoneController: _purchaserPhoneController,
+        nameController: _purchaserNameController,
+        phoneController: _purchaserPhoneController,
         selectedDate: selectedDate,
         mounted: mounted,
       ),

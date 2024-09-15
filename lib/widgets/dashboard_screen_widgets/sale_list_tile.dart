@@ -100,19 +100,6 @@ class CustomerListTile extends StatelessWidget {
                               text: value == true ? 'SALE' : 'RETURNED',
                               isSale: isSaleNotifier.value,
                               onTap: () {}
-                              // customAlertBox(
-                              //   content: 'Are you sure?',
-                              //   context: context,
-                              //   title: value == true ? 'Return item' : 'Change to sale',
-                              //   //todo: add return function
-                              //   onPressedYes: () {
-                              //     isSaleNotifier.value == true
-                              //         ? isSaleNotifier.value = false
-                              //         : isSaleNotifier.value = true;
-                              //     print('Item is ${isSaleNotifier.value}');
-                              //     Navigator.of(context).pop();
-                              //   },
-                              // ),
                               ),
                         )
                       : MyCustomButton(

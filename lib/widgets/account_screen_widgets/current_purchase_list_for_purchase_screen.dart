@@ -4,16 +4,15 @@ import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/purchase_model.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_purchase.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 
 class CurretenPurchaseListForPurchaseAddScreen extends StatelessWidget {
   const CurretenPurchaseListForPurchaseAddScreen({
     super.key,
-    this.onTap,
     this.isViewer = false,
   });
-  final void Function()? onTap;
   final bool isViewer;
   // final String itemName;
 
@@ -35,6 +34,16 @@ class CurretenPurchaseListForPurchaseAddScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   ListTile(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddNewItemInSale(
+                          isPurchase: true,
+                          itemModel: item,
+                          purchaseItemModel: purchase,
+                          isEditable: true,
+                        ),
+                      ),
+                    ),
                     tileColor: const Color.fromARGB(255, 243, 255, 227),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

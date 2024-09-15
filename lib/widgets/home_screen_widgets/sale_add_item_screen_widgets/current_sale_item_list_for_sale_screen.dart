@@ -31,7 +31,6 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final item = getItemFromDB(saleItem[index].itemId);
             final sale = saleItem[index];
-            // final brand = getItemBrandFromDB(item.brandId);
 
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
-import 'package:inventory_management_app/database/item_fun.dart';
 import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/models/item_model.dart';
@@ -49,7 +48,6 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
   void initState() {
     if (widget.itemModel != null) {
       item = widget.itemModel;
-      _itemPriceController.text = item!.itemPrice.toString();
     }
     if (widget.saleModel != null) {
       _itemStockController.text = widget.saleModel!.itemCount.toString();
@@ -62,6 +60,9 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
 
   @override
   Widget build(BuildContext context) {
+    if (item != null) {
+      _itemPriceController.text = item!.itemPrice.toString();
+    }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.maxFinite, 60),
@@ -189,6 +190,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
     );
   }
 
+  //Function for adding multiple sale
   void _saveAndNewForSale() {
     if (_formKey.currentState!.validate()) {
       final itemCount = _itemStockController.text.parseInt();
@@ -200,6 +202,8 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
           (element) => element.itemId == item!.id,
         );
 
+        //if item is already in the current sale list, for adding new or update the existing sale.
+        //if found sale
         if (index != -1) {
           customAlertBox(
             context: context,
@@ -230,7 +234,10 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
               );
             },
           );
-        } else {
+        }
+
+        //if sale not found add new
+        else {
           final sale = SaleModel(itemId: item!.id!, itemCount: itemCount);
           currentSaleItemNotifier.value.add(sale);
           notifyAnyListeners(currentSaleItemNotifier);
@@ -244,9 +251,68 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
         final double sum = itemCount.toDouble() * itemPrice!;
         totalAmountNotifier.value += sum;
       }
+
+      //Purchase funciton
+      else {
+        final int index = currentPurchaseListNotifier.value.indexWhere(
+          (element) => element.itemId == item!.id,
+        );
+
+        //if item is already in the current sale list, for adding new or update the existing sale.
+        //if found sale
+        if (index != -1) {
+          customAlertBox(
+            context: context,
+            title: 'Item already exist',
+            content: 'Whould you like to add this item to the existing item.',
+            onPressedYes: () {
+              final sameItem =
+                  currentPurchaseListNotifier.value.elementAt(index);
+              sameItem.quantity += itemCount;
+              notifyAnyListeners(currentPurchaseListNotifier);
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (ctx) => const AddNewItemInSale(),
+                ),
+              );
+            },
+            onPressedNo: () {
+              final purchase =
+                  PurchaseItemModel(itemId: item!.id!, quantity: itemCount);
+              currentPurchaseListNotifier.value.add(purchase);
+              notifyAnyListeners(currentPurchaseListNotifier);
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (ctx) => const AddNewItemInSale(),
+                ),
+              );
+            },
+          );
+        }
+
+        //if sale not found add new
+        else {
+          final purchase =
+              PurchaseItemModel(itemId: item!.id!, quantity: itemCount);
+          currentPurchaseListNotifier.value.add(purchase);
+          notifyAnyListeners(currentPurchaseListNotifier);
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (ctx) => const AddNewItemInSale(
+                isPurchase: true,
+              ),
+            ),
+          );
+        }
+      }
+      final sum = itemCount.toDouble() * itemPrice!;
+      totalAmountNotifier.value += sum;
     }
   }
 
+  //Function for adding new sale in normal conditon
   void _saveForSale() {
     if (_formKey.currentState!.validate()) {
       final itemCount = _itemStockController.text.parseInt();
@@ -329,32 +395,23 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
     }
   }
 
+//Funtion for editing existing sale.
   void _saveForSaleEditable() {
     final itemCount = _itemStockController.text.parseInt();
     final itemPrice = _itemPriceController.text.parseDouble();
-    if (widget.isEditable == true) {
-      if (widget.saleModel != null && widget.isPurchase == false) {
-        widget.saleModel!.itemCount = itemCount;
-        widget.saleModel!.itemId = item!.id!;
-        // final oldItem = getItemFromDB(widget.saleModel!.itemId);
 
-        // totalAmountNotifier.value -=
-        //     ((widget.saleModel!.itemCount) *
-        //         oldItem.itemPrice);
-        notifyAnyListeners(currentSaleItemNotifier);
-      } else if (widget.purchaseItemModel != null &&
-          widget.isPurchase == true) {
-        widget.purchaseItemModel!.itemId = item!.id!;
-        widget.purchaseItemModel!.quantity = itemCount;
+    //sale
+    if (widget.saleModel != null && widget.isPurchase == false) {
+      widget.saleModel!.itemCount = itemCount;
+      widget.saleModel!.itemId = item!.id!;
+      notifyAnyListeners(currentSaleItemNotifier);
+    }
 
-        // final oldItem =
-        //     getItemFromDB(widget.purchaseItemModel!.itemId);
-
-        // totalAmountNotifier.value -=
-        //     ((widget.purchaseItemModel!.quantity - 1) *
-        //         oldItem.itemPrice);
-        notifyAnyListeners(currentPurchaseListNotifier);
-      }
+    //purchase
+    else if (widget.purchaseItemModel != null && widget.isPurchase == true) {
+      widget.purchaseItemModel!.itemId = item!.id!;
+      widget.purchaseItemModel!.quantity = itemCount;
+      notifyAnyListeners(currentPurchaseListNotifier);
     }
     final sum = itemCount.toDouble() * itemPrice!;
     totalAmountNotifier.value += sum;
