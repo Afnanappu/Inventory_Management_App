@@ -10,6 +10,7 @@ Widget myListTile({
   bool haveTrailing = false,
   bool haveLeading = true,
   IconData trailIcon = Icons.edit_outlined,
+  Widget? trailingWidget,
 }) {
   return Card(
     elevation: 0.5,
@@ -26,11 +27,11 @@ Widget myListTile({
         size: 30,
         color: MyColors.blackShade,
       ):null,
-      trailing: (haveTrailing == true)?Icon(
+      trailing: (haveTrailing == true && trailingWidget == null)?Icon(
         trailIcon,
         size: 26,
         color: MyColors.blackShade,
-      ): null,
+      ): trailingWidget,
     ),
   );
 }

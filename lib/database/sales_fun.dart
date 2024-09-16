@@ -93,19 +93,30 @@ Future<void> increaseListOfStockFromDB(List<int> salesId) async {
   log('Stock increase finished');
 }
 
-void getTheNumberOfItemSold({required DateTime start, DateTime? end}) {
+void getTheNumberOfItemSold({DateTime? start, DateTime? end}) {
   numberOfItemSoldListNotifier.value = 0;
   final List<int> newSaleIdList = [];
   if (saleItemsListNotifier.value.isNotEmpty) {
-    final newCustomerList = customerListNotifier.value.where(
-      (element) => (end == null)
-          ? element.saleDateTime.isAfter(start)
-          : element.saleDateTime.isAfter(start) &&
-              element.saleDateTime.isBefore(end),
-    );
-    newSaleIdList.clear();
-    for (var element in newCustomerList) {
-      newSaleIdList.addAll(element.saleId);
+    //get specific number of sale based on time.
+    if (start != null) {
+      final newCustomerList = customerListNotifier.value.where(
+        (element) => (end == null)
+            ? element.saleDateTime.isAfter(start)
+            : element.saleDateTime.isAfter(start) &&
+                element.saleDateTime.isBefore(end),
+      );
+      newSaleIdList.clear();
+      for (var element in newCustomerList) {
+        newSaleIdList.addAll(element.saleId);
+      }
+    }
+
+    //get all the number of item sold
+    else {
+      newSaleIdList.clear();
+      for (var element in customerListNotifier.value) {
+        newSaleIdList.addAll(element.saleId);
+      }
     }
     for (var sale in saleItemsListNotifier.value) {
       if (newSaleIdList.contains(sale.saleId)) {
@@ -116,18 +127,24 @@ void getTheNumberOfItemSold({required DateTime start, DateTime? end}) {
   notifyAnyListeners(numberOfItemSoldListNotifier);
 }
 
-double getThePriceAmountOfItemSold({required DateTime start, DateTime? end}) {
+double getThePriceAmountOfItemSold({DateTime? start, DateTime? end}) {
   List<int> salesId = [];
 
   if (saleItemsListNotifier.value.isNotEmpty) {
-    final newCustomerList = customerListNotifier.value.where(
-      (element) => (end == null)
-          ? element.saleDateTime.isAfter(start)
-          : element.saleDateTime.isAfter(start) &&
-              element.saleDateTime.isBefore(end),
-    );
-    for (var element in newCustomerList) {
-      salesId.addAll(element.saleId);
+    if (start != null) {
+      final newCustomerList = customerListNotifier.value.where(
+        (element) => (end == null)
+            ? element.saleDateTime.isAfter(start)
+            : element.saleDateTime.isAfter(start) &&
+                element.saleDateTime.isBefore(end),
+      );
+      for (var element in newCustomerList) {
+        salesId.addAll(element.saleId);
+      }
+    } else {
+      for (var element in customerListNotifier.value) {
+        salesId.addAll(element.saleId);
+      }
     }
     priceAmountOfItemSoldListNotifier.value =
         getSumOfAllSaleOfOneCustomer(salesId);
@@ -137,16 +154,20 @@ double getThePriceAmountOfItemSold({required DateTime start, DateTime? end}) {
   return priceAmountOfItemSoldListNotifier.value;
 }
 
-void getSalesBasedOnDateTime({required DateTime startDate, DateTime? endDate}) {
+void getSalesBasedOnDateTime({DateTime? startDate, DateTime? endDate}) {
   if (customerListNotifier.value.isNotEmpty) {
-    dateTimeFilterNotifier.value = customerListNotifier.value
-        .where(
-          (element) => endDate == null
-              ? element.saleDateTime.isAfter(startDate)
-              : element.saleDateTime.isAfter(startDate) &&
-                  element.saleDateTime.isBefore(endDate),
-        )
-        .toList();
+    if (startDate != null) {
+      dateTimeFilterNotifier.value = customerListNotifier.value
+          .where(
+            (element) => endDate == null
+                ? element.saleDateTime.isAfter(startDate)
+                : element.saleDateTime.isAfter(startDate) &&
+                    element.saleDateTime.isBefore(endDate),
+          )
+          .toList();
+    } else {
+      dateTimeFilterNotifier.value = customerListNotifier.value;
+    }
 
     // print('date time filter is worked');
     notifyAnyListeners(dateTimeFilterNotifier);
@@ -162,14 +183,14 @@ void getGraphBasedOnSales({required CurrentDate currentDate, DateTime? time}) {
 
   graphPointListNotifier.value.clear();
   // print(start.isBefore(end));
-  for (int i = start.day; start.isBefore(end); i++) {
+  for (start.day;
+      start.isBefore(end);
+      start = start.add(const Duration(days: 1))) {
     final sum = getTheSumOfOneDayAllCustomerSale(start);
     graphPointListNotifier.value.add(FlSpot(start.weekday.toDouble(), sum));
-    start = start.add(const Duration(days: 1));
+
     // print('${start.day}');
   }
-  // print(
-  //     'The getGraphBasedOnSales() is worded with length of item in graph = ${graphPointListNotifier.value.length}');
 
   notifyAnyListeners(graphPointListNotifier);
 }

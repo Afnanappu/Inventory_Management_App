@@ -1,6 +1,10 @@
 import 'dart:developer';
+import 'package:inventory_management_app/constants/screen_size.dart';
+import 'package:inventory_management_app/database/password_fun.dart';
 import 'package:inventory_management_app/functions/notification_functions.dart';
 import 'package:inventory_management_app/models/purchase_model.dart';
+import 'package:inventory_management_app/screens/main_home_screen.dart';
+import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -90,7 +94,27 @@ class InventoryManagementApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const PasswordScreen(),
+      home: FutureBuilder(
+        future: havePassword(),
+        builder: (context, snapshot) {
+          MyScreenSize.initialize(context);
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              body: Center(
+                child: Image.asset(
+                  'assets/app/appstore.png',
+                  height: MyScreenSize.screenHeight * 0.5,
+                  width: MyScreenSize.screenWidth * 0.5,
+                ),
+              ),
+            );
+          } else if (snapshot.data == false) {
+            return const MainHomeScreen();
+          } else {
+            return const PasswordScreen();
+          }
+        },
+      ),
       theme: ThemeData(
         iconTheme: const IconThemeData(color: MyColors.blackShade),
         scaffoldBackgroundColor: MyColors.white,

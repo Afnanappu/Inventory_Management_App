@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
+import 'package:inventory_management_app/models/customer_model.dart';
 
 enum CurrentDate { week, month, year }
 
@@ -21,11 +22,11 @@ void getTheCurrentDate(CurrentDate currentDate) {
       startDate = getTheCurrentDateStartOrEnd(currentDate: CurrentDate.month);
       endDate = getTheCurrentDateStartOrEnd(
           currentDate: CurrentDate.week, start: false);
-      print('This month');
+      print('Last month');
 
     case CurrentDate.year:
       startDate = getTheCurrentDateStartOrEnd(currentDate: CurrentDate.year);
-      print('This year');
+      print('Last year');
     default:
       print('Nothing worked in getTheCurrentDate()');
   }
@@ -59,21 +60,23 @@ DateTime getTheCurrentDateStartOrEnd(
       switch (start) {
         case true:
           return time.subtract(
-            Duration(days: time.weekday - 1),
+            Duration(
+              days: (time.weekday - 1) + 7,
+            ),
           );
         case false:
-          return time.add(
+          return time.subtract(
             Duration(
-              days: 6 - (time.weekday - 1),
+              days: time.weekday - 1,
             ),
           );
       }
     case CurrentDate.month:
       switch (start) {
         case true:
-          return DateTime(time.year, time.month, 1);
+          return DateTime(time.year, time.month - 1, 1);
         case false:
-          return DateTime(time.year, time.month + 1, 1).subtract(
+          return DateTime(time.year, time.month, 1).subtract(
             const Duration(days: 1),
           );
       }
@@ -82,9 +85,14 @@ DateTime getTheCurrentDateStartOrEnd(
         case true:
           return DateTime(time.year, 1, 1);
         case false:
-          return DateTime(time.year + 1, 1, 1).subtract(
+          final end = DateTime(time.year + 1, 1, 1).subtract(
             const Duration(days: 1),
           );
+          if (time.isBefore(end)) {
+            return DateTime(time.year, time.month, time.day);
+          } else {
+            return end;
+          }
       }
   }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
+import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 
-final List<String> list = ['This week', 'This month', 'This year', 'All Sales'];
+final List<String> list = ['Last week', 'Last month', 'This year', 'All Sales'];
 
 class DropDownForDashboard extends StatelessWidget {
   const DropDownForDashboard({
@@ -40,9 +43,14 @@ class DropDownForDashboard extends StatelessWidget {
             } else if (_selectedValue.value == list[1]) {
               getTheCurrentDate(CurrentDate.month);
               // getGraphBasedOnSales(currentDate: CurrentDate.month);
-            } else {
+            } else if (_selectedValue.value == list[2]) {
               getTheCurrentDate(CurrentDate.year);
               // getGraphBasedOnSales(currentDate: CurrentDate.year);
+            } else {
+              // dateTimeFilterNotifier.value = customerListNotifier.value;
+              // notifyAnyListeners(dateTimeFilterNotifier);
+              getTheNumberOfItemSold();
+              getThePriceAmountOfItemSold();
             }
           },
         ),

@@ -71,26 +71,30 @@ class _PasswordScreenState extends State<PasswordScreen> {
   Widget build(BuildContext context) {
     MyScreenSize.initialize(context);
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MyScreenSize.screenHeight * 0.15,
-            ),
-            Image.asset('assets/splash logo black.png'),
-            const Text('Enter password'),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                4,
-                (index) => _passwordBox(_controllers[index], _focusNodes[index],
-                    index, _focusNodes),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              
+              Image.asset(
+                'assets/app/appstore.png',
+                height: MyScreenSize.screenHeight * 0.45,
+                width: MyScreenSize.screenWidth * 0.45,
               ),
-            )
-          ],
+              const Text('Enter password'),
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  4,
+                  (index) => _passwordBox(_controllers[index], _focusNodes[index],
+                      index, _focusNodes),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -17,29 +17,31 @@ class FloatingActionButtonForAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MyScreenSize.screenWidth * 0.41,
-      height: 50,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: FloatingActionButton(
-          onPressed: onPressed,
-          backgroundColor: color,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: MyColors.white,
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                text,
-                style: const TextStyle(color: MyColors.white),
-              ),
-            ],
+    return LayoutBuilder(
+      builder: (context, constraints) =>   SizedBox(
+        width: (constraints.maxWidth < 600)? MyScreenSize.screenWidth * 0.41: MyScreenSize.screenWidth * 0.3,
+        height: 50,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: FloatingActionButton(
+            onPressed: onPressed,
+            backgroundColor: color,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  color: MyColors.white,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  text,
+                  style: const TextStyle(color: MyColors.white),
+                ),
+              ],
+            ),
           ),
         ),
       ),
