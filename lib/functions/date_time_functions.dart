@@ -14,7 +14,7 @@ void getTheCurrentDate(CurrentDate currentDate) {
       startDate = getTheCurrentDateStartOrEnd(currentDate: CurrentDate.week);
       endDate = getTheCurrentDateStartOrEnd(
           currentDate: CurrentDate.week, start: false);
-      print('This week');
+      print('Last week');
       break;
 
     case CurrentDate.month:

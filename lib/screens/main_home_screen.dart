@@ -9,10 +9,11 @@ import 'package:inventory_management_app/widgets/common/bottom_navigation_bar.da
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({super.key});
 
-
   @override
   State<MainHomeScreen> createState() => _MainHomeScreenState();
 }
+
+ValueNotifier<bool> isKeyboardVisible = ValueNotifier(false);
 
 class _MainHomeScreenState extends State<MainHomeScreen> {
   int currentIndex = 0;
@@ -20,6 +21,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    isKeyboardVisible.value = MediaQuery.of(context).viewInsets.bottom != 0;
+
     return Scaffold(
       body: PageView(
         onPageChanged: (value) {

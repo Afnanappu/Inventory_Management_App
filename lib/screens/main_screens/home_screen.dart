@@ -3,6 +3,7 @@ import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
+import 'package:inventory_management_app/screens/main_home_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_main.dart';
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (ctx) =>  const NotificationScreen(),
+                  builder: (ctx) => const NotificationScreen(),
                 ),
               );
             }),
@@ -74,14 +75,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButtonForAll(
-        text: 'Add new sale',
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
-        },
-        color: MyColors.red,
+
+      floatingActionButton: ValueListenableBuilder(
+        valueListenable: isKeyboardVisible,
+        builder: (context, value, child) => Visibility(
+          visible: !value,
+          child: FloatingActionButtonForAll(
+            text: 'Add new sale',
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
+            },
+            color: MyColors.red,
+          ),
+        ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

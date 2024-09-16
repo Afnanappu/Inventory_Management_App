@@ -9,6 +9,7 @@ import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
 import 'package:inventory_management_app/models/item_model.dart';
+import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_or_edit_new_item_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_item_full_details.dart';
@@ -304,10 +305,18 @@ class _ItemFullDetailsState extends State<ItemFullDetails> {
                   child: buttonAddSale(
                       text: 'Add new sale',
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => const SaleAddNew(),
+                          ),
+                        );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (ctx) => AddNewItemInSale(
-                                  itemModel: widget.itemModel,
-                                )));
+                              itemModel: widget.itemModel,
+                            ),
+                          ),
+                        );
                       }),
                 ),
               ],
