@@ -108,9 +108,11 @@ class InventoryManagementApp extends StatelessWidget {
                 ),
               ),
             );
-          } else if (snapshot.data == false) {
+          } else if (snapshot.data == false || snapshot.data == null) {
+            log('going to main screen (data == ${snapshot.data})');
             return const MainHomeScreen();
           } else {
+            log('going to password screen (data == ${snapshot.data})');
             return const PasswordScreen();
           }
         },

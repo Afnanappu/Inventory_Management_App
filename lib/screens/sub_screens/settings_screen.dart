@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
             myListTile(
                 context: context,
                 title: 'Set password',
-                icon: Icons.lock_outline,
+                icon: isSwitchOn.value? Icons.lock_outline: Icons.lock_open_outlined,
                 trailingWidget: FutureBuilder(
                   future: havePassword(),
                   builder: (context, snapshot) {

@@ -12,7 +12,7 @@ class CustomHelpBottomSheet {
             contentPadding: const EdgeInsets.only(left: 30),
             title: const Text('Call Us'),
             leading: const Icon(Icons.call_outlined),
-            onTap: () => makeHelpAndSupport(path: '+919947907247'),
+            onTap: () => makeHelpAndSupport(path: '+919947907250'),
           ),
           ListTile(
             contentPadding: const EdgeInsets.only(left: 30),

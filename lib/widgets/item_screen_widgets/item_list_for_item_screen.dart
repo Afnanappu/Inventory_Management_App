@@ -11,15 +11,20 @@ class ItemListForItemScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: itemFilterListNotifiers,
-      builder: (context, itemModel, child) => ListView.builder(
-        itemCount: itemModel.length,
-        itemBuilder: (context, index) {
-          return ItemListTile(
-            index: index,
-            itemModel: itemModel[index],
-          );
-        },
-      ),
+      builder: (context, itemModel, child) =>
+          itemFilterListNotifiers.value.isNotEmpty
+              ? ListView.builder(
+                  itemCount: itemModel.length,
+                  itemBuilder: (context, index) {
+                    return ItemListTile(
+                      index: index,
+                      itemModel: itemModel[index],
+                    );
+                  },
+                )
+              : const Center(
+                  child: Text('No item found'),
+                ),
     );
   }
 }

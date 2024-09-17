@@ -19,7 +19,7 @@ class FloatingActionButtonForAll extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) =>   SizedBox(
-        width: (constraints.maxWidth < 600)? MyScreenSize.screenWidth * 0.41: MyScreenSize.screenWidth * 0.3,
+        width: (constraints.maxWidth < 600)? MyScreenSize.screenWidth * 0.41: MyScreenSize.screenWidth * 0.2,
         height: 50,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),

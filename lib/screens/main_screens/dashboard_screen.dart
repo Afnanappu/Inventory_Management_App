@@ -54,89 +54,109 @@ class DashboardScreen extends StatelessWidget {
             title: HomeScreen.profileName,
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute( 
-                  builder: (ctx) =>  const NotificationScreen(),
+                MaterialPageRoute(
+                  builder: (ctx) => const NotificationScreen(),
                 ),
               );
             }),
       ),
-      body: CustomScrollView(
-        slivers: [
-          //Dropdown menu
-          DropDownForDashboard(selectedValue: _selectedValue),
+      body: LayoutBuilder(
+        builder: (context, constraints) => constraints.maxWidth < 600
+            ? CustomScrollView(
+                slivers: [
+                  //Dropdown menu
+                  DropDownForDashboard(selectedValue: _selectedValue),
 
-          //Sale and price container that show based on the dropdown menu
-          const SaleAndPriceContainerForDashboard(),
+                  //Sale and price container that show based on the dropdown menu
+                  const SaleAndPriceContainerForDashboard(),
 
-          //Graph
-          const GraphForDashboard(),
+                  //Graph
+                  const SliverToBoxAdapter(child: GraphForDashboard()),
 
-          //Resent sales button
-          const ResentSalesButtonForDashboard(),
+                  //Resent sales button
+                  const ResentSalesButtonForDashboard(),
 
-          //resent
-          FutureBuilder(
-            future: _fetchSaleData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverToBoxAdapter(
-                    child: Center(child: CircularProgressIndicator()));
-              } else if (snapshot.hasError) {
-                return SliverToBoxAdapter(
-                  child: Center(
-                    child: Text('Error: ${snapshot.error}'),
+                  //resent
+                  FutureBuilder(
+                    future: _fetchSaleData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SliverToBoxAdapter(
+                            child: Center(child: CircularProgressIndicator()));
+                      } else if (snapshot.hasError) {
+                        return SliverToBoxAdapter(
+                          child: Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          ),
+                        );
+                      } else {
+                        return (customerListNotifier.value.isEmpty)
+                            ? SliverToBoxAdapter(
+                                child: Container(
+                                  width: double.infinity,
+                                  height: MyScreenSize.screenHeight * .2,
+                                  alignment: AlignmentDirectional.center,
+                                  child: const Text('No sale is added'),
+                                ),
+                              )
+
+                            //sales list
+                            : const CustomerListForDashboard();
+                      }
+                    },
                   ),
-                );
-              } else {
-                return (customerListNotifier.value.isEmpty)
-                    ? SliverToBoxAdapter(
-                        child: Container(
-                          width: double.infinity,
-                          height: MyScreenSize.screenHeight * .2,
-                          alignment: AlignmentDirectional.center,
-                          child: const Text('No sale is added'),
-                        ),
-                      )
 
-                    //sales list
-                    : const CustomerListForDashboard();
-              }
-            },
-          ),
+                  // returns
+                  const ReturnSaleButtonForDashboard(),
 
-          // returns
-          const ReturnSaleButtonForDashboard(),
-
-          FutureBuilder(
-            future: _fetchReturnData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverToBoxAdapter(
-                    child: Center(child: CircularProgressIndicator()));
-              } else if (snapshot.hasError) {
-                return SliverToBoxAdapter(
-                  child: Center(
-                    child: Text('Error: ${snapshot.error}'),
+                  FutureBuilder(
+                    future: _fetchReturnData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SliverToBoxAdapter(
+                            child: Center(child: CircularProgressIndicator()));
+                      } else if (snapshot.hasError) {
+                        return SliverToBoxAdapter(
+                          child: Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          ),
+                        );
+                      } else {
+                        return const ReturnSaleListForDashboard();
+                      }
+                    },
                   ),
-                );
-              } else {
-                return const ReturnSaleListForDashboard();
-              }
-            },
-          ),
-        ],
+                ],
+              )
+            : CustomScrollView(
+                slivers: [
+                  //Dropdown menu
+                  DropDownForDashboard(selectedValue: _selectedValue),
+
+                  const SliverToBoxAdapter(
+                    child: Row(
+                      children: [
+                        //Graph
+                        GraphForDashboard(),
+
+                        //Sale and price container that show based on the dropdown menu
+                        SaleAndPriceContainerForDashboard(),
+                      ],
+                    ),
+                  )
+                ],
+              ),
       ),
     );
   }
 }
 
-
-  // floatingActionButton: FloatingActionButtonForAll(
-      //   text: 'Add new sale',
-      //   onPressed: () {
-      //     Navigator.of(context)
-      //         .push(MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
-      //   },
-      //   color: MyColors.red,
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+// floatingActionButton: FloatingActionButtonForAll(
+//   text: 'Add new sale',
+//   onPressed: () {
+//     Navigator.of(context)
+//         .push(MaterialPageRoute(builder: (ctx) => const SaleAddNew()));
+//   },
+//   color: MyColors.red,
+// ),
+// floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
