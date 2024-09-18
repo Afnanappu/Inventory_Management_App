@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
+import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/return_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/models/customer_model.dart';
+import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/models/profile_model.dart';
 import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
 import 'package:inventory_management_app/screens/sub_screens/notification_screen.dart';
@@ -42,6 +44,7 @@ class DashboardScreen extends StatelessWidget {
   void fun() {
     getTheCurrentDate(CurrentDate.week);
     getGraphBasedOnSales(currentDate: CurrentDate.week);
+    notifyAnyListeners(graphPointListNotifier);
   }
 
   // Future<void>
@@ -62,19 +65,24 @@ class DashboardScreen extends StatelessWidget {
       ),
       body: LayoutBuilder(
         builder: (context, constraints) => constraints.maxWidth < 600
-            ? CustomScrollView(
+            ?
+            //For Android
+            CustomScrollView(
                 slivers: [
                   //Dropdown menu
-                  DropDownForDashboard(selectedValue: _selectedValue),
+                  SliverToBoxAdapter(
+                      child:
+                          DropDownForDashboard(selectedValue: _selectedValue)),
 
                   //Sale and price container that show based on the dropdown menu
-                  const SaleAndPriceContainerForDashboard(),
+                   const SliverToBoxAdapter(child: SaleAndPriceContainerForDashboard()),
 
                   //Graph
                   const SliverToBoxAdapter(child: GraphForDashboard()),
 
                   //Resent sales button
-                  const ResentSalesButtonForDashboard(),
+                  const SliverToBoxAdapter(
+                      child: ResentSalesButtonForDashboard()),
 
                   //resent
                   FutureBuilder(
@@ -82,7 +90,7 @@ class DashboardScreen extends StatelessWidget {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const SliverToBoxAdapter(
-                            child: Center(child: CircularProgressIndicator()));
+                            child: Center(child: CircularProgressIndicator()),);
                       } else if (snapshot.hasError) {
                         return SliverToBoxAdapter(
                           child: Center(
@@ -106,8 +114,8 @@ class DashboardScreen extends StatelessWidget {
                     },
                   ),
 
-                  // returns
-                  const ReturnSaleButtonForDashboard(),
+                  const SliverToBoxAdapter(
+                      child: ReturnSaleButtonForDashboard()),
 
                   FutureBuilder(
                     future: _fetchReturnData(),
@@ -128,21 +136,79 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ],
               )
-            : CustomScrollView(
-                slivers: [
+            :
+
+            //For Web
+            ListView(
+                shrinkWrap: true,
+                children: [
                   //Dropdown menu
                   DropDownForDashboard(selectedValue: _selectedValue),
 
-                  const SliverToBoxAdapter(
-                    child: Row(
-                      children: [
-                        //Graph
-                        GraphForDashboard(),
+                  Row(
+                    children: [
+                      //Graph
+                      Expanded(
+                          child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const GraphForDashboard(),
+                          //Resent sales button
+                          const ResentSalesButtonForDashboard(),
 
-                        //Sale and price container that show based on the dropdown menu
-                        SaleAndPriceContainerForDashboard(),
-                      ],
-                    ),
+                          //resent
+                          FutureBuilder(
+                            future: _fetchSaleData(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                  child: Text('Error: ${snapshot.error}'),
+                                );
+                              } else {
+                                return (customerListNotifier.value.isEmpty)
+                                    ? Container(
+                                        width: double.infinity,
+                                        height: MyScreenSize.screenHeight * .2,
+                                        alignment: AlignmentDirectional.center,
+                                        child: const Text('No sale is added'),
+                                      )
+
+                                    //sales list
+                                    : const CustomerListForDashboard();
+                              }
+                            },
+                          ),
+
+                          // returns
+                          const ReturnSaleButtonForDashboard(),
+
+                          FutureBuilder(
+                            future: _fetchReturnData(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                  child: Text('Error: ${snapshot.error}'),
+                                );
+                              } 
+                              else {
+                                return const ReturnSaleListForDashboard();
+                              }
+                            },
+                          ),
+                        ],
+                      )),
+
+                      //Sale and price container that show based on the dropdown menu
+                      const SaleAndPriceContainerForDashboard(),
+                    ],
                   )
                 ],
               ),

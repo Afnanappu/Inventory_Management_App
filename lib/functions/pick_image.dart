@@ -46,5 +46,6 @@ Future<Uint8List?> pickImageFromWeb() async {
     return imageByte;
   } else {
     log('Image is null');
+    return null;
   }
 }

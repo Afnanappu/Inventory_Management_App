@@ -20,9 +20,22 @@ class ItemScreen extends StatelessWidget {
       ),
       body: (itemModelListNotifiers.value.isEmpty)
           ? const Center(child: Text('No item added'))
-          : const ItemListForItemScreen(),
-
-          
+          : FutureBuilder(
+              future: getAllItemFormDB(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  return const ItemListForItemScreen();
+                }
+              },
+            ),
       floatingActionButton: FloatingActionButtonForAll(
         text: "Add new item",
         onPressed: () {

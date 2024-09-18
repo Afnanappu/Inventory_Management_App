@@ -8,38 +8,36 @@ class ReturnSaleButtonForDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                //returns
-                const Text(
-                  'Returns',
-                  style: MyFontStyle.listTileFont,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //returns
+              const Text(
+                'Returns',
+                style: MyFontStyle.listTileFont,
+              ),
+    
+              //See all
+              //todo: Add the see all button functions
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => const AllReturnItemScreen()));
+                },
+                child: const Text(
+                  'See all',
+                  style: TextStyle(color: MyColors.green),
                 ),
-
-                //See all
-                //todo: Add the see all button functions
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const AllReturnItemScreen()));
-                  },
-                  child: const Text(
-                    'See all',
-                    style: TextStyle(color: MyColors.green),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          
-        ],
-      ),
+        ),
+        
+      ],
     );
   }
 }

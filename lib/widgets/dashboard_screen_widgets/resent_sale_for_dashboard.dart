@@ -11,32 +11,30 @@ class ResentSalesButtonForDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //Brands
-            const Text(
-              'Resent',
-              style: MyFontStyle.listTileFont,
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          //Brands
+          const Text(
+            'Resent',
+            style: MyFontStyle.listTileFont,
+          ),
+        
+          //See all
+          //todo: Add the see all button functions
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => AllSaleDataScreen()));
+            },
+            child: const Text(
+              'See all',
+              style: TextStyle(color: MyColors.green),
             ),
-    
-            //See all
-            //todo: Add the see all button functions
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => AllSaleDataScreen()));
-              },
-              child: const Text(
-                'See all',
-                style: TextStyle(color: MyColors.green),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

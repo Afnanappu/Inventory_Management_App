@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
-import 'package:inventory_management_app/database/brand_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
-import 'package:inventory_management_app/models/customer_model.dart';
-import 'package:inventory_management_app/models/item_model.dart';
 
 final List<String> list = ['Last week', 'Last month', 'This year', 'All Sales'];
 
@@ -18,42 +15,36 @@ class DropDownForDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        //date select
-        child: DropdownButtonFormField(
-          dropdownColor: MyColors.white,
-          padding: const EdgeInsets.only(left: 20),
-          value: _selectedValue.value,
-          decoration: const InputDecoration(border: InputBorder.none),
-          items: list.map(
-            (e) {
-              return DropdownMenuItem(
-                value: e,
-                child: Text(e),
-              );
-            },
-          ).toList(),
-          onChanged: (value) {
-            _selectedValue.value = value;
-            if (_selectedValue.value == list[0]) {
-              getTheCurrentDate(CurrentDate.week);
-              getGraphBasedOnSales(currentDate: CurrentDate.week);
-            } else if (_selectedValue.value == list[1]) {
-              getTheCurrentDate(CurrentDate.month);
-              // getGraphBasedOnSales(currentDate: CurrentDate.month);
-            } else if (_selectedValue.value == list[2]) {
-              getTheCurrentDate(CurrentDate.year);
-              // getGraphBasedOnSales(currentDate: CurrentDate.year);
-            } else {
-              // dateTimeFilterNotifier.value = customerListNotifier.value;
-              // notifyAnyListeners(dateTimeFilterNotifier);
-              getTheNumberOfItemSold();
-              getThePriceAmountOfItemSold();
-            }
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      //date select
+      child: DropdownButtonFormField(
+        dropdownColor: MyColors.white,
+        padding: const EdgeInsets.only(left: 20),
+        value: _selectedValue.value,
+        decoration: const InputDecoration(border: InputBorder.none),
+        items: list.map(
+          (e) {
+            return DropdownMenuItem(
+              value: e,
+              child: Text(e),
+            );
           },
-        ),
+        ).toList(),
+        onChanged: (value) {
+          _selectedValue.value = value;
+          if (_selectedValue.value == list[0]) {
+            getTheCurrentDate(CurrentDate.week);
+            getGraphBasedOnSales(currentDate: CurrentDate.week);
+          } else if (_selectedValue.value == list[1]) {
+            getTheCurrentDate(CurrentDate.month);
+          } else if (_selectedValue.value == list[2]) {
+            getTheCurrentDate(CurrentDate.year);
+          } else {
+            getTheNumberOfItemSold();
+            getThePriceAmountOfItemSold();
+          }
+        },
       ),
     );
   }

@@ -20,6 +20,7 @@ late Box<ItemModel> _itemBox;
 //Function to get all item from database and added to itemModelListNotifiers.
 Future<void> getAllItemFormDB() async {
   _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
+  // itemModelListNotifiers.value.clear();
   itemModelListNotifiers.value = _itemBox.values.cast<ItemModel>().toList();
   // _itemBox.clear();
   notifyAnyListeners(itemModelListNotifiers);
@@ -37,6 +38,8 @@ Future<void> addItemToDB(ItemModel item) async {
 
   await getAllItemFormDB();
   notifyAnyListeners(itemFilterListNotifiers);
+  getTheFilterItem();
+
   // print(
   //     'A new item is added to database and the item id = ${item.id} and the brand id is = ${item.brandId} and the length of all item is ${_itemBox.values.length}');
 }
@@ -51,7 +54,9 @@ Future<void> deleteItemFromDB(int itemId, BuildContext context) async {
   if (isNotDeletable == false) {
     await _itemBox.delete(itemId);
 
-    getAllItemFormDB();
+    await getAllItemFormDB();
+    notifyAnyListeners(itemFilterListNotifiers);
+    getTheFilterItem();
 
     CustomSnackBarMessage(
       context: context,
@@ -81,6 +86,7 @@ Future<void> editItemFromDB(int itemId, ItemModel item) async {
 
   await getAllItemFormDB();
   notifyAnyListeners(itemFilterListNotifiers);
+  getTheFilterItem();
 
   // print('The item in the index $itemId is edited');
 }
@@ -161,13 +167,13 @@ void getTheFilterItem({int? limit, bool? isLess = true}) {
 
 Future<List<ItemModel>> getTheOutOfStockItems([int? outOfStockLimit]) async {
   _itemBox = await Hive.openBox<ItemModel>(_ITEM_BOX);
-  return _itemBox.values.where(
-    (element) => outOfStockLimit == null
-        ? element.stock == 0
-        : element.stock <= outOfStockLimit,
-  ).toList();
-
-  
+  return _itemBox.values
+      .where(
+        (element) => outOfStockLimit == null
+            ? element.stock == 0
+            : element.stock <= outOfStockLimit,
+      )
+      .toList();
 }
 
 void getTheItemFilteredByRange(double? start, double? end) {
@@ -182,5 +188,3 @@ void getTheItemFilteredByRange(double? start, double? end) {
 
   notifyAnyListeners(filteredItemModelList);
 }
-
-

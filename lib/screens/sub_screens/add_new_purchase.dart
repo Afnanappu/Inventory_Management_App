@@ -6,7 +6,6 @@ import 'package:inventory_management_app/functions/date_time_functions.dart';
 import 'package:inventory_management_app/functions/reg_exp_functions.dart';
 import 'package:inventory_management_app/models/purchase_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_new_item_in_sale.dart';
-import 'package:inventory_management_app/screens/sub_screens/add_new_sale.dart';
 import 'package:inventory_management_app/widgets/account_screen_widgets/current_purchase_list_for_purchase_screen.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/common/text_form_field.dart';

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/format_money.dart';
@@ -15,31 +16,66 @@ class CustomerListForDashboard extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: customerListNotifier,
       builder: (BuildContext context, List<CustomerModel> customers, _) {
-        return SliverList.builder(
-          itemCount: (customers.length < 4) ? customers.length : 4,
-          itemBuilder: (context, index) {
-            final customerRev = customers.reversed.toList();
-            final customer = customerRev[index];
-            final sumOfSales = getSumOfAllSaleOfOneCustomer(customer.saleId);
-            return CustomerListTile(
-              customerName: customer.customerName,
-              invoiceNo: '${customers.length - index}',
-              totalProduct: customer.saleId.length,
-              itemPrice: formatMoney(number: sumOfSales),
-              saleAddDate: customer.saleDateTime,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => SaleAddNew(
-                      customer: customer,
-                      isViewer: true,
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        );
+        return !kIsWeb
+            ?
+
+            //For Android
+            SliverList.builder(
+                itemCount: (customers.length < 4) ? customers.length : 4,
+                itemBuilder: (context, index) {
+                  final customerRev = customers.reversed.toList();
+                  final customer = customerRev[index];
+                  final sumOfSales =
+                      getSumOfAllSaleOfOneCustomer(customer.saleId);
+                  return CustomerListTile(
+                    customerName: customer.customerName,
+                    invoiceNo: '${customers.length - index}',
+                    totalProduct: customer.saleId.length,
+                    itemPrice: formatMoney(number: sumOfSales),
+                    saleAddDate: customer.saleDateTime,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SaleAddNew(
+                            customer: customer,
+                            isViewer: true,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              )
+            :
+
+            //For Web
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: (customers.length < 4) ? customers.length : 4,
+                itemBuilder: (context, index) {
+                  final customerRev = customers.reversed.toList();
+                  final customer = customerRev[index];
+                  final sumOfSales =
+                      getSumOfAllSaleOfOneCustomer(customer.saleId);
+                  return CustomerListTile(
+                    customerName: customer.customerName,
+                    invoiceNo: '${customers.length - index}',
+                    totalProduct: customer.saleId.length,
+                    itemPrice: formatMoney(number: sumOfSales),
+                    saleAddDate: customer.saleDateTime,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SaleAddNew(
+                            customer: customer,
+                            isViewer: true,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
       },
     );
   }

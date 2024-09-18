@@ -4,7 +4,6 @@ import 'package:inventory_management_app/database/password_fun.dart';
 import 'package:inventory_management_app/functions/notification_functions.dart';
 import 'package:inventory_management_app/models/purchase_model.dart';
 import 'package:inventory_management_app/screens/main_home_screen.dart';
-import 'package:inventory_management_app/screens/main_screens/home_screen.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,7 +41,9 @@ void main() async {
   var initializationSettingsIOS = DarwinInitializationSettings(
       onDidReceiveLocalNotification: onDidReceiveNotificationResponse);
   var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
 
   tz_data.initializeTimeZones();
 

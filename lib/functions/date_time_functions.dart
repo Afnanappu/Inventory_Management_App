@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
-import 'package:inventory_management_app/models/customer_model.dart';
 
 enum CurrentDate { week, month, year }
 

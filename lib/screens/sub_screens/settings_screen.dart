@@ -6,6 +6,7 @@ import 'package:inventory_management_app/widgets/account_screen_widgets/list_til
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/common/alert_dialog.dart';
 
+// ignore: must_be_immutable
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
   ValueNotifier<bool> isSwitchOn = ValueNotifier(false);
