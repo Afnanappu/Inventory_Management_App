@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/customer_fun.dart';
 import 'package:inventory_management_app/database/sales_fun.dart';
 import 'package:inventory_management_app/functions/date_time_functions.dart';
-import 'package:inventory_management_app/models/customer_model.dart';
 import 'package:inventory_management_app/widgets/appbar/app_bar_for_sub_with_edit.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/filter_section_for_all_sale.dart';
 import 'package:inventory_management_app/widgets/dashboard_screen_widgets/all_sale_screen_widgets/full_sale_list_for_all_sales.dart';
@@ -35,44 +36,100 @@ class AllSaleDataScreen extends StatelessWidget {
           isAddIcon: false,
         ),
       ),
-      body: ListView(
-        children: [
-          //divider
-          const Divider(),
+      body: LayoutBuilder(
+          builder: (context, constraints) =>
+              constraints.maxWidth < 600 && !kIsWeb
+                  ? ListView(
+                      shrinkWrap: true,
+                      children: [
+                        //divider
+                        const Divider(),
 
-          //filter
-          FilterSectionForAllSale(
-            selectedValue: _selectedValue,
-            pickedStartDateNotifier: pickedStartDateNotifier,
-            pickedEndDateNotifier: pickedEndDateNotifier,
-          ),
+                        //filter
+                        FilterSectionForAllSale(
+                          selectedValue: _selectedValue,
+                          pickedStartDateNotifier: pickedStartDateNotifier,
+                          pickedEndDateNotifier: pickedEndDateNotifier,
+                        ),
 
-          //divider
-          const Divider(),
+                        //divider
+                        const Divider(),
 
-          const SalesAndPriceContainerForAllSale(),
+                        const SalesAndPriceContainerForAllSale(),
 
-          //list builder
-          FutureBuilder(
-            future: _loadData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else {
-                return (dateTimeFilterNotifier.value.isEmpty)
-                    ? const Center(
-                        child: Text('No sale is added'),
-                      )
-                    : const FullSaleListForAllSales();
-              }
-            },
-          ),
-        ],
-      ),
+                        //list builder
+                        FutureBuilder(
+                          future: _loadData(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text('Error: ${snapshot.error}'),
+                              );
+                            } else {
+                              return const FullSaleListForAllSales();
+                            }
+                          },
+                        ),
+                      ],
+                    )
+                  : ListView(
+                      shrinkWrap: true,
+                      children: [
+                        //divider
+                        const Divider(),
+
+                        //filter
+                        FilterSectionForAllSale(
+                          selectedValue: _selectedValue,
+                          pickedStartDateNotifier: pickedStartDateNotifier,
+                          pickedEndDateNotifier: pickedEndDateNotifier,
+                        ),
+
+                        //divider
+                        const Divider(),
+
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            //list builder
+                            Expanded(
+                              child: FutureBuilder(
+                                future: _loadData(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Container(
+                                      width: double.infinity,
+                                      height: MyScreenSize.screenHeight * .5,
+                                      alignment: AlignmentDirectional.center,
+                                      child: const CircularProgressIndicator
+                                          .adaptive(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Container(
+                                      width: double.infinity,
+                                      height: MyScreenSize.screenHeight * .5,
+                                      alignment: AlignmentDirectional.center,
+                                      child: Text(
+                                        'Error: ${snapshot.error}',
+                                      ),
+                                    );
+                                  } else {
+                                    return const FullSaleListForAllSales();
+                                  }
+                                },
+                              ),
+                            ),
+
+                            const SalesAndPriceContainerForAllSale(),
+                          ],
+                        )
+                      ],
+                    )),
     );
   }
 }

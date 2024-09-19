@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -20,6 +21,19 @@ class ItemDetailsForHome extends StatefulWidget {
 }
 
 class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
+  int _getTheCurrentSupportedGridLength() {
+    int len = MyScreenSize.screenWidth ~/ 213;
+    log('The max grid length ==  $len');
+    return len;
+  }
+
+  // double _getTheCurrectSpacingForGrid() {
+  //   double space =
+  //       MyScreenSize.screenWidth / (_getTheCurrentSupportedGridLength() + 1);
+  //   log('The Currect spacing for grid ==  $space');
+  //   return space;
+  // }
+
   Future<void> _fetchData() async {
     await getAllItemFormDB();
     filteredItemModelList.value = itemModelListNotifiers.value
@@ -73,9 +87,10 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                           sliver: SliverGrid.builder(
                             itemCount: itemModelList.length,
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 0,
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount:
+                                  _getTheCurrentSupportedGridLength(),
+                              crossAxisSpacing: kIsWeb ? 15 : 0,
                               mainAxisSpacing: 15,
                             ),
                             itemBuilder: (BuildContext context, int index) {
@@ -97,7 +112,7 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                                       },
                                       child: Container(
                                         height: 125,
-                                        width: MyScreenSize.screenWidth * 0.37,
+                                        width: 213,
                                         decoration: BoxDecoration(
                                           color: MyColors.lightGrey,
                                           borderRadius:
@@ -107,7 +122,8 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                                           padding: const EdgeInsets.all(13),
                                           child: !kIsWeb
                                               ? Image.file(
-                                                  File(itemModel.itemImage),fit: BoxFit.contain,
+                                                  File(itemModel.itemImage),
+                                                  fit: BoxFit.contain,
                                                 )
                                               : Image.memory(base64Decode(
                                                   itemModel.itemImage)),
@@ -115,11 +131,12 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                                       ),
                                     ),
                                     Expanded(
-                                        child: Text(
-                                      itemModel.itemName,
-                                      style: MyFontStyle.itemNameInMain,
-                                      overflow: TextOverflow.ellipsis,
-                                    )),
+                                      child: Text(
+                                        itemModel.itemName,
+                                        style: MyFontStyle.itemNameInMain,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
                                     Text(
                                       formatMoney(number: itemModel.itemPrice),
                                       style: MyFontStyle.itemPriceInMain,
