@@ -143,7 +143,7 @@ class _AddNewItemInSaleState extends State<AddNewItemInSale> {
                         } else if (widget.isPurchase == false) {
                           quantity = int.parse(value);
                           if (item != null && quantity > stock) {
-                            return 'out of stock${stock == 0 ? 'item' : ', try $stock'} ';
+                            return 'out of stock ${stock == 0 ? 'item' : ', try $stock'} ';
                           } else {
                             return null;
                           }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/screen_size.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
@@ -64,7 +65,7 @@ class DashboardScreen extends StatelessWidget {
             }),
       ),
       body: LayoutBuilder(
-        builder: (context, constraints) => constraints.maxWidth < 600
+        builder: (context, constraints) => constraints.maxWidth < 600 && !kIsWeb
             ?
             //For Android
             CustomScrollView(
@@ -75,7 +76,8 @@ class DashboardScreen extends StatelessWidget {
                           DropDownForDashboard(selectedValue: _selectedValue)),
 
                   //Sale and price container that show based on the dropdown menu
-                   const SliverToBoxAdapter(child: SaleAndPriceContainerForDashboard()),
+                  const SliverToBoxAdapter(
+                      child: SaleAndPriceContainerForDashboard()),
 
                   //Graph
                   const SliverToBoxAdapter(child: GraphForDashboard()),
@@ -90,7 +92,8 @@ class DashboardScreen extends StatelessWidget {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const SliverToBoxAdapter(
-                            child: Center(child: CircularProgressIndicator()),);
+                          child: Center(child: CircularProgressIndicator()),
+                        );
                       } else if (snapshot.hasError) {
                         return SliverToBoxAdapter(
                           child: Center(
@@ -146,7 +149,9 @@ class DashboardScreen extends StatelessWidget {
                   DropDownForDashboard(selectedValue: _selectedValue),
 
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       //Graph
                       Expanded(
                           child: Column(
@@ -197,8 +202,7 @@ class DashboardScreen extends StatelessWidget {
                                 return Center(
                                   child: Text('Error: ${snapshot.error}'),
                                 );
-                              } 
-                              else {
+                              } else {
                                 return const ReturnSaleListForDashboard();
                               }
                             },

@@ -22,6 +22,7 @@ class _BrandItemsForHomeState extends State<BrandItemsForHome> {
     return ValueListenableBuilder(
       valueListenable: isSeeAllButtonPressedNotifier,
       builder: (context, value, child) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,6 +270,9 @@ class _BrandItemsForHomeState extends State<BrandItemsForHome> {
                                   notifyAnyListeners(filteredItemModelList);
                                 },
                                 style: ButtonStyle(
+                                  fixedSize: const WidgetStatePropertyAll(
+                                    Size.fromHeight(43),
+                                  ),
                                   foregroundColor:
                                       WidgetStateProperty.resolveWith(
                                     (states) {

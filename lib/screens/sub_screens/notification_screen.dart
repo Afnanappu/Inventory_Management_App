@@ -25,83 +25,43 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
         centerTitle: true,
       ),
-      body:
-          // Column(
-          //   children: [
-          //     ElevatedButton(
-          //       onPressed: () async {
-          //         await showNotification(
-          //             outOfStockItemCount: itemFilterListNotifiers.value.length);
-          //       },
-          //       child: const Text('Push a notification'),
-          //     ),
-          //   ],
-          // ),
-          ValueListenableBuilder(
-              valueListenable: outOfStockListNotifiers,
-              builder: (context, itemModel, child) {
-                return ListView.builder(
-                  itemCount: itemModel.length,
-                  itemBuilder: (context, index) {
-                    final item = itemModel[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 243, 243, 243),
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                spreadRadius: 1,
-                                blurRadius: 3,
-                              )
-                            ]),
-                        child: ListTile(
-                          title: const Text(
-                            'Alert: Out of stock!',
-                            style: MyFontStyle.mediumBlackShade,
+      body: ValueListenableBuilder(
+          valueListenable: outOfStockListNotifiers,
+          builder: (context, itemModel, child) {
+            return itemModel.isEmpty
+                ? const Center(
+                    child: Text('No notification'),
+                  )
+                : ListView.builder(
+                    itemCount: itemModel.length,
+                    itemBuilder: (context, index) {
+                      final item = itemModel[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 243, 243, 243),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  spreadRadius: 1,
+                                  blurRadius: 3,
+                                )
+                              ]),
+                          child: ListTile(
+                            title: const Text(
+                              'Alert: Out of stock!',
+                              style: MyFontStyle.mediumBlackShade,
+                            ),
+                            subtitle: Text(
+                                'The item ${item.itemName} is out of stock, Ensure continuous availability by purchasing today.'),
                           ),
-                          subtitle: Text(
-                              'The item ${item.itemName} is out of stock, Ensure continuous availability by purchasing today.'),
                         ),
-                      ),
-                    );
-                    // ExpansionTile(
-                    //   title: Text(
-                    //     'Alert!',
-                    //   ),
-                    //   children: [
-                    //     Text(
-                    //         ' Ensure continuous availability by purchasing today. Don’t let this essential item run out—order now!')
-                    //   ],
-                    // );
-                    // ExpansionPanelList(
-                    //   expansionCallback: (panelIndex, isExpanded) {
-                    //     setState(() {
-                    //       item.
-                    //     });
-                    //   },
-                    //   children: [
-                    //     ExpansionPanel(
-                    //       canTapOnHeader: true,
-                    //       isExpanded: isExpandedPannel,
-                    //       headerBuilder: (context, isExpanded) {
-
-                    //         return Text('Alert!');
-                    //       },
-                    //       body: Text('${item.itemName}'),
-                    //     )
-                    //   ],
-                    // );
-                    // ListTile(
-                    //   tileColor: ,
-                    //   title: Text('"Alert'),
-                    //   subtitle: Text(' Ensure continuous availability by purchasing today. Don’t let this essential item run out—order now!'),
-                    // );
-                  },
-                );
-              }),
+                      );
+                    },
+                  );
+          }),
     );
   }
 }
