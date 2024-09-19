@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/brand_fun.dart';
@@ -34,16 +35,18 @@ class CurretenPurchaseListForPurchaseAddScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   ListTile(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AddNewItemInSale(
-                          isPurchase: true,
-                          itemModel: item,
-                          purchaseItemModel: purchase,
-                          isEditable: true,
-                        ),
-                      ),
-                    ),
+                    onTap: () => isViewer == false
+                        ? Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => AddNewItemInSale(
+                                isPurchase: true,
+                                itemModel: item,
+                                purchaseItemModel: purchase,
+                                isEditable: true,
+                              ),
+                            ),
+                          )
+                        : null,
                     tileColor: const Color.fromARGB(255, 243, 255, 227),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,6 +79,7 @@ class CurretenPurchaseListForPurchaseAddScreen extends StatelessWidget {
                               flex: 1,
                               child: Text('Subtotal'),
                             ),
+                            !kIsWeb?
                             Expanded(
                               flex: 3,
                               child: SingleChildScrollView(
@@ -84,7 +88,12 @@ class CurretenPurchaseListForPurchaseAddScreen extends StatelessWidget {
                                   '${purchase.quantity} x ${formatMoney(number: item.itemPrice, haveSymbol: false)} = ${formatMoney(number: item.itemPrice * purchase.quantity)}',
                                 ),
                               ),
-                            ),
+                            ):SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  '${purchase.quantity} x ${formatMoney(number: item.itemPrice, haveSymbol: false)} = ${formatMoney(number: item.itemPrice * purchase.quantity)}',
+                                ),
+                              ),
                           ],
                         ),
                         const SizedBox(
