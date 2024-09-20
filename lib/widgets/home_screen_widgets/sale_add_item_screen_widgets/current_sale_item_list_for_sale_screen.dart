@@ -37,14 +37,14 @@ class CurrentSaleItemListForSaleScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   ListTile(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    onTap: () => widget.isViewer == false ? Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => AddNewItemInSale(
                         itemModel: item,
                         saleModel: sale,
                         isEditable: true,
                         
                       ),
-                    )),
+                    )): null,
                     tileColor: const Color.fromARGB(255, 243, 255, 227),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -88,8 +88,9 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                             itemCount: itemModelList.length,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount:
-                                  _getTheCurrentSupportedGridLength(),
+                              crossAxisCount: !kIsWeb
+                                  ? 2
+                                  : _getTheCurrentSupportedGridLength(),
                               crossAxisSpacing: kIsWeb ? 15 : 0,
                               mainAxisSpacing: 15,
                             ),
@@ -112,7 +113,9 @@ class _ItemDetailsForHomeState extends State<ItemDetailsForHome> {
                                       },
                                       child: Container(
                                         height: 125,
-                                        width: 213,
+                                        width: kIsWeb
+                                            ? 213
+                                            : MyScreenSize.screenWidth * 0.37,
                                         decoration: BoxDecoration(
                                           color: MyColors.lightGrey,
                                           borderRadius:
