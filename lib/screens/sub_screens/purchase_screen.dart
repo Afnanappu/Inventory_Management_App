@@ -39,43 +39,48 @@ class PurchaseScreen extends StatelessWidget {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return purchasedListNotifier.value.isEmpty
-                ? const Center(
+            return ValueListenableBuilder(
+              valueListenable: purchasedListNotifier,
+              builder: (context, purchaseModelList, child) {
+                //If there is no purchase
+                if (purchasedListNotifier.value.isEmpty) {
+                  return const Center(
                     child: Text('No purchase is added'),
-                  )
-                : ValueListenableBuilder(
-                    valueListenable: purchasedListNotifier,
-                    builder: (context, purchaseModelList, child) {
-                      final purchaseModel = purchaseModelList.reversed.toList();
-                      final length = purchaseModel.length;
-                      return ListView.builder(
-                        itemCount: length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final purchase = purchaseModel[index];
-                          final totalAmount =
-                              findTheTotalAmountOfOnePurchase(purchase);
+                  );
+                }
 
-                          return CustomerListTile(
-                            customerName: purchase.partyName,
-                            invoiceNo: '${length - index}',
-                            totalProduct:
-                                purchase.purchaseItemModleIdList.length,
-                            itemPrice: formatMoney(number: totalAmount),
-                            saleAddDate: purchase.dateTime,
-                            isPurchase: true,
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (ctx) => AddNewPurchaseScreen(
-                                        purchaseModel: purchase,
-                                        isViewer: true,
-                                        total: totalAmount,
-                                      )),
-                            ),
-                          );
-                        },
+                //if purchase found
+                else {
+                  final purchaseModel = purchaseModelList.reversed.toList();
+                  final length = purchaseModel.length;
+                  return ListView.builder(
+                    itemCount: length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final purchase = purchaseModel[index];
+                      final totalAmount =
+                          findTheTotalAmountOfOnePurchase(purchase);
+
+                      return CustomerListTile(
+                        customerName: purchase.partyName,
+                        invoiceNo: '${length - index}',
+                        totalProduct: purchase.purchaseItemModleIdList.length,
+                        itemPrice: formatMoney(number: totalAmount),
+                        saleAddDate: purchase.dateTime,
+                        isPurchase: true,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (ctx) => AddNewPurchaseScreen(
+                                    purchaseModel: purchase,
+                                    isViewer: true,
+                                    total: totalAmount,
+                                  )),
+                        ),
                       );
                     },
                   );
+                }
+              },
+            );
           }
         },
       ),

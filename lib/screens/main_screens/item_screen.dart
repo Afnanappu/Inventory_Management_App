@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_management_app/constants/colors.dart';
 import 'package:inventory_management_app/database/item_fun.dart';
-import 'package:inventory_management_app/models/item_model.dart';
 import 'package:inventory_management_app/screens/sub_screens/add_or_edit_new_item_screen.dart';
 import 'package:inventory_management_app/widgets/common/floating_action_button.dart';
 import 'package:inventory_management_app/widgets/item_screen_widgets/app_bar_for_item_screen.dart';
@@ -18,9 +17,7 @@ class ItemScreen extends StatelessWidget {
         preferredSize: Size(double.maxFinite, 60),
         child: AppBarForItemScreen(),
       ),
-      body: (itemModelListNotifiers.value.isEmpty)
-          ? const Center(child: Text('No item added'))
-          : FutureBuilder(
+      body: FutureBuilder(
               future: getAllItemFormDB(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
